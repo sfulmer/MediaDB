@@ -1,10 +1,10 @@
-#include "Media.h"
+#include "DBO.h"
 
-using namespace net::draconia;
+using namespace net::draconia::dbo;
 
-QList<Artist> Media::getArtistsInternal() const
+QList<Artist> &Media::getArtistsInternal() const
 {
-    return(mLstArtists);
+    return(const_cast<QList<Artist> &>(mLstArtists));
 }
 
 void Media::setArtists(const QList<Artist> &lstArtists)
@@ -14,35 +14,41 @@ void Media::setArtists(const QList<Artist> &lstArtists)
 }
 
 Media::Media()
-    : muiMediaId(0)
+    : Observable()
+    , muiMediaId(0)
 { }
 
 Media::Media(const unsigned uiMediaId, const QString &sName, const QDate &dtRelease)
-    : muiMediaId(uiMediaId)
+    : Observable()
+    , muiMediaId(uiMediaId)
     , mDtRelease(dtRelease)
     , msName(sName)
 { }
 
 Media::Media(const unsigned uiMediaId, const QString &sName, const unsigned uiReleaseYear)
-    : muiMediaId(uiMediaId)
+    : Observable()
+    , muiMediaId(uiMediaId)
     , mDtRelease(QDate(static_cast<int>(uiReleaseYear), 1, 1))
     , msName(sName)
 { }
 
 Media::Media(const unsigned uiMediaId, const QString &sName, const QDate &dtRelease, const QString &sFilePath)
-    : muiMediaId(uiMediaId)
+    : Observable()
+    , muiMediaId(uiMediaId)
     , mDtRelease(dtRelease)
     , msFilePath(sFilePath), msName(sName)
 { }
 
 Media::Media(const unsigned uiMediaId, const QString &sName, const unsigned uiReleaseYear, const QString &sFilePath)
-    : muiMediaId(uiMediaId)
+    : Observable()
+    , muiMediaId(uiMediaId)
     , mDtRelease(QDate(static_cast<int>(uiReleaseYear), 1, 1))
     , msFilePath(sFilePath), msName(sName)
 { }
 
 Media::Media(const unsigned uiMediaId, const QString &sName, const QDate &dtRelease, const QList<Artist> &lstArtists)
-    : muiMediaId(uiMediaId)
+    : Observable()
+    , muiMediaId(uiMediaId)
     , mDtRelease(dtRelease)
     , msName(sName)
 {
@@ -50,7 +56,8 @@ Media::Media(const unsigned uiMediaId, const QString &sName, const QDate &dtRele
 }
 
 Media::Media(const unsigned uiMediaId, const QString &sName, const unsigned uiReleaseYear, const QList<Artist> &lstArtists)
-    : muiMediaId(uiMediaId)
+    : Observable()
+    , muiMediaId(uiMediaId)
     , mDtRelease(QDate(static_cast<int>(uiReleaseYear), 1, 1))
     , msName(sName)
 {
@@ -58,7 +65,8 @@ Media::Media(const unsigned uiMediaId, const QString &sName, const unsigned uiRe
 }
 
 Media::Media(const unsigned uiMediaId, const QString &sName, const QDate &dtRelease, const QString &sFilePath, const QList<Artist> &lstArtists)
-    : muiMediaId(uiMediaId)
+    : Observable()
+    , muiMediaId(uiMediaId)
     , mDtRelease(dtRelease)
     , msFilePath(sFilePath), msName(sName)
 {
@@ -66,7 +74,8 @@ Media::Media(const unsigned uiMediaId, const QString &sName, const QDate &dtRele
 }
 
 Media::Media(const unsigned uiMediaId, const QString &sName, const unsigned uiReleaseYear, const QString &sFilePath, const QList<Artist> &lstArtists)
-    : muiMediaId(uiMediaId)
+    : Observable()
+    , muiMediaId(uiMediaId)
     , mDtRelease(QDate(static_cast<int>(uiReleaseYear), 1, 1))
     , msFilePath(sFilePath), msName(sName)
 {
@@ -74,7 +83,8 @@ Media::Media(const unsigned uiMediaId, const QString &sName, const unsigned uiRe
 }
 
 Media::Media(const Media &refCopy)
-    : muiMediaId(refCopy.getMediaId())
+    : Observable()
+    , muiMediaId(refCopy.getMediaId())
     , mDtRelease(refCopy.getReleaseDate())
     , msFilePath(refCopy.getFilePath())
     , msName(refCopy.getName())
@@ -82,20 +92,26 @@ Media::Media(const Media &refCopy)
     setArtists(refCopy.getArtists());
 }
 
+Media::~Media()
+{ }
+
 
 void Media::addArtist(const Artist &refArtist)
 {
     getArtistsInternal().append(refArtist);
+
+    setChanged();
+    notifyObservers();
 }
 
-const QList<Artist> Media::getArtists() const
+const QList<Artist> &Media::getArtists() const
 {
     return(getArtistsInternal());
 }
 
 QString &Media::getFilePath() const
 {
-    return(msFilePath);
+    return(const_cast<QString &>(msFilePath));
 }
 
 unsigned Media::getMediaId() const
@@ -116,34 +132,75 @@ QDate Media::getReleaseDate() const
 bool Media::removeArtist(const Artist &refArtist)
 {
     return(getArtistsInternal().removeOne(refArtist));
+
+    setChanged();
+    notifyObservers();
 }
 
 void Media::removeArtist(const unsigned uiIndex)
 {
-    getArtistsInternal().removeAt(uiIndex);
+    getArtistsInternal().removeAt(static_cast<int>(uiIndex));
+
+    setChanged();
+    notifyObservers();
 }
 
 void Media::setFilePath(const QString &sFilePath)
 {
     msFilePath = sFilePath;
+
+    setChanged();
+    notifyObservers();
 }
 
 void Media::setMediaId(const unsigned uiMediaId)
 {
     muiMediaId = uiMediaId;
+
+    setChanged();
+    notifyObservers();
 }
 
 void Media::setName(const QString &sName)
 {
     msName = sName;
+
+    setChanged();
+    notifyObservers();
 }
 
 void Media::setReleaseDate(const QDate &dtRelease)
 {
     mDtRelease = dtRelease;
+
+    setChanged();
+    notifyObservers();
 }
 
 void Media::setReleaseDate(const unsigned uiReleaseYear)
 {
     mDtRelease = QDate(static_cast<int>(uiReleaseYear), 1, 1);
+
+    setChanged();
+    notifyObservers();
 }
+
+bool Media::operator==(const Media &refOther) const
+{
+    return  (     (getMediaId() == refOther.getMediaId())
+            &&    (getName() == refOther.getName())
+            &&    (getReleaseDate() == refOther.getReleaseDate())
+            &&    (getFilePath() == refOther.getFilePath())
+            &&    (getArtists() == refOther.getArtists()));
+}
+
+NoMedia::NoMedia()
+    : Media()
+{ }
+
+NoMedia::NoMedia(const NoMedia &refCopy)
+    : Media(refCopy)
+{ }
+
+NoMedia::~NoMedia()
+{ }

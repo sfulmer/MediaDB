@@ -1,9 +1,11 @@
-//#include "mainwindow.h"
+//#include "MainWindow.h"
 //#include <QApplication>
 
 #include<iostream>
-#include<QtSql/QSqlDatabase>
+#include "MovieDAOImpl.h"
 
+using namespace net::draconia::dao;
+using namespace net::draconia::dbo;
 using namespace std;
 
 int main(int argc, char *argv[])
@@ -17,9 +19,9 @@ int main(int argc, char *argv[])
 
     return a.exec();*/
 
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("Test.db");
-    bool db_ok = db.open();
+    MovieDAOImpl objMovieDAO;
+    Movie objMovie = objMovieDAO.save(Movie(0, 0, "Ralph Breaks the Internet", 2018, "", QList<Artist>(), "Great movie!", QList<QDateTime>()));
+    cout << "The Id of the movie is " << objMovie.getMovieId() << endl;
 
-    cout << "It's " << ((!db_ok) ? "not " : "") << "open" << endl;
+    return(0);
 }

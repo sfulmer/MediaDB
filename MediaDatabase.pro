@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2019-02-19T20:29:24
+# Project created by QtCreator 2019-03-01T02:28:21
 #
 #-------------------------------------------------
 
@@ -26,24 +26,40 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp \
+    MainWindow.cpp \
+    Artist.cpp \
+    BeanFactory.cpp \
+    Book.cpp \
     Media.cpp \
     Movie.cpp \
-    Artist.cpp \
+    MovieDAOImpl.cpp \
+    Music.cpp \
     TVSeries.cpp \
-    Book.cpp
+    Roles.cpp \
+    MovieDAO.cpp \
+    MediaDAO.cpp \
+    MediaDAOImpl.cpp \
+    TableUtils.cpp \
+    TVEpisodeDAO.cpp \
+    Observer.cpp \
+    Observable.cpp
 
 HEADERS += \
-        mainwindow.h \
-    Media.h \
-    Movie.h \
-    Artist.h \
-    TVSeries.h \
-    Book.h \
-    music.h
+    MainWindow.h \
+    BeanFactory.h \
+    DBO.h \
+    MovieDAO.h \
+    MovieDAOImpl.h \
+    AbstractDAO.h \
+    MediaDAO.h \
+    MediaDAOImpl.h \
+    TableUtils.h \
+    TVEpisodeDAO.h \
+    Observer.h \
+    Observable.h
 
 FORMS += \
-        mainwindow.ui
+    MainWindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
