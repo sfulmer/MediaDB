@@ -2,7 +2,7 @@
 #include<QVariant>
 #include "TableUtils.h"
 
-using namespace net::draconia::dao;
+using namespace net::draconia::mediadb::dao;
 
 QSqlDatabase &TableUtils::getDatasource() const
 {

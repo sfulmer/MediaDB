@@ -1,27 +1,29 @@
 #pragma once
 
 #include "BeanFactory.h"
-#include<QString>
 #include<QtSql/QSqlDatabase>
 
 namespace net
 {
     namespace draconia
     {
-        namespace dao
+        namespace mediadb
         {
-            class TableUtils
+            namespace dao
             {
-                QSqlDatabase *mPtrDatasource;
-            protected:
-                QSqlDatabase &getDatasource() const;
-            public:
-                TableUtils(const QSqlDatabase &dbDatasource = BeanFactory::getInstance().getDatabase());
-                ~TableUtils();
+                class TableUtils
+                {
+                    QSqlDatabase *mPtrDatasource;
+                protected:
+                    QSqlDatabase &getDatasource() const;
+                public:
+                    TableUtils(const QSqlDatabase &dbDatasource = BeanFactory::getInstance().getDatabase());
+                    ~TableUtils();
 
-                bool isTableExists(const QString &sTableName) const;
-                bool removeTable(const QString &sTableName) const;
-            };
+                    bool isTableExists(const QString &sTableName) const;
+                    bool removeTable(const QString &sTableName) const;
+                };
+            }
         }
     }
 }

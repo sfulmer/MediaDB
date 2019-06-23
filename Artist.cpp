@@ -1,6 +1,6 @@
-#include "DBO.h"
+#include "Artist.h"
 
-using namespace net::draconia::dbo;
+using namespace net::draconia::mediadb::dbo;
 
 QList<Role> &Artist::getRolesInternal() const
 {
@@ -11,46 +11,37 @@ void Artist::setRoles(const QList<Role> &lstRoles)
 {
     getRolesInternal().clear();
     getRolesInternal().append(lstRoles);
-
-    setChanged();
-    notifyObservers();
 }
 
 Artist::Artist()
-    : Observable()
-    , muiArtistId(0)
+    : muiArtistId(0)
 { }
 
 Artist::Artist(const unsigned uiArtistId)
-    : Observable()
-    , muiArtistId(uiArtistId)
+    : muiArtistId(uiArtistId)
 { }
 
 Artist::Artist(const QString &sName)
-    : Observable()
-    , muiArtistId(0), msName(sName)
+    : muiArtistId(0), msName(sName)
+{ }
+
+Artist::Artist(const QString &sName, const QList<Role> &lstRoles)
+    : muiArtistId(0), msName(sName), mLstRoles(lstRoles)
 { }
 
 Artist::Artist(const unsigned uiArtistId, const QString &sName)
-    : Observable()
-    , muiArtistId(uiArtistId), msName(sName)
+    : muiArtistId(uiArtistId), msName(sName)
 { }
 
 Artist::Artist(const unsigned uiArtistId, const QString &sName, const QList<Role> &lstRoles)
-    : Observable()
-    , muiArtistId(uiArtistId)
-    , msName(sName)
-{
-    setRoles(lstRoles);
-}
+    : muiArtistId(uiArtistId), msName(sName), mLstRoles(lstRoles)
+{ }
 
 Artist::Artist(const Artist &refCopy)
-    : Observable()
-    , muiArtistId(refCopy.getArtistId())
+    : muiArtistId(refCopy.getArtistId())
     , msName(refCopy.getName())
-{
-    setRoles(refCopy.getRoles());
-}
+    , mLstRoles(refCopy.getRoles())
+{ }
 
 Artist::~Artist()
 { }
@@ -59,7 +50,7 @@ void Artist::addRole(const Role &refRole)
 {
     getRolesInternal().append(refRole);
 
-    setChanged();
+    setChanged(true);
     notifyObservers();
 }
 
@@ -80,27 +71,25 @@ const QList<Role> &Artist::getRoles() const
 
 bool Artist::removeRole(const Role &refRole)
 {
-    bool bReturnValue = getRolesInternal().removeOne(refRole);
+    bool bRetVal = getRolesInternal().removeOne(refRole);
 
-    setChanged();
+    setChanged(true);
     notifyObservers();
 
-    return(bReturnValue);
+    return(bRetVal);
 }
 
 void Artist::removeRole(const unsigned uiIndex)
 {
-    getRolesInternal().removeAt(static_cast<int>(uiIndex));
+    removeRole(getRolesInternal()[static_cast<int>(uiIndex)]);
 
-    setChanged();
-    notifyObservers();
 }
 
 void Artist::setArtistId(const unsigned uiArtistId)
 {
     muiArtistId = uiArtistId;
 
-    setChanged();
+    setChanged(true);
     notifyObservers();
 }
 
@@ -108,13 +97,27 @@ void Artist::setName(const QString &sName)
 {
     msName = sName;
 
-    setChanged();
+    setChanged(true);
     notifyObservers();
+}
+
+Artist &Artist::operator=(const Artist &refOther)
+{
+    setArtistId(refOther.getArtistId());
+    setName(refOther.getName());
+    setRoles(refOther.getRoles());
+
+    return(*this);
 }
 
 bool Artist::operator==(const Artist &refOther) const
 {
-    return(  (getArtistId() == refOther.getArtistId())
-          && (getName() == refOther.getName())
-          && (getRoles() == refOther.getRoles()));
+    return  (   (getArtistId() == refOther.getArtistId())
+            &&  (getName() == refOther.getName())
+            &&  (getRoles() == refOther.getRoles()));
+}
+
+bool Artist::operator!=(const Artist &refOther) const
+{
+    return(!operator==(refOther));
 }

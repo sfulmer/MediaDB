@@ -2,15 +2,13 @@
 
 using namespace net::draconia::util;
 
-QList<QSharedPointer<Observer>> Observable::getObservers()
+QList<Observer *> &Observable::getObserversInternal()
 {
     return(mLstObservers);
 }
 
-Observable::Observable() : mbChanged(false), mLstObservers()
-{ }
-
-Observable::Observable(const Observable &refCopy) : mbChanged(refCopy.isChanged()), mLstObservers(const_cast<Observable &>(refCopy).getObservers())
+Observable::Observable()
+    : mbChanged(false)
 { }
 
 Observable::~Observable()
@@ -18,7 +16,12 @@ Observable::~Observable()
 
 void Observable::addObserver(const Observer &refObserver)
 {
-    getObservers().append(QSharedPointer<Observer>(&refObserver));
+    getObserversInternal().append(const_cast<Observer *>(static_cast<const Observer *>(&refObserver)));
+}
+
+const QList<Observer *> &Observable::getObservers()
+{
+    return(getObserversInternal());
 }
 
 bool Observable::isChanged() const
@@ -28,16 +31,24 @@ bool Observable::isChanged() const
 
 void Observable::notifyObservers(const void *ptrArgument)
 {
-    for(QSharedPointer<Observer> &ptrObserver : getObservers())
-        ptrObserver->update(this, ptrArgument);
-}
+    for(Observer *ptrObserver : getObserversInternal())
+        (*ptrObserver).update(*this, ptrArgument);
 
-void Observable::removeObserver(const Observer &refObserver)
-{
-    getObservers().removeOne(QSharedPointer<Observer>(const_cast<Observer *>(&refObserver)));
+    setChanged(false);
 }
 
 void Observable::setChanged(const bool bChanged)
 {
     mbChanged = bChanged;
+}
+
+bool Observable::operator==(const Observable &refOther) const
+{
+    return  (   (isChanged() == refOther.isChanged())
+            &&  (mLstObservers == refOther.mLstObservers));
+}
+
+bool Observable::operator!=(const Observable &refOther) const
+{
+    return(!operator==(refOther));
 }

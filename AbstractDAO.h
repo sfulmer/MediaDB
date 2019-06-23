@@ -1,63 +1,46 @@
 #pragma once
 
-#include "BeanFactory.h"
 #include<QList>
 #include<QtSql/QSqlDatabase>
+#include<QtSql/QSqlQuery>
 #include<QtSql/QSqlRecord>
 #include "TableUtils.h"
-
-using namespace net::draconia;
 
 namespace net
 {
     namespace draconia
     {
-        namespace dao
+        namespace mediadb
         {
-            template<typename T>
-            class AbstractDAO
+            namespace dao
             {
-                QSqlDatabase *mPtrDatasource;
-                TableUtils *mPtrTableUtils;
-            protected:
-                void closeConnection()
+                template<typename T>
+                class AbstractDAO
                 {
-                    if(getDatabase().isOpen())
-                        getDatabase().close();
-                }
-                virtual T createObjectFromResults(const QSqlRecord &refRecord) = 0;
-                virtual QList<T> createObjectListFromResults(const QSqlQuery &refQuery) = 0;
-                virtual bool createTable() const = 0;
-                virtual QSqlDatabase &getDatabase() const
-                {
-                    return(*mPtrDatasource);
-                }
-                virtual QString getQueriedColumnsForSelect() const = 0;
-                TableUtils &getTableUtils()
-                {
-                    if(mPtrTableUtils == nullptr)
-                        mPtrTableUtils = new TableUtils(getDatabase());
-
-                    return(*mPtrTableUtils);
-                }
-                virtual T &insert(const T &refToSave) const = 0;
-                virtual bool isTableExists() const = 0;
-                virtual void removeTable() = 0;
-                virtual T &update(const T &refToSave) const = 0;
-            public:
-                AbstractDAO(const QSqlDatabase &refDatasource = BeanFactory::getInstance().getDatabase())
-                    : mPtrDatasource(&const_cast<QSqlDatabase &>(refDatasource))
-                { }
-                virtual ~AbstractDAO()
-                {
-                    if(mPtrTableUtils != nullptr)
-                        {
-                        delete mPtrTableUtils;
-
-                        mPtrTableUtils = nullptr;
-                        }
-                }
-            };
+                    QSqlDatabase *mPtrDatasource;
+                    TableUtils *mPtrTableUtils;
+                protected:
+                    void closeConnection();
+                    virtual T createObjectFromResults(const QSqlRecord &refRecord) = 0;
+                    QList<T> createObjectListFromResults(const QSqlQuery &refQuery);
+                    QSqlDatabase &getDatabase() const;
+                    virtual QString getPrimaryKey() const = 0;
+                    virtual QString getQueriedColumnsForSelect() const = 0;
+                    virtual QString getTableName() const = 0;
+                    TableUtils &getTableUtils();
+                    virtual T &insert(const T &refToSave) const = 0;
+                    bool isTableExists() const;
+                    void removeTable();
+                    virtual T &update(const T &refToSave) const = 0;
+                public:
+                    AbstractDAO(const QSqlDatabase &refDatasource = BeanFactory::getInstance().getDatabase());
+                    virtual ~AbstractDAO();
+                    virtual bool createTable() const = 0;
+                    T getById(const unsigned uiId) const;
+                    QList<T> list() const;
+                    bool remove(const unsigned uiId) const;
+                };
+            }
         }
     }
 }
