@@ -19,6 +19,8 @@ namespace net
                 public:
                     virtual ~MovieViewingDAO();
 
+                    virtual MovieViewing getById(const unsigned uiMovieViewingId) const = 0;
+                    virtual QList<MovieViewing> list() const = 0;
                     virtual QList<MovieViewing> listByMovie(const Movie &refMovie) const = 0;
                     virtual bool remove(const MovieViewing &refViewing) const = 0;
                     virtual MovieViewing &save(const MovieViewing &refToSave) const = 0;

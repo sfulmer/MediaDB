@@ -23,6 +23,7 @@ namespace net
                 public:
                     virtual ~RoleDAO();
 
+                    virtual Role getById(const unsigned uiRoleId) const = 0;
                     virtual Role getByNameArtistMediaAndRoleType(const QString &sName, const Artist &refArtist, const Media &refMedia, const RoleType &refRoleType) const = 0;
                     virtual QList<Role> listByArtist(const Artist &refArtist) const = 0;
                     virtual QList<Role> listByArtistAndMedia(const Artist &refArtist, const Media &refMedia) const = 0;

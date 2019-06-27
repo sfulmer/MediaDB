@@ -4,34 +4,17 @@
 
 using namespace net::draconia::mediadb::dao;
 
-const QString RoleTypeDAOImpl::TableName("RoleTypes");
-
 RoleType RoleTypeDAOImpl::createObjectFromResults(const QSqlRecord &refRecord)
 {
     return(RoleType (   refRecord.field("RoleTypeId").value().toUInt()
                     ,   refRecord.field("RoleType").value().toString()));
 }
 
-QString RoleTypeDAOImpl::getPrimaryKey() const
-{
-    return("RoleTypeId");
-}
-
-QString RoleTypeDAOImpl::getQueriedColumnsForSelect() const
-{
-    return("RoleType");
-}
-
-QString RoleTypeDAOImpl::getTableName() const
-{
-    return(TableName);
-}
-
 RoleType &RoleTypeDAOImpl::insert(const RoleType &refToSave) const
 {
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("insert into " + getTableName() + "(" + getQueriedColumnsForSelect() + ") values (?);");
+    objQuery.prepare("insert into RoleTypes(RoleType) values(?);");
 
     objQuery.bindValue(1, refToSave.getRoleType());
 
@@ -41,11 +24,21 @@ RoleType &RoleTypeDAOImpl::insert(const RoleType &refToSave) const
     return(const_cast<RoleType &>(refToSave));
 }
 
+bool RoleTypeDAOImpl::isTableExists() const
+{
+    return(const_cast<RoleTypeDAOImpl &>(*this).getTableUtils().isTableExists("RoleTypes"));
+}
+
+void RoleTypeDAOImpl::removeTable()
+{
+    getTableUtils().removeTable("RoleTypes");
+}
+
 RoleType &RoleTypeDAOImpl::update(const RoleType &refToSave) const
 {
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("update " + getTableName() + "set " + getQueriedColumnsForSelect() + " = ? where " + getPrimaryKey() + " = ?;");
+    objQuery.prepare("update RoleTypes set RoleType = ? where RoleTypeId = ?;");
 
     objQuery.bindValue(1, refToSave.getRoleType());
     objQuery.bindValue(2, refToSave.getRoleTypeId());
@@ -68,7 +61,7 @@ bool RoleTypeDAOImpl::createTable() const
         {
         QSqlQuery objQuery(getDatabase());
 
-        objQuery.prepare("create table " + getTableName() + " (" + getPrimaryKey() + " int not null auto_increment primary key, " + getQueriedColumnsForSelect() + " varchar(100) not null default ' ');");
+        objQuery.prepare("create table RoleTypes(RoleTypeId int not null auto_increment primary key, RoleType varchar(100) not null);");
 
         return(objQuery.exec());
         }
@@ -78,17 +71,48 @@ bool RoleTypeDAOImpl::createTable() const
 
 RoleType RoleTypeDAOImpl::getById(const unsigned uiRoleTypeId) const
 {
-    return(AbstractDAO<RoleType>::getById(uiRoleTypeId));
+    if(!isTableExists())
+        createTable();
+
+    QSqlQuery objQuery(getDatabase());
+
+    objQuery.prepare("select RoleTypeId, RoleType from RoleTypes where RoleTypeId = ?;");
+
+    objQuery.bindValue(1, uiRoleTypeId);
+
+    if(objQuery.exec())
+        return(const_cast<RoleTypeDAOImpl &>(*this).createObjectFromResults(objQuery.record()));
+    else
+        return(RoleType());
 }
 
 QList<RoleType> RoleTypeDAOImpl::list() const
 {
-    return(AbstractDAO<RoleType>::list());
+    if(!isTableExists())
+        createTable();
+
+    QSqlQuery objQuery(getDatabase());
+
+    objQuery.prepare("select RoleTypeId, RoleType from RoleTypes;");
+
+    if(objQuery.exec())
+        return(const_cast<RoleTypeDAOImpl &>(*this).createObjectListFromResults(objQuery));
+    else
+        return(QList<RoleType>());
 }
 
 bool RoleTypeDAOImpl::remove(const RoleType &refToRemove) const
 {
-    return(AbstractDAO<RoleType>::remove(refToRemove.getRoleTypeId()));
+    if(!isTableExists())
+        createTable();
+
+    QSqlQuery objQuery(getDatabase());
+
+    objQuery.prepare("delete from RoleTypes where RoleTypeId = ?;");
+
+    objQuery.bindValue(1, refToRemove.getRoleTypeId());
+
+    return(objQuery.exec());
 }
 
 RoleType &RoleTypeDAOImpl::save(const RoleType &refToSave) const

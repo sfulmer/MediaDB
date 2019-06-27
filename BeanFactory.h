@@ -1,5 +1,6 @@
 #pragma once
 
+#include "AlbumDAO.h"
 #include "ArtistDAO.h"
 #include "MediaDAO.h"
 #include "MovieDAO.h"
@@ -8,17 +9,22 @@
 #include<QtSql/QSqlDatabase>
 #include "RoleDAO.h"
 #include "RoleTypeDAO.h"
+#include "SingleDAO.h"
+#include "SongDAO.h"
 #include "TVEpisodeDAO.h"
 #include "TVSeasonDAO.h"
 #include "TVSeriesDAO.h"
 #include "TVSpecialDAO.h"
 
+using net::draconia::mediadb::dao::AlbumDAO;
 using net::draconia::mediadb::dao::ArtistDAO;
 using net::draconia::mediadb::dao::MediaDAO;
 using net::draconia::mediadb::dao::MovieDAO;
 using net::draconia::mediadb::dao::MovieViewingDAO;
 using net::draconia::mediadb::dao::RoleDAO;
 using net::draconia::mediadb::dao::RoleTypeDAO;
+using net::draconia::mediadb::dao::SingleDAO;
+using net::draconia::mediadb::dao::SongDAO;
 using net::draconia::mediadb::dao::TVEpisodeDAO;
 using net::draconia::mediadb::dao::TVSeasonDAO;
 using net::draconia::mediadb::dao::TVSeriesDAO;
@@ -34,6 +40,7 @@ namespace net
             {
                 static BeanFactory msObjBeanFactory;
 
+                QSharedPointer<AlbumDAO> mPtrAlbumDAO;
                 QSharedPointer<ArtistDAO> mPtrArtistDAO;
                 QSqlDatabase mDbDatabase;
                 QSharedPointer<MediaDAO> mPtrMediaDAO;
@@ -41,6 +48,8 @@ namespace net
                 QSharedPointer<MovieViewingDAO> mPtrMovieViewingDAO;
                 QSharedPointer<RoleDAO> mPtrRoleDAO;
                 QSharedPointer<RoleTypeDAO> mPtrRoleTypeDAO;
+                QSharedPointer<SingleDAO> mPtrSingleDAO;
+                QSharedPointer<SongDAO> mPtrSongDAO;
                 QSharedPointer<TVEpisodeDAO> mPtrTVEpisodeDAO;
                 QSharedPointer<TVSeasonDAO> mPtrTVSeasonDAO;
                 QSharedPointer<TVSeriesDAO> mPtrTVSeriesDAO;
@@ -52,6 +61,7 @@ namespace net
 
                 static BeanFactory &getInstance();
 
+                AlbumDAO &getAlbumDAO();
                 ArtistDAO &getArtistDAO();
                 QSqlDatabase &getDatabase();
                 MediaDAO &getMediaDAO();
@@ -59,6 +69,8 @@ namespace net
                 MovieViewingDAO &getMovieViewingDAO();
                 RoleDAO &getRoleDAO();
                 RoleTypeDAO &getRoleTypeDAO();
+                SingleDAO &getSingleDAO();
+                SongDAO &getSongDAO();
                 TVEpisodeDAO &getTVEpisodeDAO();
                 TVSeasonDAO &getTVSeasonDAO();
                 TVSeriesDAO &getTVSeriesDAO();

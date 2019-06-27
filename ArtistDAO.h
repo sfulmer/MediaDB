@@ -22,6 +22,7 @@ namespace net
 
                     virtual Artist getById(const unsigned uiArtistId) const = 0;
                     virtual Artist getByNameRoleTypeAndRoleName(const QString &sName, const RoleType &refRoleType, const QString sRoleName) const = 0;
+                    virtual QList<Artist> list() const = 0;
                     virtual QList<Artist> listByMedia(const Media &refMedia) const = 0;
                     virtual QList<Artist> listByMediaAndRoleType(const Media &refMedia, const RoleType &refRoleType) const = 0;
                     virtual bool remove(const Artist &refToRemove) const = 0;

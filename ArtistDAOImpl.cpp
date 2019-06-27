@@ -1,10 +1,9 @@
 #include "ArtistDAOImpl.h"
 #include "Media.h"
 #include<QtSql/QSqlField>
+#include "RoleDAOImpl.h"
 
 using namespace net::draconia::mediadb::dao;
-
-const QString ArtistDAOImpl::TableName("Artists");
 
 Artist ArtistDAOImpl::createObjectFromResults(const QSqlRecord &refRecord)
 {
@@ -19,34 +18,16 @@ Artist ArtistDAOImpl::createObjectFromResults(const QSqlRecord &refRecord)
     return(objArtist);
 }
 
-QString ArtistDAOImpl::getPrimaryKey() const
-{
-    return("ArtistId");
-}
-
-QString ArtistDAOImpl::getQueriedColumnsForSelect() const
-{
-    return("Name");
-}
-
 RoleDAO &ArtistDAOImpl::getRoleDAO() const
 {
     return(mRefRoleDAO);
-}
-
-QString ArtistDAOImpl::getTableName() const
-{
-    return(TableName);
 }
 
 Artist &ArtistDAOImpl::insert(const Artist &refToSave) const
 {
     QSqlQuery objQuery(getDatabase());
 
-    if(!isTableExists())
-        createTable();
-
-    objQuery.prepare("insert into " + getTableName() + " (" + getQueriedColumnsForSelect() + ") values (?);");
+    objQuery.prepare("insert into Artists (Name) values (?);");
 
     objQuery.bindValue(1, refToSave.getName());
 
@@ -59,14 +40,21 @@ Artist &ArtistDAOImpl::insert(const Artist &refToSave) const
     return(const_cast<Artist &>(refToSave));
 }
 
+bool ArtistDAOImpl::isTableExists() const
+{
+    return(const_cast<ArtistDAOImpl &>(*this).getTableUtils().isTableExists("Artists"));
+}
+
+void ArtistDAOImpl::removeTable()
+{
+    getTableUtils().removeTable("Artists");
+}
+
 Artist &ArtistDAOImpl::update(const Artist &refToSave) const
 {
     QSqlQuery objQuery(getDatabase());
 
-    if(!isTableExists())
-        createTable();
-
-    objQuery.prepare("update " + getTableName() + " set Name = ? where " + getPrimaryKey() + " = ?;");
+    objQuery.prepare("update Artists set Name = ? where ArtistId = ?;");
 
     objQuery.bindValue(1, refToSave.getName());
     objQuery.bindValue(2, refToSave.getArtistId());
@@ -91,7 +79,7 @@ bool ArtistDAOImpl::createTable() const
         {
         QSqlQuery objQuery(getDatabase());
 
-        objQuery.prepare("create table " + TableName + "(ArtistId int not null auto_increment primary key, Name varchar(255) not nullate not null, unique key(Name));");
+        objQuery.prepare("create table Artists(ArtistId int not null auto_increment primary key, Name varchar(255) not null, unique key(Name));");
 
         return(objQuery.exec());
         }
@@ -101,7 +89,19 @@ bool ArtistDAOImpl::createTable() const
 
 Artist ArtistDAOImpl::getById(const unsigned uiArtistId) const
 {
-    return(AbstractDAO<Artist>::getById(uiArtistId));
+    if(!isTableExists())
+        createTable();
+
+    QSqlQuery objQuery(getDatabase());
+
+    objQuery.prepare("select ArtistId, Name from Artists where ArtistId = ?;");
+
+    objQuery.bindValue(1, uiArtistId);
+
+    if(objQuery.exec())
+        return(const_cast<ArtistDAOImpl &>(*this).createObjectFromResults(objQuery.record()));
+    else
+        return(Artist());
 }
 
 Artist ArtistDAOImpl::getByNameRoleTypeAndRoleName(const QString &sName, const RoleType &refRoleType, const QString sRoleName) const
@@ -111,7 +111,9 @@ Artist ArtistDAOImpl::getByNameRoleTypeAndRoleName(const QString &sName, const R
     if(!isTableExists())
         createTable();
 
-    objQuery.prepare("select " + getQueriedColumnsForSelect() + " from " + getTableName() + " inner join Role on Role.ArtistId = Artist.ArtistId and Role.RoleTypeId = ? and Role.Name = ? where Artist.Name = ?;");
+    objQuery.prepare("select ArtistId, Name from Artists inner join Roles on Roles.ArtistId = Artist.ArtistId and Roles.RoleTypeId = ? and Roles.Name = ? where Artist.Name = ?;");
+
+    static_cast<RoleDAOImpl &>(getRoleDAO()).createTable();
 
     objQuery.bindValue(1, refRoleType.getRoleTypeId());
     objQuery.bindValue(2, sRoleName);
@@ -123,6 +125,21 @@ Artist ArtistDAOImpl::getByNameRoleTypeAndRoleName(const QString &sName, const R
         return(Artist());
 }
 
+QList<Artist> ArtistDAOImpl::list() const
+{
+    if(!isTableExists())
+        createTable();
+
+    QSqlQuery objQuery(getDatabase());
+
+    objQuery.prepare("select ArtistId, Name from Artists;");
+
+    if(objQuery.exec())
+        return(const_cast<ArtistDAOImpl &>(*this).createObjectListFromResults(objQuery));
+    else
+        return(QList<Artist>());
+}
+
 QList<Artist> ArtistDAOImpl::listByMedia(const Media &refMedia) const
 {
     QSqlQuery objQuery(getDatabase());
@@ -130,7 +147,9 @@ QList<Artist> ArtistDAOImpl::listByMedia(const Media &refMedia) const
     if(!isTableExists())
         createTable();
 
-    objQuery.prepare("select " + getQueriedColumnsForSelect() + " from " + getTableName() + " where Artist.MediaId = ?;");
+    objQuery.prepare("select ArtistId, Name from Artists inner join Roles on Artists.ArtistId = Roles.ArtistId and Roles.MediaId = ?;");
+
+    static_cast<RoleDAOImpl &>(getRoleDAO()).createTable();
 
     objQuery.bindValue(1, refMedia.getMediaId());
 
@@ -147,7 +166,9 @@ QList<Artist> ArtistDAOImpl::listByMediaAndRoleType(const Media &refMedia, const
     if(!isTableExists())
         createTable();
 
-    objQuery.prepare("select " + getQueriedColumnsForSelect() + " from " + getTableName() + " inner join Role on Role.ArtistId = Artist.ArtistId and ROle.RoleTypeId = ? where Artist.MediaId = ?;");
+    objQuery.prepare("select ArtistId, Name from Artists from Artists inner join Roles on Roles.ArtistId = Artist.ArtistId and Roles.RoleTypeId = ? and Roles.MediaId = ?;");
+
+    static_cast<RoleDAOImpl &>(getRoleDAO()).createTable();
 
     objQuery.bindValue(1, refRoleType.getRoleTypeId());
     objQuery.bindValue(2, refMedia.getMediaId());
@@ -165,7 +186,7 @@ QList<Artist> ArtistDAOImpl::listByName(const QString &sName) const
     if(!isTableExists())
         createTable();
 
-    objQuery.prepare("select " + getQueriedColumnsForSelect() + " from " + getTableName() + " where Artist.Name = ?;");
+    objQuery.prepare("select ArtistId, Name from Artists from Artists where Artist.Name = ?;");
 
     objQuery.bindValue(1, sName);
 
@@ -177,7 +198,16 @@ QList<Artist> ArtistDAOImpl::listByName(const QString &sName) const
 
 bool ArtistDAOImpl::remove(const Artist &refToRemove) const
 {
-    return(AbstractDAO<Artist>::remove(refToRemove.getArtistId()));
+    if(!isTableExists())
+        createTable();
+
+    QSqlQuery objQuery(getDatabase());
+
+    objQuery.prepare("delete from Artists where ArtistId = ?;");
+
+    objQuery.bindValue(1, refToRemove.getArtistId());
+
+    return(objQuery.exec());
 }
 
 Artist &ArtistDAOImpl::save(const Artist &refToSave) const

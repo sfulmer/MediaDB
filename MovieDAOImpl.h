@@ -20,8 +20,6 @@ namespace net
 
                 class MovieDAOImpl : public MovieDAO, public AbstractDAO<Movie>
                 {
-                    static const QString TableName;
-
                     ArtistDAO &mRefArtistDAO;
                     MediaDAO &mRefMediaDAO;
                     MovieViewingDAO &mRefMovieViewingDAO;
@@ -31,11 +29,10 @@ namespace net
                     ArtistDAO &getArtistDAO() const;
                     MediaDAO &getMediaDAO() const;
                     MovieViewingDAO &getMovieViewingDAO() const;
-                    virtual QString getPrimaryKey() const;
-                    virtual QString getQueriedColumnsForSelect() const;
                     RoleDAO &getRoleDAO() const;
-                    virtual QString getTableName() const;
                     virtual Movie &insert(const Movie &refToSave) const;
+                    virtual bool isTableExists() const;
+                    virtual void removeTable();
                     virtual Movie &update(const Movie &refToSave) const;
                 public:
                     MovieDAOImpl(const QSqlDatabase &refDatabase = BeanFactory::getInstance().getDatabase());

@@ -11,8 +11,6 @@ using namespace net::draconia::mediadb::dao;
 using net::draconia::mediadb::dbo::Media;
 using net::draconia::mediadb::dbo::Movie;
 
-const QString MovieDAOImpl::TableName("Movies");
-
 Movie MovieDAOImpl::createObjectFromResults(const QSqlRecord &refRecord)
 {
     Media objMedia = getMediaDAO().getById(refRecord.field("MediaId").value().toUInt());
@@ -45,31 +43,16 @@ MovieViewingDAO &MovieDAOImpl::getMovieViewingDAO() const
     return(mRefMovieViewingDAO);
 }
 
-QString MovieDAOImpl::getPrimaryKey() const
-{
-    return("MovieId");
-}
-
-QString MovieDAOImpl::getQueriedColumnsForSelect() const
-{
-    return("MediaId, Comments");
-}
-
 RoleDAO &MovieDAOImpl::getRoleDAO() const
 {
     return(mRefRoleDAO);
-}
-
-QString MovieDAOImpl::getTableName() const
-{
-    return(TableName);
 }
 
 Movie &MovieDAOImpl::insert(const Movie &refToSave) const
 {
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("insert into " + getTableName() + "(" + getQueriedColumnsForSelect() + ") values(?, ?);");
+    objQuery.prepare("insert into Movies (MediaId, Comments) values(?, ?);");
 
     objQuery.bindValue(1, refToSave.getMediaId());
     objQuery.bindValue(2, refToSave.getComments());
@@ -83,11 +66,21 @@ Movie &MovieDAOImpl::insert(const Movie &refToSave) const
     return(const_cast<Movie &>(refToSave));
 }
 
+bool MovieDAOImpl::isTableExists() const
+{
+    return(const_cast<MovieDAOImpl &>(*this).getTableUtils().isTableExists("Movies"));
+}
+
+void MovieDAOImpl::removeTable()
+{
+    getTableUtils().removeTable("Movies");
+}
+
 Movie &MovieDAOImpl::update(const Movie &refToSave) const
 {
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("update " + getTableName() + "set MediaId = ?, Comments = ? where MovieId = ?;");
+    objQuery.prepare("update Movies set MediaId = ?, Comments = ? where MovieId = ?;");
 
     objQuery.bindValue(1, refToSave.getMediaId());
     objQuery.bindValue(2, refToSave.getComments());
@@ -120,7 +113,7 @@ bool MovieDAOImpl::createTable() const
 
         static_cast<MovieViewingDAOImpl &>(getMovieViewingDAO()).createTable();
 
-        objQuery.prepare("create table " + getTableName() + "(" + getPrimaryKey() + " int not null auto_increment primary key, MediaId int not null, Comments varchar(32000) not null default ' ', foreign key(MediaId) references Media(MediaId));");
+        objQuery.prepare("create table Movies(MovieId int not null auto_increment primary key, MediaId int not null, Comments varchar(32000) not null default ' ', foreign key(MediaId) references Media(MediaId));");
 
         return(objQuery.exec());
         }
@@ -130,7 +123,19 @@ bool MovieDAOImpl::createTable() const
 
 Movie MovieDAOImpl::getById(const unsigned uiMovieId) const
 {
-    return(AbstractDAO<Movie>::getById(uiMovieId));
+    if(!isTableExists())
+        createTable();
+
+    QSqlQuery objQuery(getDatabase());
+
+    objQuery.prepare("select MovieId, MediaId, Comments from Movies where MovieId = ?;");
+
+    objQuery.bindValue(1, uiMovieId);
+
+    if(objQuery.exec())
+        return(const_cast<MovieDAOImpl &>(*this).createObjectFromResults(objQuery.record()));
+    else
+        return(Movie());
 }
 
 Movie MovieDAOImpl::getByNameAndReleaseYear(const QString &sName, const unsigned uiReleaseYear) const
@@ -142,7 +147,7 @@ Movie MovieDAOImpl::getByNameAndReleaseYear(const QString &sName, const unsigned
 
     static_cast<MediaDAOImpl &>(getMediaDAO()).createTable();
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " inner join Media on Movies.MediaId = Media.MediaId and Media.Name = ? and Media.ReleaseDate between ? and ?;");
+    objQuery.prepare("select MovieId, MediaId, Comments from Movies inner join Media on Movies.MediaId = Media.MediaId and Media.Name = ? and Media.ReleaseDate between ? and ?;");
 
     objQuery.bindValue(1, sName);
     objQuery.bindValue(2, QDate(static_cast<int>(uiReleaseYear), 1, 1));
@@ -156,7 +161,17 @@ Movie MovieDAOImpl::getByNameAndReleaseYear(const QString &sName, const unsigned
 
 QList<Movie> MovieDAOImpl::list() const
 {
-    return(AbstractDAO<Movie>::list());
+    if(!isTableExists())
+        createTable();
+
+    QSqlQuery objQuery(getDatabase());
+
+    objQuery.prepare("select MovieId, MediaId, Comments from Movies;");
+
+    if(objQuery.exec())
+        return(const_cast<MovieDAOImpl &>(*this).createObjectListFromResults(objQuery));
+    else
+        return(QList<Movie>());
 }
 
 QList<Movie> MovieDAOImpl::listByArtist(const Artist &refArtist) const
@@ -170,7 +185,7 @@ QList<Movie> MovieDAOImpl::listByArtist(const Artist &refArtist) const
     static_cast<MediaDAOImpl &>(getMediaDAO()).createTable();
     static_cast<RoleDAOImpl &>(getRoleDAO()).createTable();
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " inner join Media on Movies.MediaId = Media.MediaId inner join Roles on Roles.MediaId = Media.MediaId inner join Artists on Roles.ArtistId = Artists.ArtistId and Artists.ArtistId = ?;");
+    objQuery.prepare("select MovieId, MediaId, Comments from Movies inner join Media on Movies.MediaId = Media.MediaId inner join Roles on Roles.MediaId = Media.MediaId inner join Artists on Roles.ArtistId = Artists.ArtistId and Artists.ArtistId = ?;");
 
     objQuery.bindValue(1, refArtist.getArtistId());
 
@@ -191,7 +206,7 @@ QList<Movie> MovieDAOImpl::listByArtistAndName(const Artist &refArtist, const QS
     static_cast<MediaDAOImpl &>(getMediaDAO()).createTable();
     static_cast<RoleDAOImpl &>(getRoleDAO()).createTable();
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " inner join Media on Movies.MediaId = Media.MediaId and Media.Name = ? inner join Roles on Roles.MediaId = Media.MediaId inner join Artists on Roles.ArtistId = Artists.ArtistId and Artists.ArtistId = ?;");
+    objQuery.prepare("select MovieId, MediaId, Comments from Movies inner join Media on Movies.MediaId = Media.MediaId and Media.Name = ? inner join Roles on Roles.MediaId = Media.MediaId inner join Artists on Roles.ArtistId = Artists.ArtistId and Artists.ArtistId = ?;");
 
     objQuery.bindValue(1, sName);
     objQuery.bindValue(2, refArtist.getArtistId());
@@ -213,7 +228,7 @@ QList<Movie> MovieDAOImpl::listByArtistNameAndReleaseYear(const Artist &refArtis
     static_cast<MediaDAOImpl &>(getMediaDAO()).createTable();
     static_cast<RoleDAOImpl &>(getRoleDAO()).createTable();
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " inner join Media on Movies.MediaId = Media.MediaId and Media.Name = ? and Media.ReleaseDate between ? and ? inner join Roles on Roles.MediaId = Media.MediaId inner join Artists on Roles.ArtistId = Artists.ArtistId and Artists.ArtistId = ?;");
+    objQuery.prepare("select MovieId, MediaId, Comments from Movies inner join Media on Movies.MediaId = Media.MediaId and Media.Name = ? and Media.ReleaseDate between ? and ? inner join Roles on Roles.MediaId = Media.MediaId inner join Artists on Roles.ArtistId = Artists.ArtistId and Artists.ArtistId = ?;");
 
     objQuery.bindValue(1, sName);
     objQuery.bindValue(2, QDate(static_cast<int>(uiReleaseYear), 1, 1));
@@ -237,7 +252,7 @@ QList<Movie> MovieDAOImpl::listByArtistNameReleaseYearAndRoleType(const Artist &
     static_cast<MediaDAOImpl &>(getMediaDAO()).createTable();
     static_cast<RoleDAOImpl &>(getRoleDAO()).createTable();
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " inner join Media on Movies.MediaId = Media.MediaId and Media.Name = ? and Media.ReleaseDate between ? and ? inner join Roles on Roles.MediaId = Media.MediaId and Roles.RoleTypeId = ? inner join Artists on Roles.ArtistId = Artists.ArtistId and Artists.ArtistId = ?;");
+    objQuery.prepare("select MovieId, MediaId, Comments from Movies inner join Media on Movies.MediaId = Media.MediaId and Media.Name = ? and Media.ReleaseDate between ? and ? inner join Roles on Roles.MediaId = Media.MediaId and Roles.RoleTypeId = ? inner join Artists on Roles.ArtistId = Artists.ArtistId and Artists.ArtistId = ?;");
 
     objQuery.bindValue(1, sName);
     objQuery.bindValue(2, QDate(static_cast<int>(uiReleaseYear), 1, 1));
@@ -262,7 +277,7 @@ QList<Movie> MovieDAOImpl::listByArtistNameAndRoleType(const Artist &refArtist, 
     static_cast<MediaDAOImpl &>(getMediaDAO()).createTable();
     static_cast<RoleDAOImpl &>(getRoleDAO()).createTable();
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " inner join Media on Movies.MediaId = Media.MediaId and Media.Name = ? inner join Roles on Roles.MediaId = Media.MediaId and Roles.RoleTypeId = ? inner join Artists on Roles.ArtistId = Artists.ArtistId and Artists.ArtistId = ?;");
+    objQuery.prepare("select MovieId, MediaId, Comments from Movies inner join Media on Movies.MediaId = Media.MediaId and Media.Name = ? inner join Roles on Roles.MediaId = Media.MediaId and Roles.RoleTypeId = ? inner join Artists on Roles.ArtistId = Artists.ArtistId and Artists.ArtistId = ?;");
 
     objQuery.bindValue(1, sName);
     objQuery.bindValue(2, refRoleType.getRoleTypeId());
@@ -285,7 +300,7 @@ QList<Movie> MovieDAOImpl::listByArtistAndRoleType(const Artist &refArtist, cons
     static_cast<MediaDAOImpl &>(getMediaDAO()).createTable();
     static_cast<RoleDAOImpl &>(getRoleDAO()).createTable();
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " inner join Media on Movies.MediaId = Media.MediaId inner join Roles on Roles.MediaId = Media.MediaId and Roles.RoleTypeId = ? inner join Artists on Roles.ArtistId = Artists.ArtistId and Artists.ArtistId = ?;");
+    objQuery.prepare("select MovieId, MediaId, Comments from Movies inner join Media on Movies.MediaId = Media.MediaId inner join Roles on Roles.MediaId = Media.MediaId and Roles.RoleTypeId = ? inner join Artists on Roles.ArtistId = Artists.ArtistId and Artists.ArtistId = ?;");
 
     objQuery.bindValue(1, refRoleType.getRoleTypeId());
     objQuery.bindValue(2, refArtist.getArtistId());
@@ -305,7 +320,7 @@ QList<Movie> MovieDAOImpl::listByName(const QString &sName) const
 
     static_cast<MediaDAOImpl &>(getMediaDAO()).createTable();
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " inner join Media on Movies.MediaId = Media.MediaId and Media.Name = ?;");
+    objQuery.prepare("select MovieId, MediaId, Comments from Movies inner join Media on Movies.MediaId = Media.MediaId and Media.Name = ?;");
 
     objQuery.bindValue(1, sName);
 
@@ -324,7 +339,7 @@ QList<Movie> MovieDAOImpl::listByReleaseYear(const unsigned uiReleaseYear) const
 
     static_cast<MediaDAOImpl &>(getMediaDAO()).createTable();
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " inner join Media on Movies.MediaId = Media.MediaId and Media.ReleaseDate between ? and ?;");
+    objQuery.prepare("select MovieId, MediaId, Comments from Movies inner join Media on Movies.MediaId = Media.MediaId and Media.ReleaseDate between ? and ?;");
 
     objQuery.bindValue(1, QDate(static_cast<int>(uiReleaseYear), 1, 1));
     objQuery.bindValue(2, QDate(static_cast<int>(uiReleaseYear) + 1, 1, 1));
@@ -342,7 +357,7 @@ QList<Movie> MovieDAOImpl::listByWordInComments(const QString &sWord) const
 
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " where Comments like ?;");
+    objQuery.prepare("select MovieId, MediaId, Comments from Movies where Comments like ?;");
 
     objQuery.bindValue(1, "%" + sWord + "%");
 
@@ -354,7 +369,16 @@ QList<Movie> MovieDAOImpl::listByWordInComments(const QString &sWord) const
 
 bool MovieDAOImpl::remove(const Movie &refToRemove) const
 {
-    return(AbstractDAO<Movie>::remove(refToRemove.getMovieId()));
+    if(!isTableExists())
+        createTable();
+
+    QSqlQuery objQuery(getDatabase());
+
+    objQuery.prepare("delete from Movies where MovieId = ?;");
+
+    objQuery.bindValue(1, refToRemove.getMovieId());
+
+    return(objQuery.exec());
 }
 
 Movie &MovieDAOImpl::save(const Movie &refToSave) const

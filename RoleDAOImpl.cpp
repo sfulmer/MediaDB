@@ -4,8 +4,6 @@
 
 using namespace net::draconia::mediadb::dao;
 
-const QString RoleDAOImpl::TableName("Roles");
-
 Role RoleDAOImpl::createObjectFromResults(const QSqlRecord &refRecord)
 {
     return(Role (   refRecord.field("RoleId").value().toUInt()
@@ -25,31 +23,16 @@ MediaDAO &RoleDAOImpl::getMediaDAO() const
     return(mRefMediaDAO);
 }
 
-QString RoleDAOImpl::getPrimaryKey() const
-{
-    return("RoleId");
-}
-
-QString RoleDAOImpl::getQueriedColumnsForSelect() const
-{
-    return("ArtistId, MediaId, Name, RoleTypeId");
-}
-
 RoleTypeDAO &RoleDAOImpl::getRoleTypeDAO() const
 {
     return(mRefRoleTypeDAO);
-}
-
-QString RoleDAOImpl::getTableName() const
-{
-    return(TableName);
 }
 
 Role &RoleDAOImpl::insert(const Role &refToSave) const
 {
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("insert into " + getTableName() + " (" + getQueriedColumnsForSelect() + ") values(?, ?, ?, ?);");
+    objQuery.prepare("insert into Roles (ArtistId, MediaId, Name, RoleTypeId) values(?, ?, ?, ?);");
 
     getArtistDAO().save(refToSave.getArtist());
     getMediaDAO().save(refToSave.getMedia());
@@ -66,11 +49,21 @@ Role &RoleDAOImpl::insert(const Role &refToSave) const
     return(const_cast<Role &>(refToSave));
 }
 
+bool RoleDAOImpl::isTableExists() const
+{
+    return(const_cast<RoleDAOImpl &>(*this).getTableUtils().isTableExists("Roles"));
+}
+
+void RoleDAOImpl::removeTable()
+{
+    getTableUtils().removeTable("Roles");
+}
+
 Role &RoleDAOImpl::update(const Role &refToSave) const
 {
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("update " + getTableName() + " set ArtistId = ?, MediaId = ?, Name = ?, RoleTypeId = ? where RoleId = ?;");
+    objQuery.prepare("update Roles set ArtistId = ?, MediaId = ?, Name = ?, RoleTypeId = ? where RoleId = ?;");
 
     objQuery.bindValue(1, refToSave.getArtist().getArtistId());
     objQuery.bindValue(2, refToSave.getMedia().getMediaId());
@@ -99,12 +92,29 @@ bool RoleDAOImpl::createTable() const
         reinterpret_cast<AbstractDAO<Media> &>(getMediaDAO()).createTable();
         reinterpret_cast<AbstractDAO<RoleType> &>(getRoleTypeDAO()).createTable();
 
-        objQuery.prepare("create table " + getTableName() + "(" + getPrimaryKey() + " int not null auto_increment primary key, ArtistId int not null, MediaId int not null, Name varchar(250) default ' ' not null, RoleTypeId int not null, foreign key('ArtistId') references Artist(ArtistId), foreign key ('MediaId') references Media(MediaId), foreign key('RoleTypeId') references RoleType(RoleTypeId));");
+        objQuery.prepare("create table Roles (RoleId int not null auto_increment primary key, ArtistId int not null, MediaId int not null, Name varchar(255) not null, RoleTypeId int not null, foreign key(ArtistId) references Artists(ArtistId), foreign key(MediaId) references Media(MediaId), foreign key(RoleTypeId) references RoleTypes(RoleTypeId));");
 
         return(objQuery.exec());
         }
     else
         return(true);
+}
+
+Role RoleDAOImpl::getById(const unsigned uiRoleId) const
+{
+    if(!isTableExists())
+        createTable();
+
+    QSqlQuery objQuery(getDatabase());
+
+    objQuery.prepare("select RoleId, ArtistId, MediaId, Name, RoleTypeId from Roles where RoleId = ?;");
+
+    objQuery.bindValue(1, uiRoleId);
+
+    if(objQuery.exec())
+        return(const_cast<RoleDAOImpl &>(*this).createObjectFromResults(objQuery.record()));
+    else
+        return(Role());
 }
 
 Role RoleDAOImpl::getByNameArtistMediaAndRoleType(const QString &sName, const Artist &refArtist, const Media &refMedia, const RoleType &refRoleType) const
@@ -114,7 +124,7 @@ Role RoleDAOImpl::getByNameArtistMediaAndRoleType(const QString &sName, const Ar
 
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " where ArtistId = ? and MediaId = ? and Name = ? and RoleTypeId = ?;");
+    objQuery.prepare("select RoleId, ArtistId, MediaId, Name, RoleTypeId from Roles where ArtistId = ? and MediaId = ? and Name = ? and RoleTypeId = ?;");
 
     objQuery.bindValue(1, refArtist.getArtistId());
     objQuery.bindValue(2, refMedia.getMediaId());
@@ -134,7 +144,7 @@ QList<Role> RoleDAOImpl::listByArtist(const Artist &refArtist) const
 
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " where ArtistId = ?;");
+    objQuery.prepare("select RoleId, ArtistId, MediaId, Name, RoleTypeId from Roles where ArtistId = ?;");
 
     objQuery.bindValue(1, refArtist.getArtistId());
 
@@ -151,7 +161,7 @@ QList<Role> RoleDAOImpl::listByArtistAndMedia(const Artist &refArtist, const Med
 
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " where ArtistId = ? and MediaId = ?;");
+    objQuery.prepare("select RoleId, ArtistId, MediaId, Name, RoleTypeId from Roles where ArtistId = ? and MediaId = ?;");
 
     objQuery.bindValue(1, refArtist.getArtistId());
     objQuery.bindValue(2, refMedia.getMediaId());
@@ -169,7 +179,7 @@ QList<Role> RoleDAOImpl::listByArtistAndName(const Artist &refArtist, const QStr
 
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " where ArtistId = ? and Name = ?;");
+    objQuery.prepare("select RoleId, ArtistId, MediaId, Name, RoleTypeId from Roles where ArtistId = ? and Name = ?;");
 
     objQuery.bindValue(1, refArtist.getArtistId());
     objQuery.bindValue(2, sName);
@@ -187,7 +197,7 @@ QList<Role> RoleDAOImpl::listByMedia(const Media &refMedia) const
 
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " where MediaId = ?;");
+    objQuery.prepare("select RoleId, ArtistId, MediaId, Name, RoleTypeId from Roles where MediaId = ?;");
 
     objQuery.bindValue(1, refMedia.getMediaId());
 
@@ -204,7 +214,7 @@ QList<Role> RoleDAOImpl::listByMediaAndName(const Media &refMedia, const QString
 
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " where MediaId = ? and Name = ?;");
+    objQuery.prepare("select RoleId, ArtistId, MediaId, Name, RoleTypeId from Roles where MediaId = ? and Name = ?;");
 
     objQuery.bindValue(1, refMedia.getMediaId());
     objQuery.bindValue(2, sName);
@@ -222,7 +232,7 @@ QList<Role> RoleDAOImpl::listByName(const QString &sName) const
 
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " where Name = ?;");
+    objQuery.prepare("select RoleId, ArtistId, MediaId, Name, RoleTypeId from Roles where Name = ?;");
 
     objQuery.bindValue(1, sName);
 
@@ -239,7 +249,7 @@ QList<Role> RoleDAOImpl::listByNameAndRoleType(const QString &sName, const RoleT
 
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " where Name = ? and RoleTypeId = ?;");
+    objQuery.prepare("select RoleId, ArtistId, MediaId, Name, RoleTypeId from Roles where Name = ? and RoleTypeId = ?;");
 
     objQuery.bindValue(1, sName);
     objQuery.bindValue(2, refRoleType.getRoleTypeId());
@@ -257,7 +267,7 @@ QList<Role> RoleDAOImpl::listByRoleType(const RoleType &refRoleType) const
 
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " where RoleTypeId = ?;");
+    objQuery.prepare("select RoleId, ArtistId, MediaId, Name, RoleTypeId from Roles where RoleTypeId = ?;");
 
     objQuery.bindValue(1, refRoleType.getRoleTypeId());
 
@@ -269,7 +279,16 @@ QList<Role> RoleDAOImpl::listByRoleType(const RoleType &refRoleType) const
 
 bool RoleDAOImpl::remove(const Role &refRole) const
 {
-    return(AbstractDAO<Role>::remove(refRole.getRoleId()));
+    if(!isTableExists())
+        createTable();
+
+    QSqlQuery objQuery(getDatabase());
+
+    objQuery.prepare("delete from Roles where RoleId = ?;");
+
+    objQuery.bindValue(1, refRole.getRoleId());
+
+    return(objQuery.exec());
 }
 
 Role RoleDAOImpl::save(const Role &refToSave) const

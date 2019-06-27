@@ -3,7 +3,7 @@
 
 using namespace net::draconia::mediadb::dao;
 
-const QString MovieViewingDAOImpl::TableName("MovieViewings");
+using net::draconia::mediadb::dbo::MovieViewing;
 
 MovieViewing MovieViewingDAOImpl::createObjectFromResults(const QSqlRecord &refRecord)
 {
@@ -17,26 +17,11 @@ MovieDAO &MovieViewingDAOImpl::getMovieDAO() const
     return(mRefMovieDAO);
 }
 
-QString MovieViewingDAOImpl::getPrimaryKey() const
-{
-    return("MovieViewingId");
-}
-
-QString MovieViewingDAOImpl::getQueriedColumnsForSelect() const
-{
-    return("MovieId, ViewingDate");
-}
-
-QString MovieViewingDAOImpl::getTableName() const
-{
-    return(TableName);
-}
-
 MovieViewing &MovieViewingDAOImpl::insert(const MovieViewing &refToSave) const
 {
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("insert into " + getTableName() + "(" + getQueriedColumnsForSelect() + ") values (?, ?);");
+    objQuery.prepare("insert into MovieViewings (MovieId, ViewingDate) values(?, ?);");
 
     objQuery.bindValue(1, refToSave.getMovie().getMovieId());
     objQuery.bindValue(2, refToSave.getViewing());
@@ -47,11 +32,21 @@ MovieViewing &MovieViewingDAOImpl::insert(const MovieViewing &refToSave) const
     return(const_cast<MovieViewing &>(refToSave));
 }
 
+bool MovieViewingDAOImpl::isTableExists() const
+{
+    return(const_cast<MovieViewingDAOImpl &>(*this).getTableUtils().isTableExists("MovieViewings"));
+}
+
+void MovieViewingDAOImpl::removeTable()
+{
+    getTableUtils().removeTable("MovieViewings");
+}
+
 MovieViewing &MovieViewingDAOImpl::update(const MovieViewing &refToSave) const
 {
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("update " + getTableName() + " set MovieId = ?, ViewingDate = ? where MovieViewingId = ;");
+    objQuery.prepare("update MovieViewings set MovieId = ?, ViewingDate = ? where MovieViewingId = ?;");
 
     objQuery.bindValue(1, refToSave.getMovie().getMovieId());
     objQuery.bindValue(2, refToSave.getViewing());
@@ -76,12 +71,44 @@ bool MovieViewingDAOImpl::createTable() const
         {
         QSqlQuery objQuery(getDatabase());
 
-        objQuery.prepare("create table " + getTableName() + "( " + getPrimaryKey() + " int not null auto_increment primary key, MovieId int not null, ViewingDate datetime not null, foreign key (MovieId) references Movies(MovieId));");
+        objQuery.prepare("create table MovieViewings (MovieViewingId int not null auto_increment primary key, MovieId int not null, ViewingDate datetime not null, foreign key(MovieId) references Movies(MovieId));");
 
         return(objQuery.exec());
         }
     else
         return(true);
+}
+
+MovieViewing MovieViewingDAOImpl::getById(const unsigned uiMovieViewingId) const
+{
+    if(!isTableExists())
+        createTable();
+
+    QSqlQuery objQuery(getDatabase());
+
+    objQuery.prepare("select MovieViewingId, MovieId, ViewingDate from MovieViewings where MovieViewingId = ?;");
+
+    objQuery.bindValue(1, uiMovieViewingId);
+
+    if(objQuery.exec())
+        return(const_cast<MovieViewingDAOImpl &>(*this).createObjectFromResults(objQuery.record()));
+    else
+        return(MovieViewing());
+}
+
+QList<MovieViewing> MovieViewingDAOImpl::list() const
+{
+    if(!isTableExists())
+        createTable();
+
+    QSqlQuery objQuery(getDatabase());
+
+    objQuery.prepare("select MovieViewingId, MovieId, ViewingDate from MovieViewings;");
+
+    if(objQuery.exec())
+        return(const_cast<MovieViewingDAOImpl &>(*this).createObjectListFromResults(objQuery));
+    else
+        return(QList<MovieViewing>());
 }
 
 QList<MovieViewing> MovieViewingDAOImpl::listByMovie(const Movie &refMovie) const
@@ -91,7 +118,7 @@ QList<MovieViewing> MovieViewingDAOImpl::listByMovie(const Movie &refMovie) cons
 
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " where MovieId = ?;");
+    objQuery.prepare("select MovieViewingId, MovieId, ViewingDate from MovieViewings where MovieId = ?;");
 
     objQuery.bindValue(1, refMovie.getMovieId());
 
@@ -103,7 +130,16 @@ QList<MovieViewing> MovieViewingDAOImpl::listByMovie(const Movie &refMovie) cons
 
 bool MovieViewingDAOImpl::remove(const MovieViewing &refViewing) const
 {
-    return(AbstractDAO<MovieViewing>::remove(refViewing.getMovieViewingId()));
+    if(!isTableExists())
+        createTable();
+
+    QSqlQuery objQuery(getDatabase());
+
+    objQuery.prepare("delete from MovieViewings where MovieViewingId = ?;");
+
+    objQuery.bindValue(1, refViewing.getMovieViewingId());
+
+    return(objQuery.exec());
 }
 
 MovieViewing &MovieViewingDAOImpl::save(const MovieViewing &refToSave) const

@@ -17,13 +17,11 @@ namespace net
 
                 class RoleTypeDAOImpl : public AbstractDAO<RoleType>, public RoleTypeDAO
                 {
-                    static const QString TableName;
                 protected:
                     virtual RoleType createObjectFromResults(const QSqlRecord &refRecord);
-                    virtual QString getPrimaryKey() const;
-                    virtual QString getQueriedColumnsForSelect() const;
-                    virtual QString getTableName() const;
                     virtual RoleType &insert(const RoleType &refToSave) const;
+                    virtual bool isTableExists() const;
+                    virtual void removeTable();
                     virtual RoleType &update(const RoleType &refToSave) const;
                 public:
                     RoleTypeDAOImpl(const QSqlDatabase &refDatabase = BeanFactory::getInstance().getDatabase());

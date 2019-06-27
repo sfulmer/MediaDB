@@ -7,8 +7,6 @@
 
 using namespace net::draconia::mediadb::dao;
 
-const QString TVSpecialDAOImpl::TableName("TVSpecials");
-
 TVSpecial TVSpecialDAOImpl::createObjectFromResults(const QSqlRecord &refRecord)
 {
     Media objMedia = getMediaDAO().getById(refRecord.field("MediaId").value().toUInt());
@@ -34,24 +32,9 @@ MediaDAO &TVSpecialDAOImpl::getMediaDAO() const
     return(mRefMediaDAO);
 }
 
-QString TVSpecialDAOImpl::getPrimaryKey() const
-{
-    return("TVSpecialId");
-}
-
-QString TVSpecialDAOImpl::getQueriedColumnsForSelect() const
-{
-    return("MediaId, TVSeriesId, Comments");
-}
-
 RoleDAO &TVSpecialDAOImpl::getRoleDAO() const
 {
     return(mRefRoleDAO);
-}
-
-QString TVSpecialDAOImpl::getTableName() const
-{
-    return(TableName);
 }
 
 TVSeriesDAO &TVSpecialDAOImpl::getTVSeriesDAO() const
@@ -63,7 +46,7 @@ TVSpecial &TVSpecialDAOImpl::insert(const TVSpecial &refToSave) const
 {
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("insert into " + getTableName() + " (" + getQueriedColumnsForSelect() + ") values(?, ?, ?);");
+    objQuery.prepare("insert into TVSpecials (MediaId, TVSeriesId, Comments) values(?, ?, ?);");
 
     objQuery.bindValue(1, refToSave.getMediaId());
     objQuery.bindValue(2, refToSave.getSeries().getTVSeriesId());
@@ -75,11 +58,21 @@ TVSpecial &TVSpecialDAOImpl::insert(const TVSpecial &refToSave) const
     return(const_cast<TVSpecial &>(refToSave));
 }
 
+bool TVSpecialDAOImpl::isTableExists() const
+{
+    return(const_cast<TVSpecialDAOImpl &>(*this).getTableUtils().isTableExists("TVSpecials"));
+}
+
+void TVSpecialDAOImpl::removeTable()
+{
+    getTableUtils().removeTable("TVSpecials");
+}
+
 TVSpecial &TVSpecialDAOImpl::update(const TVSpecial &refToSave) const
 {
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("update " + getTableName() + " set MediaId = ?, TVSeriesId = ?, Comments = ? where TVSpecialId = ?;");
+    objQuery.prepare("update TVSpecials set MediaId = ?, TVSeriesId = ?, Comments = ? where TVSpecialId = ?;");
 
     objQuery.bindValue(1, refToSave.getMediaId());
     objQuery.bindValue(2, refToSave.getSeries().getTVSeriesId());
@@ -108,7 +101,7 @@ bool TVSpecialDAOImpl::createTable() const
         {
         QSqlQuery objQuery(getDatabase());
 
-        objQuery.prepare("create table " + getTableName() + "(" + getPrimaryKey() + " int not null auto_increment primary key, MediaId int not null, TVSeriesId int not null, Comments varchar(32000) not null default ' ', foreign key(MediaId) references Media(MediaId), foreign key (TVSeriesId) references TVSeries(TVSeriesId));");
+        objQuery.prepare("create table TVSpecials(TVSpecialid int not null auto_increment primary key, MediaId int not null, TVSeriesId int not null, Comments varchar(32000) not null default ' ', foreign key(MediaId) references Media(MediaId), foreign key(TVSeriesId) references TVSeries(TVSeriesId));");
 
         return(objQuery.exec());
         }
@@ -118,7 +111,19 @@ bool TVSpecialDAOImpl::createTable() const
 
 TVSpecial TVSpecialDAOImpl::getById(const unsigned uiId) const
 {
-    return(AbstractDAO<TVSpecial>::getById(uiId));
+    if(!isTableExists())
+        createTable();
+
+    QSqlQuery objQuery(getDatabase());
+
+    objQuery.prepare("select TVSpecialId, MediaId, TVSeriesId, Comments from TVSpecials where TVSpecialId = ?;");
+
+    objQuery.bindValue(1, uiId);
+
+    if(objQuery.exec())
+        return(const_cast<TVSpecialDAOImpl &>(*this).createObjectFromResults(objQuery.record()));
+    else
+        return(TVSpecial());
 }
 
 TVSpecial TVSpecialDAOImpl::getByNameAndreleaseYear(const QString &sName, const unsigned uiReleaseYear) const
@@ -128,7 +133,7 @@ TVSpecial TVSpecialDAOImpl::getByNameAndreleaseYear(const QString &sName, const 
 
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " inner join Media on " + getTableName() + ".MediaId = Media.MediaId and Media.Name = ? and Media.ReleaseDate between ? and ?;");
+    objQuery.prepare("select TVSpecialId, MediaId, TVSeriesId, Comments from TVSpecials inner join Media on TVSpecials.MediaId = Media.MediaId and Media.Name = ? and Media.ReleaseDate between ? and ?;");
 
     static_cast<MediaDAOImpl &>(getMediaDAO()).createTable();
 
@@ -144,7 +149,17 @@ TVSpecial TVSpecialDAOImpl::getByNameAndreleaseYear(const QString &sName, const 
 
 QList<TVSpecial> TVSpecialDAOImpl::list() const
 {
-    return(AbstractDAO<TVSpecial>::list());
+    if(!isTableExists())
+        createTable();
+
+    QSqlQuery objQuery(getDatabase());
+
+    objQuery.prepare("select TVSpecialId, MediaId, TVSeriesId, Comments from TVSpecials;");
+
+    if(objQuery.exec())
+        return(const_cast<TVSpecialDAOImpl &>(*this).createObjectListFromResults(objQuery));
+    else
+        return(QList<TVSpecial>());
 }
 
 QList<TVSpecial> TVSpecialDAOImpl::listByArtist(const Artist &refArtist) const
@@ -154,7 +169,7 @@ QList<TVSpecial> TVSpecialDAOImpl::listByArtist(const Artist &refArtist) const
 
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " inner join Media on " + getTableName() + ".MediaId = Media.MediaId inner join Roles on Roles.MediaId = Media.MediaId and Roles.ArtistId = ?;");
+    objQuery.prepare("select TVSpecialId, MediaId, TVSeriesId, Comments from TVSpecials inner join Media on TVSpecials.MediaId = Media.MediaId inner join Roles on Roles.MediaId = Media.MediaId and Roles.ArtistId = ?;");
 
     static_cast<RoleDAOImpl &>(getRoleDAO()).createTable();
     static_cast<MediaDAOImpl &>(getMediaDAO()).createTable();
@@ -174,7 +189,7 @@ QList<TVSpecial> TVSpecialDAOImpl::listByArtistAndSeries(const Artist &refArtist
 
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " inner join Media on " + getTableName() + ".MediaId = Media.MediaId inner join Roles on Roles.MediaId = Media.MediaId and Roles.ArtistId = ? where TVSeriesId = ?;");
+    objQuery.prepare("select TVSpecialId, MediaId, TVSeriesId, Comments from TVSpecials inner join Media on TVSpecials.MediaId = Media.MediaId inner join Roles on Roles.MediaId = Media.MediaId and Roles.ArtistId = ? where TVSeriesId = ?;");
 
     static_cast<RoleDAOImpl &>(getRoleDAO()).createTable();
     static_cast<MediaDAOImpl &>(getMediaDAO()).createTable();
@@ -195,7 +210,7 @@ QList<TVSpecial> TVSpecialDAOImpl::listByName(const QString &sName) const
 
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " inner join Media on " + getTableName() + ".MediaId = Media.MediaId and Media.Name = ?;");
+    objQuery.prepare("select TVSpecialId, MediaId, TVSeriesId, Comments from TVSpecials inner join Media on TVSpecials.MediaId = Media.MediaId and Media.Name = ?;");
 
     static_cast<MediaDAOImpl &>(getMediaDAO()).createTable();
 
@@ -214,7 +229,7 @@ QList<TVSpecial> TVSpecialDAOImpl::listByTVSeries(const TVSeries &refTVSeries) c
 
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " where TVSeriesId = ?;");
+    objQuery.prepare("select TVSpecialId, MediaId, TVSeriesId, Comments from TVSpecials where TVSeriesId = ?;");
 
     objQuery.bindValue(1, refTVSeries.getTVSeriesId());
 
@@ -231,7 +246,7 @@ QList<TVSpecial> TVSpecialDAOImpl::listByWordInComment(const QString &sWord) con
 
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " where Comments like ?;");
+    objQuery.prepare("select TVSpecialId, MediaId, TVSeriesId, Comments from TVSpecials where Comments like ?;");
 
     objQuery.bindValue(1, "%" + sWord + "%");
 
@@ -246,7 +261,13 @@ bool TVSpecialDAOImpl::remove(const TVSpecial &refToRemove) const
     if(!isTableExists())
         createTable();
 
-    return(AbstractDAO<TVSpecial>::remove(refToRemove.getTVSpecialId()));
+    QSqlQuery objQuery(getDatabase());
+
+    objQuery.prepare("delete from TVSpecials where TVSpecialId = ?;");
+
+    objQuery.bindValue(1, refToRemove.getTVSpecialId());
+
+    return(objQuery.exec());
 }
 
 TVSpecial &TVSpecialDAOImpl::save(const TVSpecial &refToSave) const

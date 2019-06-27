@@ -3,8 +3,6 @@
 
 using namespace net::draconia::mediadb::dao;
 
-const QString BookDAOImpl::TableName("Books");
-
 Book BookDAOImpl::createObjectFromResults(const QSqlRecord &refRecord)
 {
     Media objMedia = getMediaDAO().getById(refRecord.field("MediaId").value().toUInt());
@@ -24,26 +22,11 @@ MediaDAO &BookDAOImpl::getMediaDAO() const
     return(mRefMediaDAO);
 }
 
-QString BookDAOImpl::getPrimaryKey() const
-{
-    return("BookId");
-}
-
-QString BookDAOImpl::getQueriedColumnsForSelect() const
-{
-    return("MediaId, Comments, Collection");
-}
-
-QString BookDAOImpl::getTableName() const
-{
-    return(TableName);
-}
-
 Book &BookDAOImpl::insert(const Book &refToSave) const
 {
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("insert into " + getTableName() + " (" + getQueriedColumnsForSelect() + ") values(?, ?, ?);");
+    objQuery.prepare("insert into Books (MediaId, Comments, Collection) values(?, ?, ?);");
 
     getMediaDAO().save(refToSave);
 
@@ -57,11 +40,21 @@ Book &BookDAOImpl::insert(const Book &refToSave) const
     return(const_cast<Book &>(refToSave));
 }
 
+bool BookDAOImpl::isTableExists() const
+{
+    return(const_cast<BookDAOImpl &>(*this).getTableUtils().isTableExists("Books"));
+}
+
+void BookDAOImpl::removeTable()
+{
+    getTableUtils().removeTable("Books");
+}
+
 Book &BookDAOImpl::update(const Book &refToSave) const
 {
    QSqlQuery objQuery(getDatabase());
 
-   objQuery.prepare("update " + getTableName() + " set MediaId = ?, Comments = ?, Collection = ? where BookId = ?;");
+   objQuery.prepare("upate Books set MediaId = ?, Comments  ?, Collection = ? where BookId = ?;");
 
    getMediaDAO().save(refToSave);
 
@@ -87,7 +80,7 @@ bool BookDAOImpl::createTable() const
         {
         QSqlQuery objQuery(getDatabase());
 
-        objQuery.prepare("create table " + getTableName() + " (" + getPrimaryKey() + " int not null auto_increment primary key, MediaId int not null, Comments varchar(32000) not null default ' ', Collection varchar(255) not null default ' ', foreign key(MediaId) references Media(MediaId), index(Collection))");
+        objQuery.prepare("create table Books (BookId int not null auto_increment primary key, MediaId int not null, Comments varchar(32000) not null default ' ', Collection varchar(255) not null default ' ', foreign key(MediaId) references Media(MediaId), index(Collection));");
 
         return(objQuery.exec());
         }
@@ -97,7 +90,34 @@ bool BookDAOImpl::createTable() const
 
 Book BookDAOImpl::getById(const unsigned uiBookId) const
 {
-    return(AbstractDAO<Book>::getById(uiBookId));
+    if(!isTableExists())
+        createTable();
+
+    QSqlQuery objQuery(getDatabase());
+
+    objQuery.prepare("select BookId, MediaId, Comments, Collection from Books where BookId = ?;");
+
+    objQuery.bindValue(1, uiBookId);
+
+    if(objQuery.exec())
+        return(const_cast<BookDAOImpl &>(*this).createObjectFromResults(objQuery.record()));
+    else
+        return(Book());
+}
+
+QList<Book> BookDAOImpl::list() const
+{
+    if(!isTableExists())
+        createTable();
+
+    QSqlQuery objQuery(getDatabase());
+
+    objQuery.prepare("select BookId, MediaId, Comments, Collection from Books;");
+
+    if(objQuery.exec())
+        return(const_cast<BookDAOImpl &>(*this).createObjectListFromResults(objQuery));
+    else
+        return(QList<Book>());
 }
 
 QList<Book> BookDAOImpl::listByCollection(const QString &sCollection) const
@@ -107,7 +127,7 @@ QList<Book> BookDAOImpl::listByCollection(const QString &sCollection) const
 
    QSqlQuery objQuery(getDatabase());
 
-   objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + "where Collection = ?;");
+   objQuery.prepare("select BookId, MediaId, Comments, Collection from Books where Collection = ?;");
 
    objQuery.bindValue(1, sCollection);
 
@@ -124,7 +144,7 @@ QList<Book> BookDAOImpl::listByWordInComments(const QString &sWord) const
 
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + "where Comment like ?;");
+    objQuery.prepare("select BookId, MediaId, Comments, Collection from Books where Comment like ?;");
 
     objQuery.bindValue(1, "%" + sWord + "%");
 
@@ -136,7 +156,16 @@ QList<Book> BookDAOImpl::listByWordInComments(const QString &sWord) const
 
 bool BookDAOImpl::remove(const Book &refToRemove) const
 {
-    return(AbstractDAO<Book>::remove(refToRemove.getBookId()));
+    if(!isTableExists())
+        createTable();
+
+    QSqlQuery objQuery(getDatabase());
+
+    objQuery.prepare("delete from Books where BookId = ?;");
+
+    objQuery.bindValue(1, refToRemove.getBookId());
+
+    return(objQuery.exec());
 }
 
 Book &BookDAOImpl::save(const Book &refToSave) const

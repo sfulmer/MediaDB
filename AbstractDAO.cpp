@@ -66,18 +66,6 @@ TableUtils &AbstractDAO<T>::getTableUtils()
 }
 
 template<typename T>
-bool AbstractDAO<T>::isTableExists() const
-{
-    return(const_cast<AbstractDAO<T> &>(*this).getTableUtils().isTableExists(getTableName()));
-}
-
-template<typename T>
-void AbstractDAO<T>::removeTable()
-{
-    getTableUtils().removeTable(getTableName());
-}
-
-template<typename T>
 AbstractDAO<T>::AbstractDAO(const QSqlDatabase &refDatasource)
     : mPtrDatasource(&const_cast<QSqlDatabase &>(refDatasource))
 { }
@@ -91,55 +79,6 @@ AbstractDAO<T>::~AbstractDAO()
 
         mPtrTableUtils = nullptr;
         }
-}
-
-template<typename T>
-T AbstractDAO<T>::getById(const unsigned uiId) const
-{
-    QSqlQuery objQuery(getDatabase());
-
-    if(!isTableExists())
-        createTable();
-
-    objQuery.prepare("select " + getQueriedColumnsForSelect() + " from " + getTableName() + " where " + getPrimaryKey() + " = ?;");
-
-    objQuery.bindValue(1, uiId);
-
-    if(objQuery.exec())
-        return(const_cast<AbstractDAO<T> &>(*this).createObjectFromResults(objQuery.record()));
-    else
-        return(T());
-}
-
-template<typename T>
-QList<T> AbstractDAO<T>::list() const
-{
-    if(!isTableExists())
-        createTable();
-
-    QSqlQuery objQuery(getDatabase());
-
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + ";");
-
-    if(objQuery.exec())
-        return(const_cast<AbstractDAO<T> &>(*this).createObjectListFromResults(objQuery));
-    else
-        return(QList<T>());
-}
-
-template<typename T>
-bool AbstractDAO<T>::remove(const unsigned uiId) const
-{
-    QSqlQuery objQuery(getDatabase());
-
-    if(!isTableExists())
-        createTable();
-
-    objQuery.prepare("delete from " + getTableName() + " where " + getPrimaryKey() + " = ?;");
-
-    objQuery.bindValue(1, uiId);
-
-    return(objQuery.exec());
 }
 
 template class net::draconia::mediadb::dao::AbstractDAO<Artist>;

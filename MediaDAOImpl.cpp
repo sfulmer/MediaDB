@@ -5,9 +5,8 @@
 #include "RoleDAOImpl.h"
 
 using namespace net::draconia::mediadb::dao;
-using net::draconia::mediadb::dbo::Artist;
 
-const QString MediaDAOImpl::TableName("Media");
+using net::draconia::mediadb::dbo::Artist;
 
 Media MediaDAOImpl::createObjectFromResults(const QSqlRecord &refRecord)
 {
@@ -29,36 +28,20 @@ ArtistDAO &MediaDAOImpl::getArtistDAO() const
     return(mRefArtistDAO);
 }
 
-QString MediaDAOImpl::getPrimaryKey() const
-{
-    return("MediaId");
-}
-
-QString MediaDAOImpl::getQueriedColumnsForSelect() const
-{
-    return("Name, ReleaseDate, FilePath");
-}
-
 RoleDAO &MediaDAOImpl::getRoleDAO() const
 {
     return(mRefRoleDAO);
-}
-
-QString MediaDAOImpl::getTableName() const
-{
-    return(TableName);
 }
 
 Media &MediaDAOImpl::insert(const Media &refToSave) const
 {
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("insert into " + TableName + "(" + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + ") values(?, ?, ?, ?);");
+    objQuery.prepare("insert into Media (Name, ReleaseDate, FilePath) values(?, ?, ?);");
 
-    objQuery.bindValue(1, refToSave.getMediaId());
-    objQuery.bindValue(2, refToSave.getName());
-    objQuery.bindValue(3, refToSave.getReleaseDate());
-    objQuery.bindValue(4, refToSave.getFilePath());
+    objQuery.bindValue(1, refToSave.getName());
+    objQuery.bindValue(2, refToSave.getReleaseDate());
+    objQuery.bindValue(3, refToSave.getFilePath());
 
     if(objQuery.exec())
         const_cast<Media &>(refToSave).setMediaId(objQuery.lastInsertId().toUInt());
@@ -66,11 +49,21 @@ Media &MediaDAOImpl::insert(const Media &refToSave) const
     return(const_cast<Media &>(refToSave));
 }
 
+bool MediaDAOImpl::isTableExists() const
+{
+    return(const_cast<MediaDAOImpl &>(*this).getTableUtils().isTableExists("Media"));
+}
+
+void MediaDAOImpl::removeTable()
+{
+    getTableUtils().removeTable("Media");
+}
+
 Media &MediaDAOImpl::update(const Media &refToSave) const
 {
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("update " + TableName + "set Name = ?, ReleaseDate = ?, FilePath = ? where " + getPrimaryKey() + " = ?;");
+    objQuery.prepare("update Media set Name = ?, ReleaseDate = ?, FilePath = ? where MediaId = ?;");
 
     objQuery.bindValue(1, refToSave.getName());
     objQuery.bindValue(2, refToSave.getReleaseDate());
@@ -94,7 +87,7 @@ bool MediaDAOImpl::createTable() const
         {
         QSqlQuery objQuery(getDatabase());
 
-        objQuery.prepare("create table " + TableName + "(MediaId int not null auto_increment primary key, Name varchar(255) not null, ReleaseDate date not null, FilePath varchar(255) not null, unique key(Name, ReleaseDate));");
+        objQuery.prepare("create table Media (MediaId int not null auto_increment primary key, Name varchar(255) not null default ' ', ReleaseDate date not null, FilePath varchar(255) not null default ' ');");
 
         return(objQuery.exec());
         }
@@ -104,7 +97,19 @@ bool MediaDAOImpl::createTable() const
 
 Media MediaDAOImpl::getById(const unsigned uiMediaId) const
 {
-    return(AbstractDAO<Media>::getById(uiMediaId));
+    if(!isTableExists())
+        createTable();
+
+    QSqlQuery objQuery(getDatabase());
+
+    objQuery.prepare("select MediaId, Name, ReleaseDate, FilePath from Media where MediaId = ?;");
+
+    objQuery.bindValue(1, uiMediaId);
+
+    if(objQuery.exec())
+        return(const_cast<MediaDAOImpl &>(*this).createObjectFromResults(objQuery.record()));
+    else
+        return(Media());
 }
 
 Media MediaDAOImpl::getByNameAndReleaseYear(const QString &sName, const unsigned uiReleaseYear) const
@@ -114,7 +119,7 @@ Media MediaDAOImpl::getByNameAndReleaseYear(const QString &sName, const unsigned
 
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " where Name = ? and ReleaseDate between ? and ?;");
+    objQuery.prepare("select MediaId, Name, ReleaseDate, FilePath from Media where Name = ? and ReleaseDate between ? and ?;");
 
     objQuery.bindValue(1, sName);
     objQuery.bindValue(2, QDate(static_cast<int>(uiReleaseYear), 1, 1));
@@ -128,7 +133,17 @@ Media MediaDAOImpl::getByNameAndReleaseYear(const QString &sName, const unsigned
 
 QList<Media> MediaDAOImpl::list() const
 {
-    return(AbstractDAO<Media>::list());
+    if(!isTableExists())
+        createTable();
+
+    QSqlQuery objQuery(getDatabase());
+
+    objQuery.prepare("select MediaId, Name, ReleaseDate, FilePath from Media;");
+
+    if(objQuery.exec())
+        return(const_cast<MediaDAOImpl &>(*this).createObjectListFromResults(objQuery));
+    else
+        return(QList<Media>());
 }
 
 QList<Media> MediaDAOImpl::listByArtist(const Artist &refArtist) const
@@ -138,9 +153,8 @@ QList<Media> MediaDAOImpl::listByArtist(const Artist &refArtist) const
 
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " inner join Roles on Roles.MediaId = Media.MediaId inner join Artists on Roles.ArtistId = Artist.ArtistId and Artist.ArtistId = ?;");
+    objQuery.prepare("select MediaId, Name, ReleaseDate, FilePath from Media inner join Roles on Roles.MediaId = Media.MediaId and Roles.ArtistId = ?;");
 
-    reinterpret_cast<ArtistDAOImpl &>(getArtistDAO()).createTable();
     reinterpret_cast<RoleDAOImpl &>(getRoleDAO()).createTable();
 
     objQuery.bindValue(1, refArtist.getArtistId());
@@ -158,9 +172,8 @@ QList<Media> MediaDAOImpl::listByArtistAndName(const Artist &refArtist, const QS
 
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " inner join Artists on Artists.MediaId = Media.MediaId and Artist.ArtistId = ? where Media.Name = ?;");
+    objQuery.prepare("select MediaId, Name, ReleaseDate, FilePath from Media inner join Roles on Roles.MediaId = Media.MediaId and Roles.ArtistId = ? where Media.Name = ?;");
 
-    reinterpret_cast<ArtistDAOImpl &>(getArtistDAO()).createTable();
     reinterpret_cast<RoleDAOImpl &>(getRoleDAO()).createTable();
 
     objQuery.bindValue(1, refArtist.getArtistId());
@@ -179,9 +192,8 @@ QList<Media> MediaDAOImpl::listByArtistNameAndReleaseYear(const Artist &refArtis
 
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " inner join Artists on Artists.MediaId = Media.MediaId and Artist.ArtistId = ? where Media.Name = ? and Media.ReleaseDate between ? and ?;");
+    objQuery.prepare("select MediaId, Name, ReleaseDate, FilePath from Media inner join Roles on Roles.MediaId = Media.MediaId and Roles.ArtistId = ? where Media.Name = ? and Media.ReleaseDate between ? and ?;");
 
-    reinterpret_cast<ArtistDAOImpl &>(getArtistDAO()).createTable();
     reinterpret_cast<RoleDAOImpl &>(getRoleDAO()).createTable();
 
     objQuery.bindValue(1, refArtist.getArtistId());
@@ -202,9 +214,8 @@ QList<Media> MediaDAOImpl::listByArtistNameReleaseYearAndRoleType(const Artist &
 
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " inner join Artists on Artists.MediaId = Media.MediaId and Artist.ArtistId = ? inner join Role on Role.ArtistId = Artist.ArtistId and Role.RoleTypeId = ? where Media.Name = ? and Media.ReleaseDate between ? and ?;");
+    objQuery.prepare("select MediaId, Name, ReleaseDate, FilePath from Media inner join Roles on Roles.MediaId = Media.MediaId and Roles.ArtistId = ? and Roles.RoleTypeId = ? where Media.Name = ? and Media.ReleaseDate between ? and ?;");
 
-    reinterpret_cast<ArtistDAOImpl &>(getArtistDAO()).createTable();
     reinterpret_cast<RoleDAOImpl &>(getRoleDAO()).createTable();
 
     objQuery.bindValue(1, refArtist.getArtistId());
@@ -226,9 +237,8 @@ QList<Media> MediaDAOImpl::listByArtistNameAndRoleType(const Artist &refArtist, 
 
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " inner join Artists on Artists.MediaId = Media.MediaId and Artist.ArtistId = ? inner join Role on Role.ArtistId = Artist.ArtistId and Role.RoleTypeId = ? where Media.Name = ?;");
+    objQuery.prepare("select MediaId, Name, ReleaseDate, FilePath from Media inner join Roles on Roles.MediaId = Media.MediaId and Roles.ArtistId = ? and Roles.RoleTypeId = ? where Media.Name = ?;");
 
-    reinterpret_cast<ArtistDAOImpl &>(getArtistDAO()).createTable();
     reinterpret_cast<RoleDAOImpl &>(getRoleDAO()).createTable();
 
     objQuery.bindValue(1, refArtist.getArtistId());
@@ -248,9 +258,8 @@ QList<Media> MediaDAOImpl::listByArtistAndRoleType(const Artist &refArtist, cons
 
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " inner join Artists on Artists.MediaId = Media.MediaId and Artist.ArtistId = ? inner join Role on Artist.RoleId = Role.RoleId and Role.RoleTypeId = ?;");
+    objQuery.prepare("select MediaId, Name, ReleaseDate, FilePath from Media inner join Roles on Roles.MediaId = Media.MediaId and Roles.ArtistId = ? and Roles.RoleTypeId = ?;");
 
-    reinterpret_cast<ArtistDAOImpl &>(getArtistDAO()).createTable();
     reinterpret_cast<RoleDAOImpl &>(getRoleDAO()).createTable();
 
     objQuery.bindValue(1, refArtist.getArtistId());
@@ -269,7 +278,7 @@ QList<Media> MediaDAOImpl::listByName(const QString &sName) const
 
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " where Name = ?;");
+    objQuery.prepare("select MediaId, Name, ReleaseDate, FilePath from Media where Name = ?;");
 
     objQuery.bindValue(1, sName);
 
@@ -286,7 +295,7 @@ QList<Media> MediaDAOImpl::listByReleaseYear(const unsigned uiReleaseYear) const
 
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " where ReleaseDate between ? and ?;");
+    objQuery.prepare("select MediaId, Name, ReleaseDate, FilePath from Media where ReleaseDate between ? and ?;");
 
     objQuery.bindValue(1, QDate(static_cast<int>(uiReleaseYear), 1, 1));
     objQuery.bindValue(2, QDate(static_cast<int>(uiReleaseYear + 1), 1, 1));
@@ -299,7 +308,16 @@ QList<Media> MediaDAOImpl::listByReleaseYear(const unsigned uiReleaseYear) const
 
 bool MediaDAOImpl::remove(const Media &refMedia) const
 {
-    return(AbstractDAO<Media>::remove(refMedia.getMediaId()));
+    if(!isTableExists())
+        createTable();
+
+    QSqlQuery objQuery(getDatabase());
+
+    objQuery.prepare("delete from Media where MediaId = ?;");
+
+    objQuery.bindValue(1, refMedia.getMediaId());
+
+    return(objQuery.exec());
 }
 
 Media &MediaDAOImpl::save(const Media &refToSave) const

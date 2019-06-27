@@ -27,6 +27,8 @@ CONFIG += c++11
 SOURCES += \
         AbstractDAO.cpp \
         Album.cpp \
+        AlbumDAO.cpp \
+        AlbumDAOImpl.cpp \
         Artist.cpp \
         ArtistDAO.cpp \
         ArtistDAOImpl.cpp \
@@ -50,7 +52,11 @@ SOURCES += \
         RoleTypeDAO.cpp \
         RoleTypeDAOImpl.cpp \
         Single.cpp \
+        SingleDAO.cpp \
+        SingleDAOImpl.cpp \
         Song.cpp \
+        SongDAO.cpp \
+        SongDAOImpl.cpp \
         TVEpisode.cpp \
         TVEpisodeDAO.cpp \
         TVEpisodeDAOImpl.cpp \
@@ -70,6 +76,8 @@ SOURCES += \
 HEADERS += \
         AbstractDAO.h \
         Album.h \
+        AlbumDAO.h \
+        AlbumDAOImpl.h \
         Artist.h \
         ArtistDAO.h \
         ArtistDAOImpl.h \
@@ -95,7 +103,11 @@ HEADERS += \
         RoleTypeDAO.h \
         RoleTypeDAOImpl.h \
         Single.h \
+        SingleDAO.h \
+        SingleDAOImpl.h \
         Song.h \
+        SongDAO.h \
+        SongDAOImpl.h \
         TVEpisode.h \
         TVEpisodeDAO.h \
         TVEpisodeDAOImpl.h \

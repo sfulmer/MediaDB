@@ -20,16 +20,13 @@ namespace net
 
                 class ArtistDAOImpl : public ArtistDAO, public AbstractDAO<Artist>
                 {
-                    static const QString TableName;
-
                     RoleDAO &mRefRoleDAO;
                 protected:
                     virtual Artist createObjectFromResults(const QSqlRecord &refRecord);
-                    virtual QString getPrimaryKey() const;
-                    virtual QString getQueriedColumnsForSelect() const;
                     RoleDAO &getRoleDAO() const;
-                    virtual QString getTableName() const;
                     virtual Artist &insert(const Artist &refToSave) const;
+                    virtual bool isTableExists() const;
+                    virtual void removeTable();
                     virtual Artist &update(const Artist &refToSave) const;
                 public:
                     ArtistDAOImpl(const QSqlDatabase &refDatasource = BeanFactory::getInstance().getDatabase());
@@ -38,6 +35,7 @@ namespace net
                     virtual bool createTable() const;
                     virtual Artist getById(const unsigned uiArtistId) const;
                     virtual Artist getByNameRoleTypeAndRoleName(const QString &sName, const RoleType &refRoleType, const QString sRoleName) const;
+                    virtual QList<Artist> list() const;
                     virtual QList<Artist> listByMedia(const Media &refMedia) const;
                     virtual QList<Artist> listByMediaAndRoleType(const Media &refMedia, const RoleType &refRoleType) const;
                     virtual QList<Artist> listByName(const QString &sName) const;

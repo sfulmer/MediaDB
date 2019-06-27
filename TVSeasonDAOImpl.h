@@ -19,8 +19,6 @@ namespace net
 
                 class TVSeasonDAOImpl : public AbstractDAO<TVSeason>, public TVSeasonDAO
                 {
-                    static const QString TableName;
-
                     MediaDAO &mRefMediaDAO;
                     RoleDAO &mRefRoleDAO;
                     TVEpisodeDAO &mRefTVEpisodeDAO;
@@ -28,13 +26,12 @@ namespace net
                 protected:
                     virtual TVSeason createObjectFromResults(const QSqlRecord &refRecord);
                     MediaDAO &getMediaDAO() const;
-                    virtual QString getPrimaryKey() const;
-                    virtual QString getQueriedColumnsForSelect() const;
                     RoleDAO &getRoleDAO() const;
-                    virtual QString getTableName() const;
                     TVEpisodeDAO &getTVEpisodeDAO() const;
                     TVSeriesDAO &getTVSeriesDAO() const;
                     virtual TVSeason &insert(const TVSeason &refToSave) const;
+                    virtual bool isTableExists() const;
+                    virtual void removeTable();
                     virtual TVSeason &update(const TVSeason &refToSave) const;
                 public:
                     TVSeasonDAOImpl(const QSqlDatabase &refDatabase = BeanFactory::getInstance().getDatabase());

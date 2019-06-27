@@ -8,8 +8,6 @@ using namespace net::draconia::mediadb::dao;
 using net::draconia::mediadb::dbo::TVSeries;
 using net::draconia::mediadb::dbo::TVSpecial;
 
-const QString TVSeriesDAOImpl::TableName("TVSeries");
-
 TVSeries TVSeriesDAOImpl::createObjectFromResults(const QSqlRecord &refRecord)
 {
     TVSeries objSeries = TVSeries   (    refRecord.field("TVSeriesId").value().toUInt()
@@ -26,16 +24,6 @@ TVSeries TVSeriesDAOImpl::createObjectFromResults(const QSqlRecord &refRecord)
     return(objSeries);
 }
 
-QString TVSeriesDAOImpl::getPrimaryKey() const
-{
-    return("TVSeriesId");
-}
-
-QString TVSeriesDAOImpl::getQueriedColumnsForSelect() const
-{
-    return("Name, ReleaseDate, Comments");
-}
-
 TVSeasonDAO &TVSeriesDAOImpl::getTVSeasonDAO() const
 {
     return(mRefTVSeasonDAO);
@@ -46,16 +34,11 @@ TVSpecialDAO &TVSeriesDAOImpl::getTVSpecialDAO() const
     return(mRefTVSpecialDAO);
 }
 
-QString TVSeriesDAOImpl::getTableName() const
-{
-    return(TableName);
-}
-
 TVSeries &TVSeriesDAOImpl::insert(const TVSeries &refToSave) const
 {
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("insert into " + getTableName() + " (" + getQueriedColumnsForSelect() + ") values (?, ?, ?);");
+    objQuery.prepare("insert into TVSeries (Name, ReleaseDate, Comments) values(?, ?, ?);");
 
     objQuery.bindValue(1, refToSave.getName());
     objQuery.bindValue(2, refToSave.getReleaseDate());
@@ -67,11 +50,21 @@ TVSeries &TVSeriesDAOImpl::insert(const TVSeries &refToSave) const
     return(const_cast<TVSeries &>(refToSave));
 }
 
+bool TVSeriesDAOImpl::isTableExists() const
+{
+    return(const_cast<TVSeriesDAOImpl &>(*this).getTableUtils().isTableExists("TVSeries"));
+}
+
+void TVSeriesDAOImpl::removeTable()
+{
+    getTableUtils().removeTable("TVSeries");
+}
+
 TVSeries &TVSeriesDAOImpl::update(const TVSeries &refToSave) const
 {
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("update " + getTableName() + " set Name = ?, ReleaseDate = ?, Comments = ? where TVSeriesId = ?;");
+    objQuery.prepare("upate TVSeries set Name = ?, ReleaseDate = ?, Comments = ? where TVSeriesId = ?;");
 
     objQuery.bindValue(1, refToSave.getName());
     objQuery.bindValue(2, refToSave.getReleaseDate());
@@ -98,7 +91,7 @@ bool TVSeriesDAOImpl::createTable() const
         {
         QSqlQuery objQuery(getDatabase());
 
-        objQuery.prepare("create table " + getTableName() + " (" + getPrimaryKey() + " int not null auto_increment primary key, Name varchar(255), ReleaseDate date not null, Comments varchar(32000) not null default ' ');");
+        objQuery.prepare("create table TVSeries(TVSeriesId int not null auto_increment primary key, Name varchar(255) not null, ReleaseDate date not null, Comments varchar(32000) not null default ' ');");
 
         return(objQuery.exec());
         }
@@ -108,12 +101,34 @@ bool TVSeriesDAOImpl::createTable() const
 
 TVSeries TVSeriesDAOImpl::getById(const unsigned uiId) const
 {
-    return(AbstractDAO<TVSeries>::getById(uiId));
+    if(!isTableExists())
+        createTable();
+
+    QSqlQuery objQuery(getDatabase());
+
+    objQuery.prepare("select TVSeriesId, Name, ReleaseDate, Comments from TVSeries where TvSeriesId = ?;");
+
+    objQuery.bindValue(1, uiId);
+
+    if(objQuery.exec())
+        return(const_cast<TVSeriesDAOImpl &>(*this).createObjectFromResults(objQuery.record()));
+    else
+        return(TVSeries());
 }
 
 QList<TVSeries> TVSeriesDAOImpl::list() const
 {
-    return(AbstractDAO<TVSeries>::list());
+    if(!isTableExists())
+        createTable();
+
+    QSqlQuery objQuery(getDatabase());
+
+    objQuery.prepare("select TVSeriesId, Name, ReleaseDate, Comments from TVSeries;");
+
+    if(objQuery.exec())
+        return(const_cast<TVSeriesDAOImpl &>(*this).createObjectListFromResults(objQuery));
+    else
+        return(QList<TVSeries>());
 }
 
 QList<TVSeries> TVSeriesDAOImpl::listByReleaseYear(const unsigned uiReleaseYear) const
@@ -123,7 +138,7 @@ QList<TVSeries> TVSeriesDAOImpl::listByReleaseYear(const unsigned uiReleaseYear)
 
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " where ReleaseDate between ? and ?;");
+    objQuery.prepare("select TVSeriesId, Name, ReleaseDate, Comments from TVSeries where ReleaseDate between ? and ?;");
 
     objQuery.bindValue(1, QDate(static_cast<int>(uiReleaseYear), 1, 1));
     objQuery.bindValue(2, QDate(static_cast<int>(uiReleaseYear) + 1, 1, 1));
@@ -141,7 +156,7 @@ QList<TVSeries> TVSeriesDAOImpl::listByWordInComment(const QString &sWord) const
 
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("select " + getPrimaryKey() + ", " + getQueriedColumnsForSelect() + " from " + getTableName() + " where Comments like ?;");
+    objQuery.prepare("select TVSeriesId, Name, ReleaseDate, Comments from TVSeries where Comments like ?;");
 
     objQuery.bindValue(1, "%" + sWord + "%");
 
@@ -153,7 +168,16 @@ QList<TVSeries> TVSeriesDAOImpl::listByWordInComment(const QString &sWord) const
 
 bool TVSeriesDAOImpl::remove(const TVSeries &refToRemove) const
 {
-    return(AbstractDAO<TVSeries>::remove(refToRemove.getTVSeriesId()));
+    if(!isTableExists())
+        createTable();
+
+    QSqlQuery objQuery(getDatabase());
+
+    objQuery.prepare("delete from TVSeries where TVSeriesId = ?;");
+
+    objQuery.bindValue(1, refToRemove.getTVSeriesId());
+
+    return(objQuery.exec());
 }
 
 TVSeries &TVSeriesDAOImpl::save(const TVSeries &refToSave) const

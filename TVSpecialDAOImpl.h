@@ -25,8 +25,6 @@ namespace net
 
                 class TVSpecialDAOImpl : public AbstractDAO<TVSpecial>, public TVSpecialDAO
                 {
-                    static const QString TableName;
-
                     ArtistDAO &mRefArtistDAO;
                     MediaDAO &mRefMediaDAO;
                     RoleDAO &mRefRoleDAO;
@@ -35,12 +33,11 @@ namespace net
                     virtual TVSpecial createObjectFromResults(const QSqlRecord &refRecord);
                     ArtistDAO &getArtistDAO() const;
                     MediaDAO &getMediaDAO() const;
-                    virtual QString getPrimaryKey() const;
-                    virtual QString getQueriedColumnsForSelect() const;
                     RoleDAO &getRoleDAO() const;
-                    virtual QString getTableName() const;
                     TVSeriesDAO &getTVSeriesDAO() const;
                     virtual TVSpecial &insert(const TVSpecial &refToSave) const;
+                    virtual bool isTableExists() const;
+                    virtual void removeTable();
                     virtual TVSpecial &update(const TVSpecial &refToSave) const;
                 public:
                     TVSpecialDAOImpl(const QSqlDatabase &refDatabase = BeanFactory::getInstance().getDatabase());

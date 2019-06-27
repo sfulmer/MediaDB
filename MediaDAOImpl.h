@@ -18,18 +18,15 @@ namespace net
 
                 class MediaDAOImpl : public AbstractDAO<Media>, public MediaDAO
                 {
-                    static const QString TableName;
-
                     ArtistDAO &mRefArtistDAO;
                     RoleDAO &mRefRoleDAO;
                 protected:
                     virtual Media createObjectFromResults(const QSqlRecord &refRecord);
                     ArtistDAO &getArtistDAO() const;
-                    virtual QString getPrimaryKey() const;
-                    virtual QString getQueriedColumnsForSelect() const;
                     RoleDAO &getRoleDAO() const;
-                    virtual QString getTableName() const;
                     virtual Media &insert(const Media &refToSave) const;
+                    virtual bool isTableExists() const;
+                    virtual void removeTable();
                     virtual Media &update(const Media &refToSave) const;
                 public:
                     MediaDAOImpl(const QSqlDatabase &refDatasource = BeanFactory::getInstance().getDatabase());
