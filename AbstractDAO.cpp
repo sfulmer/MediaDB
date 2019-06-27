@@ -81,6 +81,7 @@ AbstractDAO<T>::~AbstractDAO()
         }
 }
 
+template class net::draconia::mediadb::dao::AbstractDAO<Album>;
 template class net::draconia::mediadb::dao::AbstractDAO<Artist>;
 template class net::draconia::mediadb::dao::AbstractDAO<Book>;
 template class net::draconia::mediadb::dao::AbstractDAO<Media>;
