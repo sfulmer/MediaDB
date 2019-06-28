@@ -18,6 +18,12 @@ namespace net
                     QListWidget *mLstMedia;
                     QScrollArea *mScrMediaList;
                     QWidget *mPnlMediaList;
+                protected:
+                    QListWidget *getMediaList();
+                    QWidget *getMediaPanel();
+                    QScrollArea *getMediaScrollArea();
+
+                    void initPanel();
                 public:
                     explicit MainPanel(QWidget *parent = nullptr);
 
