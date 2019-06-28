@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include <QApplication>
 
+using net::draconia::mediadb::ui::MainWindow;
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);

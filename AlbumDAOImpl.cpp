@@ -27,6 +27,16 @@ Album AlbumDAOImpl::createObjectFromResults(const QSqlRecord &refRecord)
     return(objAlbum);
 }
 
+MediaDAO &AlbumDAOImpl::getMediaDAO() const
+{
+    return(mRefMediaDAO);
+}
+
+RoleDAO &AlbumDAOImpl::getRoleDAO() const
+{
+    return(mRefRoleDAO);
+}
+
 SingleDAO &AlbumDAOImpl::getSingleDAO() const
 {
     return(mRefSingleDAO);
