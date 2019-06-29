@@ -73,7 +73,8 @@ SOURCES += \
         TVSpecial.cpp \
         MainPanel.cpp \
         MainWindow.cpp \
-        Observable.cpp
+        Observable.cpp \
+        CrawlerImpl.cpp
 
 HEADERS += \
         BeanFactory.h \
@@ -125,7 +126,8 @@ HEADERS += \
         TVSpecial.h \
         MainPanel.h \
         MainWindow.h \
-        Observable.h
+        Observable.h \
+        Crawler.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
