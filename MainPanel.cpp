@@ -50,8 +50,8 @@ void MainPanel::initPanel()
 {
     QLayout *loMain = new QHBoxLayout(this);
 
-    setLayout(loMain);
-    setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
+    this->setLayout(loMain);
+    this->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 
     loMain->addWidget(getMediaPanel()); // FIXME This like called a crash.
 }
