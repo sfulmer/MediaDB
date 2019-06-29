@@ -53,7 +53,7 @@ void MainPanel::initPanel()
     setLayout(loMain);
     setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 
-    loMain->addWidget(getMediaPanel());
+    loMain->addWidget(getMediaPanel()); // FIXME This like called a crash.
 }
 
 MainPanel::MainPanel(QWidget *parent)
