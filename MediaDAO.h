@@ -17,7 +17,7 @@ namespace net
                 class MediaDAO
                 {
                 public:
-                    virtual ~MediaDAO() { }
+                    virtual ~MediaDAO();
 
                     virtual Media getById(const unsigned uiMediaId) const = 0;
                     virtual Media getByNameAndReleaseYear(const QString &sName, const unsigned uiReleaseYear) const = 0;
