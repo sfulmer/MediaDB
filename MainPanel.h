@@ -15,9 +15,9 @@ namespace net
                 class MainPanel : public QWidget
                 {
                     Q_OBJECT
-                    QListWidget *mLstMedia;
-                    QScrollArea *mScrMediaList;
-                    QWidget *mPnlMediaList;
+                    QListWidget *mLstMedia{};
+                    QScrollArea *mScrMediaList{};
+                    QWidget *mPnlMediaList{};
                 protected:
                     QListWidget *getMediaList();
                     QWidget *getMediaPanel();
