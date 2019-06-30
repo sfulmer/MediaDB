@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MediaListPanel.h"
+#include<QPushButton>
 #include<QWidget>
 
 namespace net
@@ -11,23 +11,21 @@ namespace net
         {
             namespace ui
             {
-                class MainPanel : public QWidget
+                class MediaListButtonPanel : public QWidget
                 {
                     Q_OBJECT
-                    MediaListPanel *mPnlMediaList;
+                    QPushButton *mBtnAdd, *mBtnEdit, *mBtnRemove;
                 protected:
-                    MediaListPanel *getMediaListPanel();
+                    QPushButton *getAddButton();
+                    QPushButton *getEditButton();
+                    QPushButton *getRemoveButton();
                     void initPanel();
                 public:
-                    explicit MainPanel(QWidget *parent = nullptr);
-
-                    virtual QSize sizeHint() const;
-
+                    explicit MediaListButtonPanel(QWidget *parent = nullptr);
                 signals:
 
                 public slots:
                 };
-
             }
         }
     }
