@@ -1,10 +1,7 @@
 #pragma once
 
-#include<QLayout>
 #include "MainPanel.h"
 #include<QMainWindow>
-#include<QScrollArea>
-#include<QListWidget>
 
 namespace net
 {
@@ -17,15 +14,15 @@ namespace net
                 class MainWindow : public QMainWindow
                 {
                     Q_OBJECT
+
                     MainPanel *mPnlMain;
                 protected:
-
+                    MainPanel *getMainPanel();
                     void initControls();
                     void initMenus();
                     void initWindow();
                 public:
                     explicit MainWindow(QWidget *parent = nullptr);
-                    ~MainWindow();
                 };
             }
         }

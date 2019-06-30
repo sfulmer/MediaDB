@@ -1,64 +1,28 @@
 #include "MainPanel.h"
-#include<QHBoxLayout>
 #include<QVBoxLayout>
 
-using namespace net::draconia::mediadb::ui;
-
-QListWidget *MainPanel::getMediaList()
+QListWidget *MainPanel::getList()
 {
-    if(mLstMedia == nullptr)
+    if(mList == nullptr)
         {
-        mLstMedia = new QListWidget(getMediaScrollArea());
+        mList = new QListWidget(this);
 
-        mLstMedia->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
+        mList->addItem("Testing");
         }
 
-    return(mLstMedia);
-}
-
-QWidget *MainPanel::getMediaPanel()
-{
-    if(mPnlMediaList == nullptr)
-        {
-        mPnlMediaList = new QWidget(this);
-
-        QLayout *loMediaList = new QVBoxLayout(mPnlMediaList);
-
-        mPnlMediaList->setLayout(loMediaList);
-        mPnlMediaList->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
-
-        loMediaList->addWidget(getMediaScrollArea());
-        }
-
-    return(mPnlMediaList);
-}
-
-QScrollArea *MainPanel::getMediaScrollArea()
-{
-    if(mScrMediaList == nullptr)
-        {
-        mScrMediaList = new QScrollArea(getMediaPanel());
-
-        mScrMediaList->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred));
-        mScrMediaList->setWidget(getMediaList());
-        }
-
-    return(mScrMediaList);
-}
-
-void MainPanel::initPanel()
-{
-    QLayout *loMain = new QHBoxLayout(this);
-
-    this->setLayout(loMain);
-    this->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
-
-    loMain->addWidget(getMediaPanel());
-    MainPanel::setStyleSheet("QScrollArea { background-color: blue; } QListWidget { background-color: green; } QWidget { background-color: red; }"); // For debugging of UI.
+    return(mList);
 }
 
 MainPanel::MainPanel(QWidget *parent)
     : QWidget(parent)
 {
-    initPanel();
+    QLayout *lo = new QVBoxLayout(this);
+    mList = new QListWidget(this);
+
+    mList->addItem("Testing");
+
+    lo->addWidget(mList);
+    lo->setSpacing(5);
+
+    setLayout(lo);
 }

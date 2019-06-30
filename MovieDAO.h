@@ -17,7 +17,7 @@ namespace net
                 class MovieDAO
                 {
                 public:
-                    virtual ~MovieDAO();
+                    virtual ~MovieDAO() = 0;
 
                     virtual Movie getById(const unsigned uiMovieId) const = 0;
                     virtual Movie getByNameAndReleaseYear(const QString &sName, const unsigned uiReleaseYear) const = 0;
