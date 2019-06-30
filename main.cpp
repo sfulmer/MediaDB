@@ -8,6 +8,7 @@ int main(int argc, char *argv[])
     QApplication objApp(argc, argv);
     MainWindow wndMain;
 
+    wndMain.setFixedSize(1280, 720); // For easier debugging of UI.
     wndMain.show();
 
     return(objApp.exec());

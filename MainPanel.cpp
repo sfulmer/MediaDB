@@ -39,7 +39,7 @@ QScrollArea *MainPanel::getMediaScrollArea()
         {
         mScrMediaList = new QScrollArea(getMediaPanel());
 
-        mScrMediaList->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred));
+        mScrMediaList->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred));
         mScrMediaList->setWidget(getMediaList());
         }
 
@@ -53,7 +53,8 @@ void MainPanel::initPanel()
     this->setLayout(loMain);
     this->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 
-    loMain->addWidget(getMediaPanel()); // FIXME This like called a crash.
+    loMain->addWidget(getMediaPanel());
+    MainPanel::setStyleSheet("QScrollArea { background-color: blue; } QListWidget { background-color: green; } QWidget { background-color: red; }"); // For debugging of UI.
 }
 
 MainPanel::MainPanel(QWidget *parent)
