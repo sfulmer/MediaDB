@@ -1,12 +1,20 @@
 #include "MainWindow.h"
 #include<QHBoxLayout>
-#include<QScrollArea>
+#include<QListWidget>
 
 using namespace net::draconia::mediadb::ui;
 
+MainPanel *MainWindow::getMainPanel()
+{
+    if(mPnlMain == nullptr)
+        mPnlMain = new MainPanel(this);
+
+    return(mPnlMain);
+}
+
 void MainWindow::initControls()
 {
-    new MainPanel(this);
+    setCentralWidget(getMainPanel());
 }
 
 void MainWindow::initMenus()
@@ -14,7 +22,7 @@ void MainWindow::initMenus()
 
 void MainWindow::initWindow()
 {
-    setWindowTitle("Media Database");
+    setWindowTitle(QObject::tr("Media Database"));
 
     initControls();
     initMenus();
@@ -22,9 +30,7 @@ void MainWindow::initWindow()
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
+    , mPnlMain(nullptr)
 {
     initWindow();
 }
-
-MainWindow::~MainWindow()
-{ }

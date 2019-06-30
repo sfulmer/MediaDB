@@ -18,7 +18,7 @@ namespace net
             {
                 extern template class AbstractDAO<Movie>;
 
-                class MovieDAOImpl : public MovieDAO, public AbstractDAO<Movie>
+                class MovieDAOImpl : public AbstractDAO<Movie>, public MovieDAO
                 {
                     ArtistDAO &mRefArtistDAO;
                     MediaDAO &mRefMediaDAO;

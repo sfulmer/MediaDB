@@ -25,7 +25,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+        MainPanel.cpp \
+        MediaDAO.cpp \
         MediaDBApp.cpp \
+        MovieDAO.cpp \
         main.cpp \
         BeanFactory.cpp \
         AbstractDAO.cpp \
@@ -36,7 +39,6 @@ SOURCES += \
         BookDAO.cpp \
         BookDAOImpl.cpp \
         MediaDAOImpl.cpp \
-        MovieDAO.cpp \
         MovieDAOImpl.cpp \
         MovieViewingDAO.cpp \
         MovieViewingDAOImpl.cpp \
@@ -71,7 +73,6 @@ SOURCES += \
         TVSeason.cpp \
         TVSeries.cpp \
         TVSpecial.cpp \
-        MainPanel.cpp \
         MainWindow.cpp \
         Observable.cpp
 
@@ -84,9 +85,9 @@ HEADERS += \
         ArtistDAOImpl.h \
         BookDAO.h \
         BookDAOImpl.h \
+        MainPanel.h \
         MediaDAO.h \
         MediaDAOImpl.h \
-        MediaDAOcpp \
         MediaDBApp.h \
         MovieDAO.h \
         MovieDAOImpl.h \
@@ -123,7 +124,6 @@ HEADERS += \
         TVSeason.h \
         TVSeries.h \
         TVSpecial.h \
-        MainPanel.h \
         MainWindow.h \
         Observable.h
 
@@ -131,3 +131,5 @@ HEADERS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+FORMS +=

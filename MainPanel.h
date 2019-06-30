@@ -1,37 +1,18 @@
 #pragma once
 
 #include<QListWidget>
-#include<QScrollArea>
-#include <QWidget>
+#include<QWidget>
 
-namespace net
+class MainPanel : public QWidget
 {
-    namespace draconia
-    {
-        namespace mediadb
-        {
-            namespace ui
-            {
-                class MainPanel : public QWidget
-                {
-                    Q_OBJECT
-                    QListWidget *mLstMedia;
-                    QScrollArea *mScrMediaList;
-                    QWidget *mPnlMediaList;
-                protected:
-                    QListWidget *getMediaList();
-                    QWidget *getMediaPanel();
-                    QScrollArea *getMediaScrollArea();
+    Q_OBJECT
+    QListWidget *mList;
+protected:
+    QListWidget *getList();
+public:
+    explicit MainPanel(QWidget *parent = nullptr);
 
-                    void initPanel();
-                public:
-                    explicit MainPanel(QWidget *parent = nullptr);
+signals:
 
-                signals:
-
-                public slots:
-                };
-            }
-        }
-    }
-}
+public slots:
+};
