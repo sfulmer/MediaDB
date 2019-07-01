@@ -65,6 +65,7 @@ SOURCES += \
         Media.cpp \
         Movie.cpp \
         MovieViewing.cpp \
+        MediaListPanel.cpp \
         Role.cpp \
         RoleType.cpp \
         Single.cpp \
@@ -116,6 +117,7 @@ HEADERS += \
         Media.h \
         Movie.h \
         MovieViewing.h \
+        MediaListPanel.h \
         Role.h \
         RoleType.h \
         Single.h \

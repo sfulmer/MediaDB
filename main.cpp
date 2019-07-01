@@ -1,5 +1,6 @@
-#include "mainwindow.h"
 #include<QApplication>
+#include "MainWindow.h"
+#include <QApplication>
 
 using net::draconia::mediadb::ui::MainWindow;
 

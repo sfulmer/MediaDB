@@ -1,4 +1,2 @@
-cmake-build-debug/
-
-CMakeLists.txt
-*.autosave
+/*.autosave
+/*.pro.*
