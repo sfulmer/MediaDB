@@ -3,6 +3,14 @@
 
 using namespace net::draconia::mediadb::ui;
 
+FilePathFieldPanel *MediaDetailsDataPanel::getFilePathField()
+{
+    if(mFldFilePath == nullptr)
+        mFldFilePath = new FilePathFieldPanel(this);
+
+    return(mFldFilePath);
+}
+
 QLabel *MediaDetailsDataPanel::getFilePathLabel()
 {
     if(mLblFilePath == nullptr)
@@ -10,7 +18,7 @@ QLabel *MediaDetailsDataPanel::getFilePathLabel()
         mLblFilePath = new QLabel("File &Path:", this);
 
         mLblFilePath->setFont(QFont(font().family(), font().pointSize(), QFont::Bold, font().italic()));
-        mLblFilePath->setBuddy(nullptr);
+        mLblFilePath->setBuddy(getFilePathField());
         }
 
     return(mLblFilePath);
@@ -47,6 +55,7 @@ QDateEdit *MediaDetailsDataPanel::getReleaseDateField()
         {
         mDtRelease = new QDateEdit(this);
 
+        mDtRelease->setFixedWidth(100);
         mDtRelease->setReadOnly(true);
         }
 
@@ -72,7 +81,9 @@ void MediaDetailsDataPanel::initPanel()
 
     loDetailsData->addRow(getNameLabel(), getNameField());
     loDetailsData->addRow(getReleaseDateLabel(), getReleaseDateField());
-    //loDetailsData->addRow(getFilePathLabel(), getFilePathField());
+    loDetailsData->addRow(getFilePathLabel(), getFilePathField());
+
+    loDetailsData->setFieldGrowthPolicy(QFormLayout::FieldGrowthPolicy::AllNonFixedFieldsGrow);
     loDetailsData->setSpacing(3);
 
     setLayout(loDetailsData);
@@ -81,6 +92,7 @@ void MediaDetailsDataPanel::initPanel()
 
 MediaDetailsDataPanel::MediaDetailsDataPanel(QWidget *parent)
     : QWidget(parent)
+    , mFldFilePath(nullptr)
     , mDtRelease(nullptr)
     , mLblFilePath(nullptr)
     , mLblName(nullptr)

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "MediaDetailsDataPanel.h"
-#include<QTabWidget>
+#include "MediaDetailsMovieDetailsPanel.h"
+#include<QVideoWidget>
 #include<QWidget>
 
 namespace net
@@ -12,17 +12,17 @@ namespace net
         {
             namespace ui
             {
-                class MediaDetailsPanel : public QWidget
+                class MediaDetailsMoviePanel : public QWidget
                 {
                     Q_OBJECT
-                    MediaDetailsDataPanel *mPnlDetailsData;
-                    QTabWidget *mTabMediaTypes;
+                    MediaDetailsMovieDetailsPanel *mPnlDetails;
+                    QVideoWidget *mPlayMedia;
                 protected:
-                    MediaDetailsDataPanel *getDetailsData();
-                    QTabWidget *getMediaTypeTabs();
+                    MediaDetailsMovieDetailsPanel *getDetailsPanel();
+                    QVideoWidget *getMediaPlayer();
                     void initPanel();
                 public:
-                    explicit MediaDetailsPanel(QWidget *parent = nullptr);
+                    explicit MediaDetailsMoviePanel(QWidget *parent = nullptr);
 
                     virtual QSize sizeHint() const;
                 signals:

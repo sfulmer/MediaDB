@@ -25,10 +25,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+        FilePathFieldPanel.cpp \
         MainPanel.cpp \
         MediaDAO.cpp \
         MediaDBApp.cpp \
+        MediaDetailsArtistButtonPanel.cpp \
+        MediaDetailsArtistPanel.cpp \
         MediaDetailsDataPanel.cpp \
+        MediaDetailsMovieDetailsPanel.cpp \
+        MediaDetailsMoviePanel.cpp \
         MediaDetailsPanel.cpp \
         MediaListButtonPanel.cpp \
         MediaListPanel.cpp \
@@ -89,11 +94,16 @@ HEADERS += \
         ArtistDAOImpl.h \
         BookDAO.h \
         BookDAOImpl.h \
+        FilePathFieldPanel.h \
         MainPanel.h \
         MediaDAO.h \
         MediaDAOImpl.h \
         MediaDBApp.h \
+        MediaDetailsArtistButtonPanel.h \
+        MediaDetailsArtistPanel.h \
         MediaDetailsDataPanel.h \
+        MediaDetailsMovieDetailsPanel.h \
+        MediaDetailsMoviePanel.h \
         MediaDetailsPanel.h \
         MediaListButtonPanel.h \
         MediaListPanel.h \

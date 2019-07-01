@@ -1,13 +1,13 @@
-#include "MediaListButtonPanel.h"
+#include "MediaDetailsArtistButtonPanel.h"
 #include<QHBoxLayout>
 
 using namespace net::draconia::mediadb::ui;
 
-QPushButton *MediaListButtonPanel::getAddButton()
+QPushButton *MediaDetailsArtistButtonPanel::getAddButton()
 {
     if(mBtnAdd == nullptr)
         {
-        mBtnAdd = new QPushButton("&Add", this);
+        mBtnAdd = new QPushButton("Add", this);
 
         mBtnAdd->setFlat(false);
         mBtnAdd->setFont(QFont(font().family(), font().pointSize(), QFont::Bold, font().italic()));
@@ -16,11 +16,11 @@ QPushButton *MediaListButtonPanel::getAddButton()
     return(mBtnAdd);
 }
 
-QPushButton *MediaListButtonPanel::getEditButton()
+QPushButton *MediaDetailsArtistButtonPanel::getEditButton()
 {
     if(mBtnEdit == nullptr)
         {
-        mBtnEdit = new QPushButton("&Edit", this);
+        mBtnEdit = new QPushButton("Edit", this);
 
         mBtnEdit->setFlat(false);
         mBtnEdit->setFont(QFont(font().family(), font().pointSize(), QFont::Bold, font().italic()));
@@ -29,11 +29,11 @@ QPushButton *MediaListButtonPanel::getEditButton()
     return(mBtnEdit);
 }
 
-QPushButton *MediaListButtonPanel::getRemoveButton()
+QPushButton *MediaDetailsArtistButtonPanel::getRemoveButton()
 {
     if(mBtnRemove == nullptr)
         {
-        mBtnRemove = new QPushButton("&Remove", this);
+        mBtnRemove = new QPushButton("Remove", this);
 
         mBtnRemove->setFlat(false);
         mBtnRemove->setFont(QFont(font().family(), font().pointSize(), QFont::Bold, font().italic()));
@@ -42,7 +42,7 @@ QPushButton *MediaListButtonPanel::getRemoveButton()
     return(mBtnRemove);
 }
 
-void MediaListButtonPanel::initPanel()
+void MediaDetailsArtistButtonPanel::initPanel()
 {
     QLayout *loButtons = new QHBoxLayout(this);
 
@@ -52,12 +52,19 @@ void MediaListButtonPanel::initPanel()
     loButtons->setSpacing(3);
 
     setLayout(loButtons);
-    setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));
+    setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred));
 }
 
-MediaListButtonPanel::MediaListButtonPanel(QWidget *parent)
+MediaDetailsArtistButtonPanel::MediaDetailsArtistButtonPanel(QWidget *parent)
     : QWidget(parent)
-    , mBtnAdd(nullptr), mBtnEdit(nullptr), mBtnRemove(nullptr)
+    , mBtnAdd(nullptr)
+    , mBtnEdit(nullptr)
+    , mBtnRemove(nullptr)
 {
     initPanel();
+}
+
+QSize MediaDetailsArtistButtonPanel::sizeHint() const
+{
+    return(QWidget::sizeHint());
 }

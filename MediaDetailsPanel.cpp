@@ -1,3 +1,5 @@
+#include "MediaDetailsArtistPanel.h"
+#include "MediaDetailsMoviePanel.h"
 #include "MediaDetailsPanel.h"
 #include<QVBoxLayout>
 
@@ -11,18 +13,19 @@ MediaDetailsDataPanel *MediaDetailsPanel::getDetailsData()
     return(mPnlDetailsData);
 }
 
-QTabBar *MediaDetailsPanel::getMediaTypeTabs()
+QTabWidget *MediaDetailsPanel::getMediaTypeTabs()
 {
     if(mTabMediaTypes == nullptr)
         {
-        mTabMediaTypes = new QTabBar(this);
+        mTabMediaTypes = new QTabWidget(this);
 
-        mTabMediaTypes->setDrawBase(false);
-        mTabMediaTypes->setShape(QTabBar::Shape::RoundedNorth);
         mTabMediaTypes->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding));
 
-        for(QString sMediaType : {"Artist", "Movie", "TV Show", "Music", "Book"})
-            mTabMediaTypes->addTab(sMediaType);
+        mTabMediaTypes->addTab(new MediaDetailsArtistPanel(), "Artist");
+        mTabMediaTypes->addTab(new MediaDetailsMoviePanel(), "Movie");
+        mTabMediaTypes->addTab(new QWidget(), "TV Show");
+        mTabMediaTypes->addTab(new QWidget(), "Music");
+        mTabMediaTypes->addTab(new QWidget(), "Book");
         }
 
     return(mTabMediaTypes);

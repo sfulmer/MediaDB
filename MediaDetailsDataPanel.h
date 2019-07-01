@@ -1,5 +1,6 @@
 #pragma once
 
+#include "FilePathFieldPanel.h"
 #include<QDateEdit>
 #include<QLabel>
 #include<QLineEdit>
@@ -16,10 +17,12 @@ namespace net
                 class MediaDetailsDataPanel : public QWidget
                 {
                     Q_OBJECT
+                    FilePathFieldPanel *mFldFilePath;
                     QDateEdit *mDtRelease;
                     QLabel *mLblFilePath, *mLblName, *mLblReleaseDate;
                     QLineEdit *mTxtName;
                 protected:
+                    FilePathFieldPanel *getFilePathField();
                     QLabel *getFilePathLabel();
                     QLineEdit *getNameField();
                     QLabel *getNameLabel();
