@@ -3,6 +3,14 @@
 
 using namespace net::draconia::mediadb::ui;
 
+MediaDetailsPanel *MainPanel::getMediaDetailsPanel()
+{
+    if(mPnlMediaDetails == nullptr)
+        mPnlMediaDetails = new MediaDetailsPanel(this);
+
+    return(mPnlMediaDetails);
+}
+
 MediaListPanel *MainPanel::getMediaListPanel()
 {
     if(mPnlMediaList == nullptr)
@@ -16,6 +24,7 @@ void MainPanel::initPanel()
     QLayout *loMain = new QHBoxLayout(this);
 
     loMain->addWidget(getMediaListPanel());
+    loMain->addWidget(getMediaDetailsPanel());
     loMain->setSpacing(2);
 
     setLayout(loMain);
@@ -24,6 +33,7 @@ void MainPanel::initPanel()
 
 MainPanel::MainPanel(QWidget *parent)
     : QWidget(parent)
+    , mPnlMediaDetails(nullptr)
     , mPnlMediaList(nullptr)
 {
     initPanel();

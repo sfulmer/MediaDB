@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui sql
+QT       += core gui multimedia multimediawidgets sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -28,6 +28,10 @@ SOURCES += \
         MainPanel.cpp \
         MediaDAO.cpp \
         MediaDBApp.cpp \
+        MediaDetailsDataPanel.cpp \
+        MediaDetailsPanel.cpp \
+        MediaListButtonPanel.cpp \
+        MediaListPanel.cpp \
         MovieDAO.cpp \
         main.cpp \
         BeanFactory.cpp \
@@ -89,6 +93,10 @@ HEADERS += \
         MediaDAO.h \
         MediaDAOImpl.h \
         MediaDBApp.h \
+        MediaDetailsDataPanel.h \
+        MediaDetailsPanel.h \
+        MediaListButtonPanel.h \
+        MediaListPanel.h \
         MovieDAO.h \
         MovieDAOImpl.h \
         MovieViewingDAO.h \

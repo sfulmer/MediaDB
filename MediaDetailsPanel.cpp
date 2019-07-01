@@ -1,90 +1,45 @@
 #include "MediaDetailsPanel.h"
+#include<QVBoxLayout>
 
 using namespace net::draconia::mediadb::ui;
 
-QLabel *MediaDetailsPanel::getFilePathLabel()
+MediaDetailsDataPanel *MediaDetailsPanel::getDetailsData()
 {
-    if(mLblFilePath == nullptr)
-        {
-        mLblFilePath = new QLabel("File &Path:", this);
+    if(mPnlDetailsData == nullptr)
+        mPnlDetailsData = new MediaDetailsDataPanel(this);
 
-        mLblFilePath->setFont(QFont(font().family(), font().pointSize(), QFont::Bold, font().italic()));
-        mLblFilePath->setBuddy(nullptr);
-        }
-
-    return(mLblFilePath);
+    return(mPnlDetailsData);
 }
 
-QMediaPlayer *MediaDetailsPanel::getMediaPlayer()
+QTabBar *MediaDetailsPanel::getMediaTypeTabs()
 {
-    if(mPlayMedia == nullptr)
-        mPlayMedia = new QMediaPlayer(this);
-
-    return(mPlayMedia);
-}
-
-QLineEdit *MediaDetailsPanel::getNameField()
-{
-    if(mTxtName == nullptr)
+    if(mTabMediaTypes == nullptr)
         {
-        mTxtName = new QLineEdit(this);
+        mTabMediaTypes = new QTabBar(this);
 
-        mTxtName->setReadOnly(true);
+        for(QString sMediaType : {"Artists", "Movie", "TV Show", "Music", "Book"})
+            mTabMediaTypes->addTab(sMediaType);
         }
 
-    return(mTxtName);
-}
-
-QLabel *MediaDetailsPanel::getNameLabel()
-{
-    if(mLblName == nullptr)
-        {
-        mLblName = new QLabel("&Name: ", this);
-
-        mLblName->setFont(QFont(font().family(), font().pointSize(), QFont::Bold, font().italic()));
-        mLblName->setBuddy(getNameField());
-        }
-
-    return(mLblName);
-}
-
-QDateEdit *MediaDetailsPanel::getReleaseDateField()
-{
-    if(mDtRelease == nullptr)
-        {
-        mDtRelease = new QDateEdit(this);
-
-        mDtRelease->setReadOnly(true);
-        }
-
-    return(mDtRelease);
-}
-
-QLabel *MediaDetailsPanel::getReleaseDateLabel()
-{
-    if(mLblReleaseDate == nullptr)
-        {
-        mLblReleaseDate = new QLabel("Release &Date:", this);
-
-        mLblReleaseDate->setFont(QFont(font().family(), font().pointSize(), QFont::Bold, font().italic()));
-        }
-
-    return(mLblReleaseDate);
+    return(mTabMediaTypes);
 }
 
 void MediaDetailsPanel::initPanel()
 {
-    //
+    QLayout *loDetails = new QVBoxLayout(this);
+
+    loDetails->addWidget(getDetailsData());
+    loDetails->addWidget(getMediaTypeTabs());
+    loDetails->setSpacing(3);
+
+    setLayout(loDetails);
+    setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 }
 
 MediaDetailsPanel::MediaDetailsPanel(QWidget *parent)
     : QWidget(parent)
-    , mDtRelease(nullptr)
-    , mLblFilePath(nullptr)
-    , mLblName(nullptr)
-    , mLblReleaseDate(nullptr)
-    , mTxtName(nullptr)
-    , mPlayMedia(nullptr)
+    , mPnlDetailsData(nullptr)
+    , mTabMediaTypes(nullptr)
 {
     initPanel();
 }

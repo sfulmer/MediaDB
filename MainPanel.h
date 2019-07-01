@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MediaDetailsPanel.h"
 #include "MediaListPanel.h"
 #include<QWidget>
 
@@ -14,8 +15,10 @@ namespace net
                 class MainPanel : public QWidget
                 {
                     Q_OBJECT
+                    MediaDetailsPanel *mPnlMediaDetails;
                     MediaListPanel *mPnlMediaList;
                 protected:
+                    MediaDetailsPanel *getMediaDetailsPanel();
                     MediaListPanel *getMediaListPanel();
                     void initPanel();
                 public:

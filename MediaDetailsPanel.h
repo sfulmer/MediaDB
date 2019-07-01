@@ -1,9 +1,7 @@
 #pragma once
 
-#include<QDateEdit>
-#include<QLabel>
-#include<QLineEdit>
-#include<QMediaPlayer>
+#include "MediaDetailsDataPanel.h"
+#include<QTabBar>
 #include<QWidget>
 
 namespace net
@@ -17,17 +15,11 @@ namespace net
                 class MediaDetailsPanel : public QWidget
                 {
                     Q_OBJECT
-                    QDateEdit *mDtRelease;
-                    QLabel *mLblFilePath, *mLblName, *mLblReleaseDate;
-                    QLineEdit *mTxtName;
-                    QMediaPlayer *mPlayMedia;
+                    MediaDetailsDataPanel *mPnlDetailsData;
+                    QTabBar *mTabMediaTypes;
                 protected:
-                    QLabel *getFilePathLabel();
-                    QMediaPlayer *getMediaPlayer();
-                    QLineEdit *getNameField();
-                    QLabel *getNameLabel();
-                    QDateEdit *getReleaseDateField();
-                    QLabel *getReleaseDateLabel();
+                    MediaDetailsDataPanel *getDetailsData();
+                    QTabBar *getMediaTypeTabs();
                     void initPanel();
                 public:
                     explicit MediaDetailsPanel(QWidget *parent = nullptr);
