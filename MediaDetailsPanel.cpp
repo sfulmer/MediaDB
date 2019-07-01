@@ -17,7 +17,11 @@ QTabBar *MediaDetailsPanel::getMediaTypeTabs()
         {
         mTabMediaTypes = new QTabBar(this);
 
-        for(QString sMediaType : {"Artists", "Movie", "TV Show", "Music", "Book"})
+        mTabMediaTypes->setDrawBase(false);
+        mTabMediaTypes->setShape(QTabBar::Shape::RoundedNorth);
+        mTabMediaTypes->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding));
+
+        for(QString sMediaType : {"Artist", "Movie", "TV Show", "Music", "Book"})
             mTabMediaTypes->addTab(sMediaType);
         }
 
@@ -27,13 +31,16 @@ QTabBar *MediaDetailsPanel::getMediaTypeTabs()
 void MediaDetailsPanel::initPanel()
 {
     QLayout *loDetails = new QVBoxLayout(this);
+    QSizePolicy szPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
 
     loDetails->addWidget(getDetailsData());
     loDetails->addWidget(getMediaTypeTabs());
-    loDetails->setSpacing(3);
+    loDetails->setSpacing(2);
+
+    szPolicy.setHorizontalStretch(7);
 
     setLayout(loDetails);
-    setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
+    setSizePolicy(szPolicy);
 }
 
 MediaDetailsPanel::MediaDetailsPanel(QWidget *parent)

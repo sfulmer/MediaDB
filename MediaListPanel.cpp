@@ -18,7 +18,7 @@ QListWidget *MediaListPanel::getMediaList()
         {
         mLstMedia = new QListWidget(this);
 
-        mLstMedia->addItem("Testing");
+        mLstMedia->addItem("The 41 Year Old Virgin Who Knocked Up Sarah Marshall and Felt Superbad About It");
         mLstMedia->setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAsNeeded);
         mLstMedia->setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAsNeeded);
         }
@@ -29,13 +29,16 @@ QListWidget *MediaListPanel::getMediaList()
 void MediaListPanel::initPanel()
 {
     QLayout *loMediaList = new QVBoxLayout(this);
+    QSizePolicy szPolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
 
     loMediaList->addWidget(getMediaList());
     loMediaList->addWidget(getButtonPanel());
     loMediaList->setSpacing(5);
 
+    szPolicy.setHorizontalStretch(1);
+
     setLayout(loMediaList);
-    setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding));
+    setSizePolicy(szPolicy);
 }
 
 MediaListPanel::MediaListPanel(QWidget *parent)
