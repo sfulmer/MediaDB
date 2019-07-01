@@ -1,28 +1,37 @@
 #include "MainPanel.h"
 #include<QVBoxLayout>
 
-QListWidget *MainPanel::getList()
+using namespace net::draconia::mediadb::ui;
+
+MediaListPanel *MainPanel::getMediaListPanel()
 {
-    if(mList == nullptr)
-        {
-        mList = new QListWidget(this);
+    if(mPnlMediaList == nullptr)
+        mPnlMediaList = new MediaListPanel(this);
 
-        mList->addItem("Testing");
-        }
+    return(mPnlMediaList);
+}
 
-    return(mList);
+void MainPanel::initPanel()
+{
+    QLayout *loMain = new QHBoxLayout(this);
+
+    loMain->addWidget(getMediaListPanel());
+    loMain->setSpacing(2);
+
+    setLayout(loMain);
+    setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 }
 
 MainPanel::MainPanel(QWidget *parent)
     : QWidget(parent)
+    , mPnlMediaList(nullptr)
 {
-    QLayout *lo = new QVBoxLayout(this);
-    mList = new QListWidget(this);
+    initPanel();
+}
 
-    mList->addItem("Testing");
+QSize MainPanel::sizeHint() const
+{
+    MainPanel &refThis = const_cast<MainPanel &>(*this);
 
-    lo->addWidget(mList);
-    lo->setSpacing(5);
-
-    setLayout(lo);
+    return(refThis.getMediaListPanel()->sizeHint());
 }
