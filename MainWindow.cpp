@@ -1,6 +1,8 @@
 #include "MainWindow.h"
 #include<QHBoxLayout>
 #include<QListWidget>
+#include<QGuiApplication>
+#include<QScreen>
 
 using namespace net::draconia::mediadb::ui;
 
@@ -26,6 +28,16 @@ void MainWindow::initWindow()
 
     initControls();
     initMenus();
+
+    QSize sz = size();
+    QRect rect = QGuiApplication::primaryScreen()->availableGeometry();
+
+    QRect alignedRect(  (rect.width() - sz.width()) / 4
+                     ,  (rect.height() - sz.height()) / 4
+                     ,  sz.width()
+                     ,  sz.height());
+
+    setGeometry(alignedRect);
 }
 
 MainWindow::MainWindow(QWidget *parent)

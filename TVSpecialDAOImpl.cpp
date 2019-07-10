@@ -18,8 +18,8 @@ TVSpecial TVSpecialDAOImpl::createObjectFromResults(const QSqlRecord &refRecord)
                     ,   objMedia.getName()
                     ,   objMedia.getReleaseDate()
                     ,   objMedia.getFilePath()
-                    ,   objMedia.getArtists()
-                    ,   refRecord.field("Comments").value().toString()));
+                    ,   refRecord.field("Comments").value().toString()
+                    ,   objMedia.getArtists()));
 }
 
 ArtistDAO &TVSpecialDAOImpl::getArtistDAO() const
@@ -126,27 +126,6 @@ TVSpecial TVSpecialDAOImpl::getById(const unsigned uiId) const
         return(TVSpecial());
 }
 
-TVSpecial TVSpecialDAOImpl::getByNameAndreleaseYear(const QString &sName, const unsigned uiReleaseYear) const
-{
-    if(!isTableExists())
-        createTable();
-
-    QSqlQuery objQuery(getDatabase());
-
-    objQuery.prepare("select TVSpecialId, MediaId, TVSeriesId, Comments from TVSpecials inner join Media on TVSpecials.MediaId = Media.MediaId and Media.Name = ? and Media.ReleaseDate between ? and ?;");
-
-    static_cast<MediaDAOImpl &>(getMediaDAO()).createTable();
-
-    objQuery.bindValue(1, sName);
-    objQuery.bindValue(2, QDate(static_cast<int>(uiReleaseYear), 1, 1));
-    objQuery.bindValue(3, QDate(static_cast<int>(uiReleaseYear) + 1, 1, 1));
-
-    if(objQuery.exec())
-        return(const_cast<TVSpecialDAOImpl &>(*this).createObjectFromResults(objQuery.record()));
-    else
-        return(TVSpecial());
-}
-
 QList<TVSpecial> TVSpecialDAOImpl::list() const
 {
     if(!isTableExists())
@@ -215,6 +194,27 @@ QList<TVSpecial> TVSpecialDAOImpl::listByName(const QString &sName) const
     static_cast<MediaDAOImpl &>(getMediaDAO()).createTable();
 
     objQuery.bindValue(1, sName);
+
+    if(objQuery.exec())
+        return(const_cast<TVSpecialDAOImpl &>(*this).createObjectListFromResults(objQuery));
+    else
+        return(QList<TVSpecial>());
+}
+
+QList<TVSpecial> TVSpecialDAOImpl::listByNameAndReleaseYear(const QString &sName, const unsigned uiReleaseYear) const
+{
+    if(!isTableExists())
+        createTable();
+
+    QSqlQuery objQuery(getDatabase());
+
+    objQuery.prepare("select TVSpecialId, TVSpecials.MediaId MediaId, TVSeriesId, Comments from TVSpecials inner join Media on TVSpecials.MediaId = Media.MediaId and Media.Name = ? and Media.ReleaseDate between ? and ?;");
+
+    static_cast<MediaDAOImpl &>(getMediaDAO()).createTable();
+
+    objQuery.bindValue(1, sName);
+    objQuery.bindValue(2, QDate(static_cast<int>(uiReleaseYear), 1, 1));
+    objQuery.bindValue(3, QDate(static_cast<int>(uiReleaseYear) + 1, 1, 1));
 
     if(objQuery.exec())
         return(const_cast<TVSpecialDAOImpl &>(*this).createObjectListFromResults(objQuery));

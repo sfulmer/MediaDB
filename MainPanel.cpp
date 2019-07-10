@@ -3,6 +3,8 @@
 
 using namespace net::draconia::mediadb::ui;
 
+using net::draconia::ui::ListPanel;
+
 MediaDetailsPanel *MainPanel::getMediaDetailsPanel()
 {
     if(mPnlMediaDetails == nullptr)
@@ -11,10 +13,10 @@ MediaDetailsPanel *MainPanel::getMediaDetailsPanel()
     return(mPnlMediaDetails);
 }
 
-MediaListPanel *MainPanel::getMediaListPanel()
+ListPanel *MainPanel::getMediaListPanel()
 {
     if(mPnlMediaList == nullptr)
-        mPnlMediaList = new MediaListPanel(this);
+        mPnlMediaList = new ListPanel("Media:", true, this);
 
     return(mPnlMediaList);
 }
@@ -41,7 +43,11 @@ MainPanel::MainPanel(QWidget *parent)
 
 QSize MainPanel::sizeHint() const
 {
-    MainPanel &refThis = const_cast<MainPanel &>(*this);
+    return(QWidget::sizeHint());
+}
 
-    return(refThis.getMediaListPanel()->sizeHint());
+void MainPanel::setDisabled(bool disable)
+{
+    getMediaListPanel()->setDisabled(disable);
+    getMediaDetailsPanel()->setDisabled(disable);
 }

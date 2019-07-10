@@ -1,9 +1,9 @@
-#include "MediaListButtonPanel.h"
+#include "ListButtonPanel.h"
 #include<QHBoxLayout>
 
-using namespace net::draconia::mediadb::ui;
+using namespace net::draconia::ui;
 
-QPushButton *MediaListButtonPanel::getAddButton()
+QPushButton *ListButtonPanel::getAddButton()
 {
     if(mBtnAdd == nullptr)
         {
@@ -16,12 +16,13 @@ QPushButton *MediaListButtonPanel::getAddButton()
     return(mBtnAdd);
 }
 
-QPushButton *MediaListButtonPanel::getEditButton()
+QPushButton *ListButtonPanel::getEditButton()
 {
     if(mBtnEdit == nullptr)
         {
         mBtnEdit = new QPushButton("&Edit", this);
 
+        mBtnEdit->setDisabled(true);
         mBtnEdit->setFlat(false);
         mBtnEdit->setFont(QFont(font().family(), font().pointSize(), QFont::Bold, font().italic()));
         }
@@ -29,12 +30,13 @@ QPushButton *MediaListButtonPanel::getEditButton()
     return(mBtnEdit);
 }
 
-QPushButton *MediaListButtonPanel::getRemoveButton()
+QPushButton *ListButtonPanel::getRemoveButton()
 {
     if(mBtnRemove == nullptr)
         {
         mBtnRemove = new QPushButton("&Remove", this);
 
+        mBtnRemove->setDisabled(true);
         mBtnRemove->setFlat(false);
         mBtnRemove->setFont(QFont(font().family(), font().pointSize(), QFont::Bold, font().italic()));
         }
@@ -42,7 +44,7 @@ QPushButton *MediaListButtonPanel::getRemoveButton()
     return(mBtnRemove);
 }
 
-void MediaListButtonPanel::initPanel()
+void ListButtonPanel::initPanel()
 {
     QLayout *loButtons = new QHBoxLayout(this);
 
@@ -55,9 +57,21 @@ void MediaListButtonPanel::initPanel()
     setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));
 }
 
-MediaListButtonPanel::MediaListButtonPanel(QWidget *parent)
+ListButtonPanel::ListButtonPanel(QWidget *parent)
     : QWidget(parent)
     , mBtnAdd(nullptr), mBtnEdit(nullptr), mBtnRemove(nullptr)
 {
     initPanel();
+}
+
+QSize ListButtonPanel::sizeHiint() const
+{
+    return(QWidget::sizeHint());
+}
+
+void ListButtonPanel::setDisabled(bool disable)
+{
+    getAddButton()->setDisabled(disable);
+    getEditButton()->setDisabled(disable);
+    getRemoveButton()->setDisabled(disable);
 }

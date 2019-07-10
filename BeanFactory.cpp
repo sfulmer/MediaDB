@@ -32,7 +32,9 @@ using net::draconia::mediadb::dao::TVSpecialDAOImpl;
 BeanFactory BeanFactory::msObjBeanFactory;
 
 BeanFactory::BeanFactory()
-    : mPtrAlbumDAO(nullptr), mPtrArtistDAO(nullptr)
+    : mFntApplication("Times", 8, QFont::Normal, false)
+    , mPtrAlbumDAO(nullptr)
+    , mPtrArtistDAO(nullptr)
     , mPtrMediaDAO(nullptr), mPtrMovieDAO(nullptr)
     , mPtrMovieViewingDAO(nullptr)
     , mPtrRoleDAO(nullptr), mPtrRoleTypeDAO(nullptr)
@@ -59,6 +61,11 @@ AlbumDAO &BeanFactory::getAlbumDAO()
     return(*mPtrAlbumDAO);
 }
 
+QFont &BeanFactory::getApplicationFont() const
+{
+    return(const_cast<BeanFactory &>(*this).mFntApplication);
+}
+
 ArtistDAO &BeanFactory::getArtistDAO()
 {
     if(mPtrArtistDAO.isNull())
@@ -80,6 +87,11 @@ QSqlDatabase &BeanFactory::getDatabase()
         }
 
     return(mDbDatabase);
+}
+
+LabelBuilder &BeanFactory::getLabelBuilder()
+{
+    return(mObjLabelBuilder);
 }
 
 MediaDAO &BeanFactory::getMediaDAO()

@@ -1,12 +1,10 @@
 #pragma once
 
 #include "Artist.h"
-#include "Observable.h"
+#include "MediaFile.h"
 #include<QDate>
 #include<QList>
 #include<QString>
-
-using net::draconia::util::Observable;
 
 namespace net
 {
@@ -18,12 +16,12 @@ namespace net
             {
                 class Artist;
 
-                class Media : public Observable
+                class Media : public MediaFile
                 {
                     unsigned muiMediaId;
                     QDate mDtRelease;
                     QList<Artist> mLstArtists;
-                    QString msFilePath, msName;
+                    QString msName;
                 protected:
                     QList<Artist> &getArtistsInternal() const;
                     void setArtists(const QList<Artist> lstArtists);
@@ -55,12 +53,10 @@ namespace net
 
                     void addArtist(const Artist &refArtist);
                     const QList<Artist> getArtists() const;
-                    QString getFilePath() const;
                     unsigned getMediaId() const;
                     QString getName() const;
                     QDate getReleaseDate() const;
                     void removeArtist(const Artist &refArtist);
-                    void setFilePath(const QString &sFilePath);
                     void setMediaId(const unsigned uiMediaId);
                     void setName(const QString &sName);
                     void setReleaseDate(const QDate &dtRelease);

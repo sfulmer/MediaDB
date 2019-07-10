@@ -45,11 +45,11 @@ namespace net
 
                     virtual bool createTable() const;
                     virtual TVSpecial getById(const unsigned uiId) const;
-                    virtual TVSpecial getByNameAndreleaseYear(const QString &sName, const unsigned uiReleaseYear) const;
                     virtual QList<TVSpecial> list() const;
                     virtual QList<TVSpecial> listByArtist(const Artist &refArtist) const;
                     virtual QList<TVSpecial> listByArtistAndSeries(const Artist &refArtist, const TVSeries &refTVSeries) const;
                     virtual QList<TVSpecial> listByName(const QString &sName) const;
+                    virtual QList<TVSpecial> listByNameAndReleaseYear(const QString &sName, const unsigned uiReleaseYear) const;
                     virtual QList<TVSpecial> listByTVSeries(const TVSeries &refTVSeries) const;
                     virtual QList<TVSpecial> listByWordInComment(const QString &sWord) const;
                     virtual bool remove(const TVSpecial &refToRemove) const;

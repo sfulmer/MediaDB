@@ -22,6 +22,7 @@ QPushButton *MediaDetailsArtistButtonPanel::getEditButton()
         {
         mBtnEdit = new QPushButton("Edit", this);
 
+        mBtnEdit->setDisabled(true);
         mBtnEdit->setFlat(false);
         mBtnEdit->setFont(QFont(font().family(), font().pointSize(), QFont::Bold, font().italic()));
         }
@@ -35,6 +36,7 @@ QPushButton *MediaDetailsArtistButtonPanel::getRemoveButton()
         {
         mBtnRemove = new QPushButton("Remove", this);
 
+        mBtnRemove->setDisabled(true);
         mBtnRemove->setFlat(false);
         mBtnRemove->setFont(QFont(font().family(), font().pointSize(), QFont::Bold, font().italic()));
         }

@@ -1,7 +1,9 @@
 #include "MediaDetailsArtistPanel.h"
 #include "MediaDetailsMoviePanel.h"
 #include "MediaDetailsPanel.h"
+#include "MediaDetailsTVPanel.h"
 #include<QVBoxLayout>
+#include "VideoPlayerPanel.h"
 
 using namespace net::draconia::mediadb::ui;
 
@@ -19,13 +21,14 @@ QTabWidget *MediaDetailsPanel::getMediaTypeTabs()
         {
         mTabMediaTypes = new QTabWidget(this);
 
-        mTabMediaTypes->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding));
+        mTabMediaTypes->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 
         mTabMediaTypes->addTab(new MediaDetailsArtistPanel(), "Artist");
         mTabMediaTypes->addTab(new MediaDetailsMoviePanel(), "Movie");
-        mTabMediaTypes->addTab(new QWidget(), "TV Show");
+        mTabMediaTypes->addTab(new MediaDetailsTVPanel(), "TV");
         mTabMediaTypes->addTab(new QWidget(), "Music");
         mTabMediaTypes->addTab(new QWidget(), "Book");
+        mTabMediaTypes->addTab(new VideoPlayerPanel(), "Play");
         }
 
     return(mTabMediaTypes);
@@ -57,4 +60,10 @@ MediaDetailsPanel::MediaDetailsPanel(QWidget *parent)
 QSize MediaDetailsPanel::sizeHint() const
 {
     return(QWidget::sizeHint());
+}
+
+void MediaDetailsPanel::setDisabled(bool disable)
+{
+    getDetailsData()->setDisabled(disable);
+    getMediaTypeTabs()->setDisabled(disable);
 }

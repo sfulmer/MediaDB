@@ -39,149 +39,94 @@ TVSeries::TVSeries(const unsigned uiTVSeriesId)
 { }
 
 TVSeries::TVSeries(const QString &sName)
-    : muiTVSeriesId(0), msName(sName)
-{ }
-
-TVSeries::TVSeries(const QDate &dtRelease)
-    : muiTVSeriesId(0), mDtReleaseDate(dtRelease)
+    : muiTVSeriesId(0)
+    , msName(sName)
 { }
 
 TVSeries::TVSeries(const QList<TVSeason> &lstSeasons)
-    : muiTVSeriesId(0), mLstSeasons(lstSeasons)
+    : muiTVSeriesId(0)
+    , mLstSeasons(lstSeasons)
 { }
 
 TVSeries::TVSeries(const QList<TVSpecial> &lstSpecials)
-    : muiTVSeriesId(0), mLstSpecials(lstSpecials)
+    : muiTVSeriesId(0)
+    , mLstSpecials(lstSpecials)
 { }
 
 TVSeries::TVSeries(const unsigned uiTVSeriesId, const QString &sName)
-    : muiTVSeriesId(uiTVSeriesId), msName(sName)
-{ }
-
-TVSeries::TVSeries(const unsigned uiTVSeriesId, const QDate &dtRelease)
-    : muiTVSeriesId(uiTVSeriesId), mDtReleaseDate(dtRelease)
-{ }
-
-TVSeries::TVSeries(const unsigned uiTVSeriesId, const unsigned uiReleaseYear)
-    : muiTVSeriesId(uiTVSeriesId), mDtReleaseDate(QDate(static_cast<int>(uiReleaseYear), 1, 1))
+    : muiTVSeriesId(uiTVSeriesId)
+    , msName(sName)
 { }
 
 TVSeries::TVSeries(const unsigned uiTVSeriesId, const QList<TVSeason> &lstSeasons)
-    : muiTVSeriesId(uiTVSeriesId), mLstSeasons(lstSeasons)
+    : muiTVSeriesId(uiTVSeriesId)
+    , mLstSeasons(lstSeasons)
 { }
 
 TVSeries::TVSeries(const unsigned uiTVSeriesId, const QList<TVSpecial> &lstSpecials)
-    : muiTVSeriesId(uiTVSeriesId), mLstSpecials(lstSpecials)
+    : muiTVSeriesId(uiTVSeriesId)
+    , mLstSpecials(lstSpecials)
 { }
 
 TVSeries::TVSeries(const QString &sName, const QString &sComments)
-    : muiTVSeriesId(0), msComments(sComments), msName(sName)
-{ }
-
-TVSeries::TVSeries(const QString &sName, const QDate &dtRelease)
-    : muiTVSeriesId(0), mDtReleaseDate(dtRelease), msName(sName)
-{ }
-
-TVSeries::TVSeries(const QString &sName, const unsigned uiReleaseYear)
-    : muiTVSeriesId(0), mDtReleaseDate(QDate(static_cast<int>(uiReleaseYear), 1, 1)), msName(sName)
+    : muiTVSeriesId(0)
+    , msComments(sComments), msName(sName)
 { }
 
 TVSeries::TVSeries(const QString &sName, const QList<TVSeason> &lstSeasons)
-    : muiTVSeriesId(0), mLstSeasons(lstSeasons), msName(sName)
+    : muiTVSeriesId(0)
+    , mLstSeasons(lstSeasons)
+    , msName(sName)
 { }
 
 TVSeries::TVSeries(const QString &sName, const QList<TVSpecial> &lstSpecials)
-    : muiTVSeriesId(0), mLstSpecials(lstSpecials), msName(sName)
-{ }
-
-TVSeries::TVSeries(const QList<TVSeason> &lstSeasons, const QList<TVSpecial> &lstSpecials)
-    : muiTVSeriesId(0), mLstSeasons(lstSeasons), mLstSpecials(lstSpecials)
+    : muiTVSeriesId(0)
+    , mLstSpecials(lstSpecials)
+    , msName(sName)
 { }
 
 TVSeries::TVSeries(const unsigned uiTVSeriesId, const QString &sName, const QString &sComments)
-    : muiTVSeriesId(uiTVSeriesId), msComments(sComments), msName(sName)
-{ }
-
-TVSeries::TVSeries(const unsigned uiTVSeriesId, const QString &sName, const QDate &dtRelease)
-    : muiTVSeriesId(uiTVSeriesId), mDtReleaseDate(dtRelease), msName(sName)
-{ }
-
-TVSeries::TVSeries(const unsigned uiTVSeriesId, const QString &sName, const unsigned uiReleaseYear)
-    : muiTVSeriesId(uiTVSeriesId), mDtReleaseDate(QDate(static_cast<int>(uiReleaseYear), 1, 1)), msName(sName)
+    : muiTVSeriesId(uiTVSeriesId)
+    , msComments(sComments), msName(sName)
 { }
 
 TVSeries::TVSeries(const unsigned uiTVSeriesId, const QString &sName, const QList<TVSeason> &lstSeasons)
-    : muiTVSeriesId(uiTVSeriesId), mLstSeasons(lstSeasons), msName(sName)
+    : muiTVSeriesId(uiTVSeriesId)
+    , mLstSeasons(lstSeasons)
+    , msName(sName)
 { }
 
 TVSeries::TVSeries(const unsigned uiTVSeriesId, const QString &sName, const QList<TVSpecial> &lstSpecials)
-   : muiTVSeriesId(uiTVSeriesId), mLstSpecials(lstSpecials), msName(sName)
+    : muiTVSeriesId(uiTVSeriesId)
+    , mLstSpecials(lstSpecials)
+    , msName(sName)
 { }
 
-TVSeries::TVSeries(const QString &sName, const QString &sComments, const QList<TVSeason> &lstSeasons)
-    : muiTVSeriesId(0), mLstSeasons(lstSeasons), msComments(sComments), msName(sName)
+TVSeries::TVSeries(const unsigned uiTVSeriesId, const QString &sName, const QString &sComments, const QList<TVSeason> &lstSeasons)
+    : muiTVSeriesId(uiTVSeriesId)
+    , mLstSeasons(lstSeasons)
+    , msComments(sComments), msName(sName)
 { }
 
-TVSeries::TVSeries(const QString &sName, const QDate &dtRelease, const QList<TVSeason> &lstSeasons)
-    : muiTVSeriesId(0), mDtReleaseDate(dtRelease), mLstSeasons(lstSeasons), msName(sName)
-{ }
-
-TVSeries::TVSeries(const QString &sName, const unsigned uiReleaseYear, const QList<TVSeason> &lstSeasons)
-    : muiTVSeriesId(0), mDtReleaseDate(QDate(static_cast<int>(uiReleaseYear), 1, 1)), mLstSeasons(lstSeasons), msName(sName)
-{ }
-
-TVSeries::TVSeries(const QString &sName, const QString &sComments, const QList<TVSpecial> &lstSpecials)
-    : muiTVSeriesId(0), mLstSpecials(lstSpecials), msComments(sComments), msName(sName)
-{ }
-
-TVSeries::TVSeries(const QString &sName, const QDate &dtRelease, const QList<TVSpecial> &lstSpecials)
-    : muiTVSeriesId(0), mDtReleaseDate(dtRelease), mLstSpecials(lstSpecials), msName(sName)
-{ }
-
-TVSeries::TVSeries(const QString &sName, const unsigned uiReleaseYear, const QList<TVSpecial> &lstSpecials)
-    : muiTVSeriesId(0), mDtReleaseDate(QDate(static_cast<int>(uiReleaseYear), 1, 1)), mLstSpecials(lstSpecials), msName(sName)
-{ }
-
-TVSeries::TVSeries(const QString &sName, const QList<TVSeason> &lstSeasons, const QList<TVSpecial> &lstSpecials)
-    : muiTVSeriesId(0), mLstSeasons(lstSeasons), mLstSpecials(lstSpecials), msName(sName)
-{ }
-
-TVSeries::TVSeries(const unsigned uiTVSeriesId, const QString &sName, const QList<TVSeason> &lstSeasons, const QList<TVSpecial> &lstSpecials)
-    : muiTVSeriesId(uiTVSeriesId), mLstSeasons(lstSeasons), mLstSpecials(lstSpecials), msName(sName)
+TVSeries::TVSeries(const unsigned uiTVSeriesId, const QString &sName, const QString &sComments, const QList<TVSpecial> &lstSpecials)
+    : muiTVSeriesId(uiTVSeriesId)
+    , mLstSpecials(lstSpecials)
+    , msComments(sComments), msName(sName)
 { }
 
 TVSeries::TVSeries(const unsigned uiTVSeriesId, const QString &sName, const QString &sComments, const QList<TVSeason> &lstSeasons, const QList<TVSpecial> &lstSpecials)
-    : muiTVSeriesId(uiTVSeriesId), mLstSeasons(lstSeasons), mLstSpecials(lstSpecials), msComments(sComments), msName(sName)
-{ }
-
-TVSeries::TVSeries(const unsigned uiTVSeriesId, const QString &sName, const QDate &dtRelease, const QList<TVSeason> &lstSeasons, const QList<TVSpecial> &lstSpecials)
-    : muiTVSeriesId(uiTVSeriesId), mDtReleaseDate(dtRelease), mLstSeasons(lstSeasons), mLstSpecials(lstSpecials), msName(sName)
-{ }
-
-TVSeries::TVSeries(const unsigned uiTVSeriesId, const QString &sName, const unsigned uiReleaseYear, const QList<TVSeason> &lstSeasons, const QList<TVSpecial> &lstSpecials)
-    : muiTVSeriesId(uiTVSeriesId), mDtReleaseDate(QDate(static_cast<int>(uiReleaseYear), 1, 1)), mLstSeasons(lstSeasons), mLstSpecials(lstSpecials), msName(sName)
-{ }
-
-TVSeries::TVSeries(const unsigned uiTVSeriesId, const QString &sName, const QDate &dtRelease, const QString &sComments)
-    : muiTVSeriesId(uiTVSeriesId), mDtReleaseDate(dtRelease), msComments(sComments), msName(sName)
-{ }
-
-TVSeries::TVSeries(const unsigned uiTVSeriesId, const QString &sName, const unsigned uiReleaseYear, const QString &sComments)
-    : muiTVSeriesId(uiTVSeriesId), mDtReleaseDate(QDate(static_cast<int>(uiReleaseYear), 1, 1)), msComments(sComments), msName(sName)
-{ }
-
-TVSeries::TVSeries(const unsigned uiTVSeriesId, const QString &sName, const QDate &dtRelease, const QString &sComments, const QList<TVSeason> &lstSeasons, const QList<TVSpecial> &lstSpecials)
-    : muiTVSeriesId(uiTVSeriesId), mDtReleaseDate(dtRelease), mLstSeasons(lstSeasons), mLstSpecials(lstSpecials), msComments(sComments), msName(sName)
-{ }
-
-TVSeries::TVSeries(const unsigned uiTVSeriesId, const QString &sName, const unsigned uiReleaseYear, const QString &sComments, const QList<TVSeason> &lstSeasons, const QList<TVSpecial> &lstSpecials)
-    : muiTVSeriesId(uiTVSeriesId), mDtReleaseDate(QDate(static_cast<int>(uiReleaseYear), 1, 1)), mLstSeasons(lstSeasons), mLstSpecials(lstSpecials), msComments(sComments), msName(sName)
+    : muiTVSeriesId(uiTVSeriesId)
+    , mLstSeasons(lstSeasons)
+    , mLstSpecials(lstSpecials)
+    , msComments(sComments), msName(sName)
 { }
 
 TVSeries::TVSeries(const TVSeries &refCopy)
-    : muiTVSeriesId(refCopy.getTVSeriesId()), mDtReleaseDate(refCopy.getReleaseDate())
-    , mLstSeasons(refCopy.getSeasons()), mLstSpecials(refCopy.getSpecials())
-    , msComments(refCopy.getComments()), msName(refCopy.getName())
+    : muiTVSeriesId(refCopy.getTVSeriesId())
+    , mLstSeasons(refCopy.getSeasons())
+    , mLstSpecials(refCopy.getSpecials())
+    , msComments(refCopy.getComments())
+    , msName(refCopy.getName())
 { }
 
 TVSeries::~TVSeries()
@@ -211,11 +156,6 @@ QString TVSeries::getComments() const
 QString TVSeries::getName() const
 {
     return(msName);
-}
-
-QDate TVSeries::getReleaseDate() const
-{
-    return(mDtReleaseDate);
 }
 
 const QList<TVSeason> TVSeries::getSeasons() const
@@ -285,19 +225,6 @@ void TVSeries::setName(const QString &sName)
     notifyObservers();
 }
 
-void TVSeries::setReleaseDate(const QDate &dtRelease)
-{
-    mDtReleaseDate = dtRelease;
-
-    setChanged(true);
-    notifyObservers();
-}
-
-void TVSeries::setReleaseYear(const unsigned uiReleaseYear)
-{
-    setReleaseDate(QDate(static_cast<int>(uiReleaseYear), 1, 1));
-}
-
 void TVSeries::setTVSeriesId(const unsigned uiTVSeriesId)
 {
     muiTVSeriesId = uiTVSeriesId;
@@ -308,8 +235,6 @@ void TVSeries::setTVSeriesId(const unsigned uiTVSeriesId)
 
 TVSeries &TVSeries::operator=(const TVSeries &refCopy)
 {
-    Observable::operator=(refCopy);
-
     setComments(refCopy.getComments());
     setName(refCopy.getName());
     setSeasons(refCopy.getSeasons());

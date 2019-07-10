@@ -1,10 +1,8 @@
 #pragma once
 
-#include "ListPanel.h"
-#include "MediaDetailsPanel.h"
+#include<QMediaPlayer>
+#include<QVideoWidget>
 #include<QWidget>
-
-using net::draconia::ui::ListPanel;
 
 namespace net
 {
@@ -14,17 +12,17 @@ namespace net
         {
             namespace ui
             {
-                class MainPanel : public QWidget
+                class VideoPlayerPanel : public QWidget
                 {
                     Q_OBJECT
-                    MediaDetailsPanel *mPnlMediaDetails;
-                    ListPanel *mPnlMediaList;
+                    QMediaPlayer *mObjMediaPlayer;
+                    QVideoWidget *mPnlVideo;
                 protected:
-                    MediaDetailsPanel *getMediaDetailsPanel();
-                    ListPanel *getMediaListPanel();
+                    QMediaPlayer *getMediaPlayer();
+                    QVideoWidget *getVideoPanel();
                     void initPanel();
                 public:
-                    explicit MainPanel(QWidget *parent = nullptr);
+                    explicit VideoPlayerPanel(QWidget *parent = nullptr);
 
                     virtual QSize sizeHint() const;
 
@@ -33,7 +31,6 @@ namespace net
                 public slots:
                     void setDisabled(bool disable);
                 };
-
             }
         }
     }

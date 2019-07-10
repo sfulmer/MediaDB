@@ -17,17 +17,17 @@ namespace net
                 class MediaDetailsDataPanel : public QWidget
                 {
                     Q_OBJECT
-                    FilePathFieldPanel *mFldFilePath;
-                    QDateEdit *mDtRelease;
-                    QLabel *mLblFilePath, *mLblName, *mLblReleaseDate;
+                    //FilePathFieldPanel *mFldFilePath;
+                    //QDateEdit *mDtRelease;
+                    QLabel /**mLblFilePath,*/ *mLblName;//, *mLblReleaseDate;
                     QLineEdit *mTxtName;
                 protected:
-                    FilePathFieldPanel *getFilePathField();
-                    QLabel *getFilePathLabel();
+                    /*FilePathFieldPanel *getFilePathField();
+                    QLabel *getFilePathLabel();*/
                     QLineEdit *getNameField();
                     QLabel *getNameLabel();
-                    QDateEdit *getReleaseDateField();
-                    QLabel *getReleaseDateLabel();
+                    /*QDateEdit *getReleaseDateField();
+                    QLabel *getReleaseDateLabel();*/
                     void initPanel();
                 public:
                     explicit MediaDetailsDataPanel(QWidget *parent = nullptr);
@@ -36,6 +36,7 @@ namespace net
                 signals:
 
                 public slots:
+                    void setDisabled(bool disable);
                 };
             }
         }

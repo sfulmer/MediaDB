@@ -26,18 +26,24 @@ CONFIG += c++11
 
 SOURCES += \
         FilePathFieldPanel.cpp \
+        LabelBuilder.cpp \
+        ListButtonPanel.cpp \
+        ListPanel.cpp \
         MainPanel.cpp \
         MediaDAO.cpp \
-        MediaDBApp.cpp \
         MediaDetailsArtistButtonPanel.cpp \
         MediaDetailsArtistPanel.cpp \
         MediaDetailsDataPanel.cpp \
-        MediaDetailsMovieDetailsPanel.cpp \
         MediaDetailsMoviePanel.cpp \
         MediaDetailsPanel.cpp \
-        MediaListButtonPanel.cpp \
-        MediaListPanel.cpp \
+        MediaDetailsTVEpisodePanel.cpp \
+        MediaDetailsTVPanel.cpp \
+        MediaDetailsTVSeasonPanel.cpp \
+        MediaDetailsTVSeriesPanel.cpp \
+        MediaDetailsTVSpecialPanel.cpp \
+        MediaFile.cpp \
         MovieDAO.cpp \
+        VideoPlayerPanel.cpp \
         main.cpp \
         BeanFactory.cpp \
         AbstractDAO.cpp \
@@ -95,18 +101,23 @@ HEADERS += \
         BookDAO.h \
         BookDAOImpl.h \
         FilePathFieldPanel.h \
+        LabelBuilder.h \
+        ListButtonPanel.h \
+        ListPanel.h \
         MainPanel.h \
         MediaDAO.h \
         MediaDAOImpl.h \
-        MediaDBApp.h \
         MediaDetailsArtistButtonPanel.h \
         MediaDetailsArtistPanel.h \
         MediaDetailsDataPanel.h \
-        MediaDetailsMovieDetailsPanel.h \
         MediaDetailsMoviePanel.h \
         MediaDetailsPanel.h \
-        MediaListButtonPanel.h \
-        MediaListPanel.h \
+        MediaDetailsTVEpisodePanel.h \
+        MediaDetailsTVPanel.h \
+        MediaDetailsTVSeasonPanel.h \
+        MediaDetailsTVSeriesPanel.h \
+        MediaDetailsTVSpecialPanel.h \
+        MediaFile.h \
         MovieDAO.h \
         MovieDAOImpl.h \
         MovieViewingDAO.h \
@@ -143,7 +154,8 @@ HEADERS += \
         TVSeries.h \
         TVSpecial.h \
         MainWindow.h \
-        Observable.h
+        Observable.h \
+        VideoPlayerPanel.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -1,9 +1,11 @@
 #pragma once
 
+#include "ListPanel.h"
+#include<QGroupBox>
 #include<QLabel>
-#include<QListWidget>
 #include<QTextEdit>
-#include<QWidget>
+
+using net::draconia::ui::ListPanel;
 
 namespace net
 {
@@ -13,25 +15,25 @@ namespace net
         {
             namespace ui
             {
-                class MediaDetailsMovieDetailsPanel : public QWidget
+                class MediaDetailsTVSeriesPanel : public QGroupBox
                 {
                     Q_OBJECT
-                    QLabel *mLblComments, *mLblViewings;
-                    QListWidget *mLstViewings;
+                    ListPanel *mPnlSeasons, *mPnlSpecials;
+                    QLabel *mLblComments;
                     QTextEdit *mTxtComments;
                 protected:
                     QTextEdit *getCommentsField();
                     QLabel *getCommentsLabel();
-                    QListWidget *getViewingsList();
-                    QLabel *getViewingsLabel();
+                    ListPanel *getSeasonList();
+                    ListPanel *getSpecialsList();
                     void initPanel();
                 public:
-                    explicit MediaDetailsMovieDetailsPanel(QWidget *parent = nullptr);
+                    explicit MediaDetailsTVSeriesPanel(QWidget *parent = nullptr);
 
                     virtual QSize sizeHint() const;
                 signals:
-
                 public slots:
+                    void setDisabled(bool disable);
                 };
             }
         }

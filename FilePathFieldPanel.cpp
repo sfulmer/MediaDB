@@ -50,3 +50,9 @@ QSize FilePathFieldPanel::sizeHint() const
 {
     return(QWidget::sizeHint());
 }
+
+void FilePathFieldPanel::setDisabled(bool disable)
+{
+    getFilePathField()->setDisabled(disable);
+    getBrowseButton()->setDisabled(disable);
+}

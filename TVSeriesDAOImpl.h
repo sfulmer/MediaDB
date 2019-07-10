@@ -38,6 +38,8 @@ namespace net
                     virtual bool createTable() const;
                     virtual TVSeries getById(const unsigned uiId) const;
                     virtual QList<TVSeries> list() const;
+                    virtual QList<TVSeries> listByName(const QString &sName) const;
+                    virtual QList<TVSeries> listByNameAndReleaseYear(const QString &sName, const unsigned uiReleaseYear) const;
                     virtual QList<TVSeries> listByReleaseYear(const unsigned uiReleaseYear) const;
                     virtual QList<TVSeries> listByWordInComment(const QString &sWord) const;
                     virtual bool remove(const TVSeries &refToRemove) const;

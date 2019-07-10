@@ -1,11 +1,13 @@
 #pragma once
 
-#include "FilePathFieldPanel.h"
+#include "ListPanel.h"
+#include<QGroupBox>
 #include<QLabel>
-#include<QLineEdit>
 #include<QListWidget>
+#include<QSpinBox>
 #include<QTextEdit>
-#include<QWidget>
+
+using net::draconia::ui::ListPanel;
 
 namespace net
 {
@@ -15,23 +17,23 @@ namespace net
         {
             namespace ui
             {
-                class MediaDetailsMoviePanel : public QWidget
+                class MediaDetailsTVSeasonPanel : public QGroupBox
                 {
                     Q_OBJECT
-                    FilePathFieldPanel *mFldFilePath;
-                    QLabel *mLblComments, *mLblFilePath, *mLblViewings;
-                    QListWidget *mLstViewings;
+
+                    ListPanel *mPnlEpisodes;
+                    QLabel *mLblComments, *mLblNumber;
+                    QSpinBox *mSpnNumber;
                     QTextEdit *mTxtComments;
                 protected:
                     QTextEdit *getCommentsField();
                     QLabel *getCommentsLabel();
-                    FilePathFieldPanel *getFilePathField();
-                    QLabel *getFilePathLabel();
-                    QLabel *getViewingsLabel();
-                    QListWidget *getViewingsList();
+                    ListPanel *getEpisodesList();
+                    QSpinBox *getNumberField();
+                    QLabel *getNumberLabel();
                     void initPanel();
                 public:
-                    explicit MediaDetailsMoviePanel(QWidget *parent = nullptr);
+                    explicit MediaDetailsTVSeasonPanel(QWidget *parent = nullptr);
 
                     virtual QSize sizeHint() const;
                 signals:

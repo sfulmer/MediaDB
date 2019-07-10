@@ -1,14 +1,14 @@
-#include "mainwindow.h"
+#include "MainWindow.h"
 #include<QApplication>
 
 using net::draconia::mediadb::ui::MainWindow;
 
 int main(int argc, char *argv[])
 {
-    QApplication objApp(argc, argv);
-    MainWindow wndMain;
+   QApplication app(argc, argv);
 
-    wndMain.show();
+    MainWindow wnd;
+    wnd.show();
 
-    return(objApp.exec());
+    return(app.exec());
 }

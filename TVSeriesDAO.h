@@ -19,6 +19,8 @@ namespace net
 
                     virtual TVSeries getById(const unsigned uiId) const = 0;
                     virtual QList<TVSeries> list() const = 0;
+                    virtual QList<TVSeries> listByName(const QString &sName) const = 0;
+                    virtual QList<TVSeries> listByNameAndReleaseYear(const QString &sName, const unsigned uiReleaseYear) const = 0;
                     virtual QList<TVSeries> listByReleaseYear(const unsigned uiReleaseYear) const = 0;
                     virtual QList<TVSeries> listByWordInComment(const QString &sWord) const = 0;
                     virtual bool remove(const TVSeries &refToRemove) const = 0;

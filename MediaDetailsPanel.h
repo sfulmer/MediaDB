@@ -28,6 +28,7 @@ namespace net
                 signals:
 
                 public slots:
+                    void setDisabled(bool disable);
                 };
             }
         }

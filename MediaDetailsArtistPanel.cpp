@@ -23,8 +23,8 @@ QTableWidget *MediaDetailsArtistPanel::getArtistsTable()
         mTblArtists = new QTableWidget(this);
 
         mTblArtists->setSortingEnabled(true);
-        mTblArtists->setColumnCount(2);
-        mTblArtists->setHorizontalHeaderLabels({"Artist", "Role"});
+        mTblArtists->setColumnCount(3);
+        mTblArtists->setHorizontalHeaderLabels({"Sel", "Artist", "Role"});
         }
 
     return(mTblArtists);
@@ -64,4 +64,11 @@ MediaDetailsArtistPanel::MediaDetailsArtistPanel(QWidget *parent)
 QSize MediaDetailsArtistPanel::sizeHint() const
 {
     return(QWidget::sizeHint());
+}
+
+void MediaDetailsArtistPanel::setDisabled(bool disable)
+{
+    getArtistsLabel()->setDisabled(disable);
+    getArtistsTable()->setDisabled(disable);
+    getButtonPanel()->setDisabled(disable);
 }

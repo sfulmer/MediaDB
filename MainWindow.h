@@ -1,7 +1,9 @@
 #pragma once
 
 #include "MainPanel.h"
+#include<QApplication>
 #include<QMainWindow>
+#include<QSharedPointer>
 
 namespace net
 {
@@ -28,3 +30,5 @@ namespace net
         }
     }
 }
+
+extern QSharedPointer<QApplication> mPtrApp;

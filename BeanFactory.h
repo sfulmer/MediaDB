@@ -2,9 +2,11 @@
 
 #include "AlbumDAO.h"
 #include "ArtistDAO.h"
+#include "LabelBuilder.h"
 #include "MediaDAO.h"
 #include "MovieDAO.h"
 #include "MovieViewingDAO.h"
+#include<QFont>
 #include<QSharedPointer>
 #include<QtSql/QSqlDatabase>
 #include "RoleDAO.h"
@@ -15,6 +17,8 @@
 #include "TVSeasonDAO.h"
 #include "TVSeriesDAO.h"
 #include "TVSpecialDAO.h"
+
+using net::draconia::mediadb::util::LabelBuilder;
 
 using net::draconia::mediadb::dao::AlbumDAO;
 using net::draconia::mediadb::dao::ArtistDAO;
@@ -40,6 +44,8 @@ namespace net
             {
                 static BeanFactory msObjBeanFactory;
 
+                LabelBuilder mObjLabelBuilder;
+                QFont mFntApplication;
                 QSharedPointer<AlbumDAO> mPtrAlbumDAO;
                 QSharedPointer<ArtistDAO> mPtrArtistDAO;
                 QSqlDatabase mDbDatabase;
@@ -62,8 +68,10 @@ namespace net
                 static BeanFactory &getInstance();
 
                 AlbumDAO &getAlbumDAO();
+                QFont &getApplicationFont() const;
                 ArtistDAO &getArtistDAO();
                 QSqlDatabase &getDatabase();
+                LabelBuilder &getLabelBuilder();
                 MediaDAO &getMediaDAO();
                 MovieDAO &getMovieDAO();
                 MovieViewingDAO &getMovieViewingDAO();

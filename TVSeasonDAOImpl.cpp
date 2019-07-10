@@ -170,7 +170,7 @@ QList<TVSeason> TVSeasonDAOImpl::listByArtist(const Artist &refArtist) const
 
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("select TVSeasonId, TVSeriesId, SeasonNumber, Comments from TVSeasons inner join TVEpisodes on TVEpisodes.TVSeasonId = TVSeasons.TVSeasonId inner join Media on TVEpisodes.MediaId = Media.MediaId inner join Roles on Roles.MediaId = Media.MediaId and Roles.ArtistId = ?;");
+    objQuery.prepare("select TVSeasons.TVSeasonId TVSeasonId, TVSeasons.TVSeriesId TVSeriesId, TVSeasons.SeasonNumber SeasonNumber, TVSeasons.Comments Comments from TVSeasons inner join TVEpisodes on TVEpisodes.TVSeasonId = TVSeasons.TVSeasonId inner join Media on TVEpisodes.MediaId = Media.MediaId inner join Roles on Roles.MediaId = Media.MediaId and Roles.ArtistId = ?;");
 
     static_cast<MediaDAOImpl &>(getMediaDAO()).createTable();
     static_cast<RoleDAOImpl &>(getRoleDAO()).createTable();
@@ -208,7 +208,7 @@ QList<TVSeason> TVSeasonDAOImpl::listByTVSeriesAndArtist(const TVSeries &refTVSe
 
     QSqlQuery objQuery(getDatabase());
 
-    objQuery.prepare("select TVSeasonId, TVSeriesId, SeasonNumber, Comments from TVSeasons inner join TVEpisodes on TVEpisodes.TVSeasonId = TVSeasons.TVSeasonId inner join Media on TVEpisodes.MediaId = Media.MediaId inner join Roles on Roles.MediaId = Media.MediaId and Roles.ArtistId = ? where TVSeriesId = ?;");
+    objQuery.prepare("select TVSeasons.TVSeasonId TVSeasonId, TVSeasons.TVSeriesId TVSeriesId, SeasonNumber, TVSeasons.Comments Comments from TVSeasons inner join TVEpisodes on TVEpisodes.TVSeasonId = TVSeasons.TVSeasonId inner join Media on TVEpisodes.MediaId = Media.MediaId inner join Roles on Roles.MediaId = Media.MediaId and Roles.ArtistId = ? where TVSeriesId = ?;");
 
     static_cast<MediaDAOImpl &>(getMediaDAO()).createTable();
     static_cast<RoleDAOImpl &>(getRoleDAO()).createTable();

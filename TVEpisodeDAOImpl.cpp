@@ -20,8 +20,8 @@ TVEpisode TVEpisodeDAOImpl::createObjectFromResults(const QSqlRecord &refRecord)
                     ,   objMedia.getName()
                     ,   objMedia.getReleaseDate()
                     ,   objMedia.getFilePath()
-                    ,   objMedia.getArtists()
-                    ,   refRecord.field("Comments").value().toString()));
+                    ,   refRecord.field("Comments").value().toString()
+                    ,   objMedia.getArtists()));
 }
 
 MediaDAO &TVEpisodeDAOImpl::getMediaDAO() const
