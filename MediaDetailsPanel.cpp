@@ -1,5 +1,6 @@
 #include "MediaDetailsArtistPanel.h"
 #include "MediaDetailsMoviePanel.h"
+#include "MediaDetailsMusicPanel.h"
 #include "MediaDetailsPanel.h"
 #include "MediaDetailsTVPanel.h"
 #include<QVBoxLayout>
@@ -26,7 +27,7 @@ QTabWidget *MediaDetailsPanel::getMediaTypeTabs()
         mTabMediaTypes->addTab(new MediaDetailsArtistPanel(), "Artist");
         mTabMediaTypes->addTab(new MediaDetailsMoviePanel(), "Movie");
         mTabMediaTypes->addTab(new MediaDetailsTVPanel(), "TV");
-        mTabMediaTypes->addTab(new QWidget(), "Music");
+        mTabMediaTypes->addTab(new MediaDetailsMusicPanel(), "Music");
         mTabMediaTypes->addTab(new QWidget(), "Book");
         mTabMediaTypes->addTab(new VideoPlayerPanel(), "Play");
         }

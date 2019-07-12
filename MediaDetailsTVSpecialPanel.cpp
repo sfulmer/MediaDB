@@ -58,16 +58,38 @@ QLabel *MediaDetailsTVSpecialPanel::getNameLabel()
     return(mLblName);
 }
 
+QDateEdit *MediaDetailsTVSpecialPanel::getReleaseDateField()
+{
+    if(mDtRelease == nullptr)
+        {
+        mDtRelease = new QDateEdit(this);
+
+        mDtRelease->setFrame(true);
+        }
+
+    return(mDtRelease);
+}
+
+QLabel *MediaDetailsTVSpecialPanel::getReleaseDateLabel()
+{
+    if(mLblReleaseDate == nullptr)
+        mLblReleaseDate = BeanFactory::getInstance().getLabelBuilder().buildQLabel(this, "Release Date:", false, getReleaseDateField());
+
+    return(mLblReleaseDate);
+}
+
 void MediaDetailsTVSpecialPanel::initPanel()
 {
     QGridLayout *loSpecials = new QGridLayout(this);
 
-    loSpecials->addWidget(getNameLabel(), 0, 0, 1, 1);
-    loSpecials->addWidget(getNameField(), 0, 1, 1, 1);
-    loSpecials->addWidget(getFilePathLabel(), 1, 0, 1, 1);
-    loSpecials->addWidget(getFilePathField(), 1, 1, 1, 1);
-    loSpecials->addWidget(getCommentsLabel(), 2, 0, 1, 2);
-    loSpecials->addWidget(getCommentsField(), 3, 0, 1, 2);
+    loSpecials->addWidget(getNameLabel(), 0, 0);
+    loSpecials->addWidget(getNameField(), 0, 1);
+    loSpecials->addWidget(getReleaseDateLabel(), 1, 0);
+    loSpecials->addWidget(getReleaseDateField(), 1, 1);
+    loSpecials->addWidget(getFilePathLabel(), 2, 0);
+    loSpecials->addWidget(getFilePathField(), 2, 1);
+    loSpecials->addWidget(getCommentsLabel(), 3, 0, 1, 2);
+    loSpecials->addWidget(getCommentsField(), 4, 0, 1, 2);
 
     loSpecials->setSpacing(2);
 
@@ -78,9 +100,11 @@ void MediaDetailsTVSpecialPanel::initPanel()
 MediaDetailsTVSpecialPanel::MediaDetailsTVSpecialPanel(QWidget *parent)
     : QGroupBox("Special", parent)
     , mPnlFilePath(nullptr)
+    , mDtRelease(nullptr)
     , mLblComments(nullptr)
     , mLblFilePath(nullptr)
     , mLblName(nullptr)
+    , mLblReleaseDate(nullptr)
     , mTxtName(nullptr)
     , mTxtComments(nullptr)
 {

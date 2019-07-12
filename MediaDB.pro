@@ -35,6 +35,11 @@ SOURCES += \
         MediaDetailsArtistPanel.cpp \
         MediaDetailsDataPanel.cpp \
         MediaDetailsMoviePanel.cpp \
+        MediaDetailsMusicAlbumPanel.cpp \
+        MediaDetailsMusicPanel.cpp \
+        MediaDetailsMusicSingleDetailPanel.cpp \
+        MediaDetailsMusicSinglePanel.cpp \
+        MediaDetailsMusicSongPanel.cpp \
         MediaDetailsPanel.cpp \
         MediaDetailsTVEpisodePanel.cpp \
         MediaDetailsTVPanel.cpp \
@@ -111,6 +116,11 @@ HEADERS += \
         MediaDetailsArtistPanel.h \
         MediaDetailsDataPanel.h \
         MediaDetailsMoviePanel.h \
+        MediaDetailsMusicAlbumPanel.h \
+        MediaDetailsMusicPanel.h \
+        MediaDetailsMusicSingleDetailPanel.h \
+        MediaDetailsMusicSinglePanel.h \
+        MediaDetailsMusicSongPanel.h \
         MediaDetailsPanel.h \
         MediaDetailsTVEpisodePanel.h \
         MediaDetailsTVPanel.h \

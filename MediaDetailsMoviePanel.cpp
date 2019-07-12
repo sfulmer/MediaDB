@@ -43,6 +43,26 @@ QLabel *MediaDetailsMoviePanel::getFilePathLabel()
     return(mLblFilePath);
 }
 
+QDateEdit *MediaDetailsMoviePanel::getReleaseDateField()
+{
+    if(mDtRelease == nullptr)
+        {
+        mDtRelease = new QDateEdit(this);
+
+        mDtRelease->setFrame(true);
+        }
+
+    return(mDtRelease);
+}
+
+QLabel *MediaDetailsMoviePanel::getReleaseDatelabel()
+{
+    if(mLblRelease == nullptr)
+        mLblRelease = BeanFactory::getInstance().getLabelBuilder().buildQLabel(this, "Release Date:", false, getReleaseDateField());
+
+    return(mLblRelease);
+}
+
 QLabel *MediaDetailsMoviePanel::getViewingsLabel()
 {
     if(mLblViewings == nullptr)
@@ -68,8 +88,10 @@ void MediaDetailsMoviePanel::initPanel()
 {
     QGridLayout *loDetails = new QGridLayout(this);
 
-    loDetails->addWidget(getFilePathLabel(), 1, 0, 1, 1);
-    loDetails->addWidget(getFilePathField(), 1, 1, 1, 1);
+    loDetails->addWidget(getReleaseDatelabel(), 0, 0);
+    loDetails->addWidget(getReleaseDateField(), 0, 1);
+    loDetails->addWidget(getFilePathLabel(), 1, 0);
+    loDetails->addWidget(getFilePathField(), 1, 1);
     loDetails->addWidget(getCommentsLabel(), 2, 0, 1, 2);
     loDetails->addWidget(getViewingsLabel(), 2, 2, 1, 2);
     loDetails->addWidget(getCommentsField(), 3, 0, 1, 2);
@@ -84,8 +106,10 @@ void MediaDetailsMoviePanel::initPanel()
 MediaDetailsMoviePanel::MediaDetailsMoviePanel(QWidget *parent)
     : QWidget(parent)
     , mFldFilePath(nullptr)
+    , mDtRelease(nullptr)
     , mLblComments(nullptr)
     , mLblFilePath(nullptr)
+    , mLblRelease(nullptr)
     , mLblViewings(nullptr)
     , mLstViewings(nullptr)
     , mTxtComments(nullptr)
@@ -104,6 +128,8 @@ void MediaDetailsMoviePanel::setDisabled(bool disable)
     getCommentsLabel()->setDisabled(disable);
     getFilePathField()->setDisabled(disable);
     getFilePathLabel()->setDisabled(disable);
+    getReleaseDateField()->setDisabled(disable);
+    getReleaseDatelabel()->setDisabled(disable);
     getViewingsList()->setDisabled(disable);
     getViewingsLabel()->setDisabled(disable);
 }

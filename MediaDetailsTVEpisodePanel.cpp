@@ -81,18 +81,40 @@ QLabel *MediaDetailsTVEpisodePanel::getNumberLabel()
     return(mLblNumber);
 }
 
+QDateEdit *MediaDetailsTVEpisodePanel::getReleaseDateField()
+{
+    if(mDtRelease == nullptr)
+        {
+        mDtRelease = new QDateEdit(this);
+
+        mDtRelease->setFrame(true);
+        }
+
+    return(mDtRelease);
+}
+
+QLabel *MediaDetailsTVEpisodePanel::getReleaseDateLabel()
+{
+    if(mLblReleaseDate == nullptr)
+        mLblReleaseDate = BeanFactory::getInstance().getLabelBuilder().buildQLabel(this, "Release Date:", false, getReleaseDateField());
+
+    return(mLblReleaseDate);
+}
+
 void MediaDetailsTVEpisodePanel::initPanel()
 {
     QGridLayout *loEpisode = new QGridLayout(this);
 
-    loEpisode->addWidget(getNameLabel(), 0, 0, 1, 1);
-    loEpisode->addWidget(getNameField(), 0, 1, 1, 1);
-    loEpisode->addWidget(getNumberLabel(), 1, 0, 1, 1);
-    loEpisode->addWidget(getNumberField(), 1, 1, 1, 1);
-    loEpisode->addWidget(getFilePathLabel(), 2, 0, 1, 1);
-    loEpisode->addWidget(getFilePathField(), 2, 1, 1, 1);
-    loEpisode->addWidget(getCommentsLabel(), 3, 0, 1, 2);
-    loEpisode->addWidget(getCommentsField(), 4, 0, 1, 2);
+    loEpisode->addWidget(getNameLabel(), 0, 0);
+    loEpisode->addWidget(getNameField(), 0, 1);
+    loEpisode->addWidget(getNumberLabel(), 1, 0);
+    loEpisode->addWidget(getNumberField(), 1, 1);
+    loEpisode->addWidget(getReleaseDateLabel(), 2, 0);
+    loEpisode->addWidget(getReleaseDateField(), 2, 1);
+    loEpisode->addWidget(getFilePathLabel(), 3, 0);
+    loEpisode->addWidget(getFilePathField(), 3, 1);
+    loEpisode->addWidget(getCommentsLabel(), 4, 0, 1, 2);
+    loEpisode->addWidget(getCommentsField(), 5, 0, 1, 2);
 
     loEpisode->setSpacing(2);
 
@@ -103,10 +125,12 @@ void MediaDetailsTVEpisodePanel::initPanel()
 MediaDetailsTVEpisodePanel::MediaDetailsTVEpisodePanel(QWidget *parent)
     : QGroupBox(tr("Episode"), parent)
     , mPnlFilePath(nullptr)
+    , mDtRelease(nullptr)
     , mLblComments(nullptr)
     , mLblFilePath(nullptr)
     , mLblName(nullptr)
     , mLblNumber(nullptr)
+    , mLblReleaseDate(nullptr)
     , mTxtName(nullptr)
     , mSpnNumber(nullptr)
     , mTxtComments(nullptr)

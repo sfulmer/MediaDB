@@ -1,6 +1,7 @@
 #pragma once
 
 #include "FilePathFieldPanel.h"
+#include<QDateEdit>
 #include <QGroupBox>
 #include<QLabel>
 #include<QLineEdit>
@@ -18,7 +19,8 @@ namespace net
                 {
                     Q_OBJECT
                     FilePathFieldPanel *mPnlFilePath;
-                    QLabel *mLblComments, *mLblFilePath, *mLblName;
+                    QDateEdit *mDtRelease;
+                    QLabel *mLblComments, *mLblFilePath, *mLblName, *mLblReleaseDate;
                     QLineEdit *mTxtName;
                     QTextEdit *mTxtComments;
                 protected:
@@ -28,6 +30,8 @@ namespace net
                     QLabel *getFilePathLabel();
                     QLineEdit *getNameField();
                     QLabel *getNameLabel();
+                    QDateEdit *getReleaseDateField();
+                    QLabel *getReleaseDateLabel();
                     void initPanel();
                 public:
                     explicit MediaDetailsTVSpecialPanel(QWidget *parent = nullptr);

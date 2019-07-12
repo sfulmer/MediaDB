@@ -4,7 +4,6 @@
 #include<QDateEdit>
 #include<QLabel>
 #include<QLineEdit>
-#include<QListWidget>
 #include<QTextEdit>
 #include<QWidget>
 
@@ -16,26 +15,26 @@ namespace net
         {
             namespace ui
             {
-                class MediaDetailsMoviePanel : public QWidget
+                class MediaDetailsMusicSingleDetailPanel : public QWidget
                 {
                     Q_OBJECT
-                    FilePathFieldPanel *mFldFilePath;
+                    FilePathFieldPanel *mPnlFilePath;
                     QDateEdit *mDtRelease;
-                    QLabel *mLblComments, *mLblFilePath, *mLblRelease, *mLblViewings;
-                    QListWidget *mLstViewings;
+                    QLabel *mLblComments, *mLblFilePath, *mLblName, *mLblRelease;
+                    QLineEdit *mTxtName;
                     QTextEdit *mTxtComments;
                 protected:
                     QTextEdit *getCommentsField();
                     QLabel *getCommentsLabel();
                     FilePathFieldPanel *getFilePathField();
                     QLabel *getFilePathLabel();
+                    QLineEdit *getNameField();
+                    QLabel *getNameLabel();
                     QDateEdit *getReleaseDateField();
-                    QLabel *getReleaseDatelabel();
-                    QLabel *getViewingsLabel();
-                    QListWidget *getViewingsList();
+                    QLabel *getReleaseDateLabel();
                     void initPanel();
                 public:
-                    explicit MediaDetailsMoviePanel(QWidget *parent = nullptr);
+                    explicit MediaDetailsMusicSingleDetailPanel(QWidget *parent = nullptr);
 
                     virtual QSize sizeHint() const;
                 signals:
