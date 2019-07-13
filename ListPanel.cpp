@@ -1,4 +1,5 @@
 #include "ListPanel.h"
+#include<QMouseEvent>
 #include<QVBoxLayout>
 
 using namespace net::draconia::ui;
@@ -11,6 +12,44 @@ ListButtonPanel *ListPanel::getButtonPanel()
     return(mPnlButtons);
 }
 
+QAction *ListPanel::getAddAction()
+{
+    if(mActAdd == nullptr)
+        {
+        mActAdd = new QAction(tr("&Add"), this);
+
+        connect(mActAdd, &QAction::triggered, this, &ListPanel::addDetail);
+        }
+
+    return(mActAdd);
+}
+
+QMenu &ListPanel::getContextMenu()
+{
+    if(mMnuContext.isEmpty())
+        {
+        mMnuContext.addAction(getAddAction());
+        mMnuContext.addAction(getEditAction());
+        mMnuContext.addAction(getRemoveAction());
+        }
+
+    return(mMnuContext);
+}
+
+QAction *ListPanel::getEditAction()
+{
+    if(mActEdit == nullptr)
+        {
+        mActEdit = new QAction(tr("&Edit"), this);
+
+        connect(mActEdit, &QAction::triggered, this, &ListPanel::editDetail);
+
+        mActEdit->setEnabled(getList()->selectedItems().count() == 1);
+        }
+
+    return(mActEdit);
+}
+
 QListWidget *ListPanel::getList()
 {
     if(mLstList == nullptr)
@@ -21,6 +60,20 @@ QListWidget *ListPanel::getList()
         }
 
     return(mLstList);
+}
+
+QAction *ListPanel::getRemoveAction()
+{
+    if(mActRemove == nullptr)
+        {
+        mActRemove = new QAction(tr("&Remove"), this);
+
+        connect(mActRemove, &QAction::triggered, this, &ListPanel::removeDetail);
+
+        mActRemove->setEnabled(getList()->selectedItems().count() > 0);
+        }
+
+    return(mActRemove);
 }
 
 QLabel *ListPanel::getTitleLabel()
@@ -47,14 +100,20 @@ void ListPanel::initPanel()
 
     loList->setSpacing(2);
 
+    getList()->setContextMenuPolicy(Qt::CustomContextMenu);
     setLayout(loList);
     setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
+
+    connect(getList(), SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
 }
 
 ListPanel::ListPanel(QWidget *parent)
     : QWidget(parent)
     , mbSortingEnabled(false)
     , mPnlButtons(nullptr)
+    , mActAdd(nullptr)
+    , mActEdit(nullptr)
+    , mActRemove(nullptr)
     , mLblTitle(nullptr)
     , mLstList(nullptr)
 {
@@ -65,6 +124,9 @@ ListPanel::ListPanel(const QString &sTitle, QWidget *parent)
     : QWidget(parent)
     , mbSortingEnabled(false)
     , mPnlButtons(nullptr)
+    , mActAdd(nullptr)
+    , mActEdit(nullptr)
+    , mActRemove(nullptr)
     , mLblTitle(nullptr)
     , mLstList(nullptr)
     , msTitle(sTitle)
@@ -76,6 +138,9 @@ ListPanel::ListPanel(const QString &sTitle, bool bSortingEnabled, QWidget *paren
     : QWidget(parent)
     , mbSortingEnabled(bSortingEnabled)
     , mPnlButtons(nullptr)
+    , mActAdd(nullptr)
+    , mActEdit(nullptr)
+    , mActRemove(nullptr)
     , mLblTitle(nullptr)
     , mLstList(nullptr)
     , msTitle(sTitle)
@@ -107,6 +172,14 @@ int	ListPanel::currentRow() const
 void ListPanel::editItem(QListWidgetItem *item)
 {
     getList()->editItem(item);
+}
+
+bool ListPanel::eventFilter(QObject *object, QEvent *event)
+{
+    if((object == getList()) && (event->type() == QEvent::Type::MouseButtonPress))
+        return(true);
+
+    return(false);
 }
 
 QList<QListWidgetItem *> ListPanel::findItems(const QString &text, Qt::MatchFlags flags) const
@@ -281,12 +354,27 @@ Qt::ScrollBarPolicy	ListPanel::verticalScrollBarPolicy() const
 QRect ListPanel::visualItemRect(const QListWidgetItem *item) const
 {
     ListPanel &refThis = const_cast<ListPanel &>(*this);
+    QListWidget *ptrList = refThis.getList();
 
-    return(refThis.visualItemRect(item));
+    return(ptrList->visualItemRect(item));
 }
+
+void ListPanel::addDetail()
+{ }
+
+void ListPanel::editDetail()
+{ }
+
+void ListPanel::removeDetail()
+{ }
 
 void ListPanel::setDisabled(bool disable)
 {
     getList()->setDisabled(disable);
     getButtonPanel()->setDisabled(disable);
+}
+
+void ListPanel::showContextMenu(const QPoint &pos)
+{
+    getContextMenu().exec(getList()->mapToGlobal(pos));
 }

@@ -3,6 +3,7 @@
 #include "ListButtonPanel.h"
 #include<QLabel>
 #include<QListWidget>
+#include<QMenu>
 #include<QWidget>
 
 namespace net
@@ -16,12 +17,18 @@ namespace net
                 Q_OBJECT
                 bool mbSortingEnabled;
                 ListButtonPanel *mPnlButtons;
+                QAction *mActAdd, *mActEdit, *mActRemove;
                 QLabel *mLblTitle;
                 QListWidget *mLstList;
+                QMenu mMnuContext;
                 QString msTitle;
             protected:
                 ListButtonPanel *getButtonPanel();
+                QAction *getAddAction();
+                QMenu &getContextMenu();
+                QAction *getEditAction();
                 QListWidget *getList();
+                QAction *getRemoveAction();
                 QLabel *getTitleLabel();
                 void initPanel();
             public:
@@ -32,6 +39,7 @@ namespace net
                 QListWidgetItem *currentItem() const;
                 int	currentRow() const;
                 void editItem(QListWidgetItem *item);
+                bool eventFilter(QObject *object, QEvent *event);
                 QList<QListWidgetItem *> findItems(const QString &text, Qt::MatchFlags flags) const;
                 QString &getTitle();
                 Qt::ScrollBarPolicy	horizontalScrollBarPolicy() const;
@@ -65,7 +73,11 @@ namespace net
             signals:
 
             public slots:
+                void addDetail();
+                void editDetail();
+                void removeDetail();
                 void setDisabled(bool disable);
+                void showContextMenu(const QPoint&);
             };
         }
     }
