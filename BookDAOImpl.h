@@ -2,9 +2,11 @@
 
 #include "AbstractDAO.h"
 #include "BookDAO.h"
+#include "CollectionDAO.h"
 #include "MediaDAO.h"
 
 using net::draconia::mediadb::dbo::Book;
+using net::draconia::mediadb::dbo::Collection;
 
 namespace net
 {
@@ -18,9 +20,11 @@ namespace net
 
                 class BookDAOImpl : public AbstractDAO<Book>, public BookDAO
                 {
+                    CollectionDAO &mRefCollectionDAO;
                     MediaDAO &mRefMediaDAO;
                 protected:
                     virtual Book createObjectFromResults(const QSqlRecord &refRecord);
+                    CollectionDAO &getCollectionDAO() const;
                     MediaDAO &getMediaDAO() const;
                     virtual Book &insert(const Book &refToSave) const;
                     virtual bool isTableExists() const;
@@ -32,7 +36,8 @@ namespace net
                     virtual bool createTable() const;
                     virtual Book getById(const unsigned uiBookId) const;
                     virtual QList<Book> list() const;
-                    virtual QList<Book> listByCollection(const QString &sCollection) const;
+                    virtual QList<Book> listByCollection(const Collection &objCollection) const;
+                    virtual QList<Book> listByNoCollection() const;
                     virtual QList<Book> listByWordInComments(const QString &sWord) const;
                     virtual bool remove(const Book &refToRemove) const;
                     virtual Book &save(const Book &refToSave) const;

@@ -25,6 +25,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+        Collection.cpp \
+        CollectionDAO.cpp \
+        CollectionDAOImpl.cpp \
         FilePathFieldPanel.cpp \
         LabelBuilder.cpp \
         ListButtonPanel.cpp \
@@ -33,6 +36,7 @@ SOURCES += \
         MediaDAO.cpp \
         MediaDetailsArtistButtonPanel.cpp \
         MediaDetailsArtistPanel.cpp \
+        MediaDetailsBookPanel.cpp \
         MediaDetailsDataPanel.cpp \
         MediaDetailsMoviePanel.cpp \
         MediaDetailsMusicAlbumPanel.cpp \
@@ -105,6 +109,9 @@ HEADERS += \
         ArtistDAOImpl.h \
         BookDAO.h \
         BookDAOImpl.h \
+        Collection.h \
+        CollectionDAO.h \
+        CollectionDAOImpl.h \
         FilePathFieldPanel.h \
         LabelBuilder.h \
         ListButtonPanel.h \
@@ -114,6 +121,7 @@ HEADERS += \
         MediaDAOImpl.h \
         MediaDetailsArtistButtonPanel.h \
         MediaDetailsArtistPanel.h \
+        MediaDetailsBookPanel.h \
         MediaDetailsDataPanel.h \
         MediaDetailsMoviePanel.h \
         MediaDetailsMusicAlbumPanel.h \

@@ -1,6 +1,7 @@
 #include "AlbumDAOImpl.h"
 #include "ArtistDAOImpl.h"
 #include "BeanFactory.h"
+#include "CollectionDAOImpl.h"
 #include "MediaDAOImpl.h"
 #include "MovieDAOImpl.h"
 #include "MovieViewingDAOImpl.h"
@@ -17,6 +18,7 @@ using namespace net::draconia::mediadb;
 
 using net::draconia::mediadb::dao::AlbumDAOImpl;
 using net::draconia::mediadb::dao::ArtistDAOImpl;
+using net::draconia::mediadb::dao::CollectionDAOImpl;
 using net::draconia::mediadb::dao::MediaDAOImpl;
 using net::draconia::mediadb::dao::MovieDAOImpl;
 using net::draconia::mediadb::dao::MovieViewingDAOImpl;
@@ -35,6 +37,7 @@ BeanFactory::BeanFactory()
     : mFntApplication("Times", 8, QFont::Normal, false)
     , mPtrAlbumDAO(nullptr)
     , mPtrArtistDAO(nullptr)
+    , mPtrCollectionDAO(nullptr)
     , mPtrMediaDAO(nullptr), mPtrMovieDAO(nullptr)
     , mPtrMovieViewingDAO(nullptr)
     , mPtrRoleDAO(nullptr), mPtrRoleTypeDAO(nullptr)
@@ -72,6 +75,14 @@ ArtistDAO &BeanFactory::getArtistDAO()
         mPtrArtistDAO.reset(static_cast<ArtistDAO *>(new ArtistDAOImpl(getDatabase())));
 
     return(*mPtrArtistDAO);
+}
+
+CollectionDAO &BeanFactory::getCollectionDAO()
+{
+    if(mPtrCollectionDAO.isNull())
+        mPtrCollectionDAO.reset(static_cast<CollectionDAO *>(new CollectionDAOImpl(getDatabase())));
+
+    return(*mPtrCollectionDAO);
 }
 
 QSqlDatabase &BeanFactory::getDatabase()

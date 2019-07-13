@@ -54,20 +54,20 @@ Book::Book(const unsigned uiMediaId, const unsigned uiBookId, const QString &sNa
     : Media(uiMediaId, sName, uiReleaseYear, sFilePath), muiBookId(uiBookId), msComments(sComments)
 { }
 
-Book::Book(const unsigned uiMediaId, const QString &sName, const QDate &dtRelease, const QString &sFilePath, const QString &sComments, const QString &sCollection)
-    : Media(uiMediaId, sName, dtRelease, sFilePath), muiBookId(0), msCollection(sCollection), msComments(sComments)
+Book::Book(const unsigned uiMediaId, const QString &sName, const QDate &dtRelease, const QString &sFilePath, const QString &sComments, const Collection &objCollection)
+    : Media(uiMediaId, sName, dtRelease, sFilePath), mObjCollection(objCollection), muiBookId(0), msComments(sComments)
 { }
 
-Book::Book(const unsigned uiMediaId, const QString &sName, const unsigned uiReleaseYear, const QString &sFilePath, const QString &sComments, const QString &sCollection)
-    : Media(uiMediaId, sName, uiReleaseYear, sFilePath), muiBookId(0), msCollection(sCollection), msComments(sComments)
+Book::Book(const unsigned uiMediaId, const QString &sName, const unsigned uiReleaseYear, const QString &sFilePath, const QString &sComments, const Collection &objCollection)
+    : Media(uiMediaId, sName, uiReleaseYear, sFilePath), mObjCollection(objCollection), muiBookId(0), msComments(sComments)
 { }
 
-Book::Book(const unsigned uiMediaId, const unsigned uiBookId, const QString &sName, const QDate &dtRelease, const QString &sFilePath, const QString &sComments, const QString &sCollection)
-    : Media(uiMediaId, sName, dtRelease, sFilePath), muiBookId(uiBookId), msCollection(sCollection), msComments(sComments)
+Book::Book(const unsigned uiMediaId, const unsigned uiBookId, const QString &sName, const QDate &dtRelease, const QString &sFilePath, const QString &sComments, const Collection &objCollection)
+    : Media(uiMediaId, sName, dtRelease, sFilePath), mObjCollection(objCollection), muiBookId(uiBookId), msComments(sComments)
 { }
 
-Book::Book(const unsigned uiMediaId, const unsigned uiBookId, const QString &sName, const unsigned uiReleaseYear, const QString &sFilePath, const QString &sComments, const QString &sCollection)
-    : Media(uiMediaId, sName, uiReleaseYear, sFilePath), muiBookId(uiBookId), msCollection(sCollection), msComments(sComments)
+Book::Book(const unsigned uiMediaId, const unsigned uiBookId, const QString &sName, const unsigned uiReleaseYear, const QString &sFilePath, const QString &sComments, const Collection &objCollection)
+    : Media(uiMediaId, sName, uiReleaseYear, sFilePath), mObjCollection(objCollection), muiBookId(uiBookId), msComments(sComments)
 { }
 
 Book::Book(const unsigned uiMediaId, const QString &sName, const QDate &dtRelease, const QList<Artist> &lstArtists)
@@ -102,20 +102,20 @@ Book::Book(const unsigned uiMediaId, const unsigned uiBookId, const QString &sNa
     : Media(uiMediaId, sName, uiReleaseYear, lstArtists), muiBookId(uiBookId), msComments(sComments)
 { }
 
-Book::Book(const unsigned uiMediaId, const QString &sName, const QDate &dtRelease, const QList<Artist> &lstArtists, const QString &sComments, const QString &sCollection)
-    : Media(uiMediaId, sName, dtRelease, lstArtists), muiBookId(0), msCollection(sCollection), msComments(sComments)
+Book::Book(const unsigned uiMediaId, const QString &sName, const QDate &dtRelease, const QList<Artist> &lstArtists, const QString &sComments, const Collection &objCollection)
+    : Media(uiMediaId, sName, dtRelease, lstArtists), mObjCollection(objCollection), muiBookId(0), msComments(sComments)
 { }
 
-Book::Book(const unsigned uiMediaId, const QString &sName, const unsigned uiReleaseYear, const QList<Artist> &lstArtists, const QString &sComments, const QString &sCollection)
-    : Media(uiMediaId, sName, uiReleaseYear, lstArtists), muiBookId(0), msCollection(sCollection), msComments(sComments)
+Book::Book(const unsigned uiMediaId, const QString &sName, const unsigned uiReleaseYear, const QList<Artist> &lstArtists, const QString &sComments, const Collection &objCollection)
+    : Media(uiMediaId, sName, uiReleaseYear, lstArtists), mObjCollection(objCollection), muiBookId(0), msComments(sComments)
 { }
 
-Book::Book(const unsigned uiMediaId, const unsigned uiBookId, const QString &sName, const QDate &dtRelease, const QList<Artist> &lstArtists, const QString &sComments, const QString &sCollection)
-    : Media(uiMediaId, sName, dtRelease, lstArtists), muiBookId(uiBookId), msCollection(sCollection), msComments(sComments)
+Book::Book(const unsigned uiMediaId, const unsigned uiBookId, const QString &sName, const QDate &dtRelease, const QList<Artist> &lstArtists, const QString &sComments, const Collection &objCollection)
+    : Media(uiMediaId, sName, dtRelease, lstArtists), mObjCollection(objCollection), muiBookId(uiBookId), msComments(sComments)
 { }
 
-Book::Book(const unsigned uiMediaId, const unsigned uiBookId, const QString &sName, const unsigned uiReleaseYear, const QList<Artist> &lstArtists, const QString &sComments, const QString &sCollection)
-    : Media(uiMediaId, sName, uiReleaseYear, lstArtists), muiBookId(uiBookId), msCollection(sCollection), msComments(sComments)
+Book::Book(const unsigned uiMediaId, const unsigned uiBookId, const QString &sName, const unsigned uiReleaseYear, const QList<Artist> &lstArtists, const QString &sComments, const Collection &objCollection)
+    : Media(uiMediaId, sName, uiReleaseYear, lstArtists), mObjCollection(objCollection), muiBookId(uiBookId), msComments(sComments)
 { }
 
 Book::Book(const unsigned uiMediaId, const QString &sName, const QDate &dtRelease, const QString &sFilePath, const QList<Artist> &lstArtists)
@@ -150,24 +150,24 @@ Book::Book(const unsigned uiMediaId, const unsigned uiBookId, const QString &sNa
     : Media(uiMediaId, sName, uiReleaseYear, sFilePath, lstArtists), muiBookId(uiBookId), msComments(sComments)
 { }
 
-Book::Book(const unsigned uiMediaId, const QString &sName, const QDate &dtRelease, const QString &sFilePath, const QList<Artist> &lstArtists, const QString &sComments, const QString &sCollection)
-    : Media(uiMediaId, sName, dtRelease, sFilePath, lstArtists), muiBookId(0), msCollection(sCollection), msComments(sComments)
+Book::Book(const unsigned uiMediaId, const QString &sName, const QDate &dtRelease, const QString &sFilePath, const QList<Artist> &lstArtists, const QString &sComments, const Collection &objCollection)
+    : Media(uiMediaId, sName, dtRelease, sFilePath, lstArtists), mObjCollection(objCollection), muiBookId(0), msComments(sComments)
 { }
 
-Book::Book(const unsigned uiMediaId, const QString &sName, const unsigned uiReleaseYear, const QString &sFilePath, const QList<Artist> &lstArtists, const QString &sComments, const QString &sCollection)
-    : Media(uiMediaId, sName, uiReleaseYear, sFilePath, lstArtists), muiBookId(0), msCollection(sCollection), msComments(sComments)
+Book::Book(const unsigned uiMediaId, const QString &sName, const unsigned uiReleaseYear, const QString &sFilePath, const QList<Artist> &lstArtists, const QString &sComments, const Collection &objCollection)
+    : Media(uiMediaId, sName, uiReleaseYear, sFilePath, lstArtists), mObjCollection(objCollection), muiBookId(0), msComments(sComments)
 { }
 
-Book::Book(const unsigned uiMediaId, const unsigned uiBookId, const QString &sName, const QDate &dtRelease, const QString &sFilePath, const QList<Artist> &lstArtists, const QString &sComments, const QString &sCollection)
-    : Media(uiMediaId, sName, dtRelease, sFilePath, lstArtists), muiBookId(uiBookId), msCollection(sCollection), msComments(sComments)
+Book::Book(const unsigned uiMediaId, const unsigned uiBookId, const QString &sName, const QDate &dtRelease, const QString &sFilePath, const QList<Artist> &lstArtists, const QString &sComments, const Collection &objCollection)
+    : Media(uiMediaId, sName, dtRelease, sFilePath, lstArtists), mObjCollection(objCollection), muiBookId(uiBookId), msComments(sComments)
 { }
 
-Book::Book(const unsigned uiMediaId, const unsigned uiBookId, const QString &sName, const unsigned uiReleaseYear, const QString &sFilePath, const QList<Artist> &lstArtists, const QString &sComments, const QString &sCollection)
-    : Media(uiMediaId, sName, uiReleaseYear, sFilePath, lstArtists), muiBookId(uiBookId), msCollection(sCollection), msComments(sComments)
+Book::Book(const unsigned uiMediaId, const unsigned uiBookId, const QString &sName, const unsigned uiReleaseYear, const QString &sFilePath, const QList<Artist> &lstArtists, const QString &sComments, const Collection &objCollection)
+    : Media(uiMediaId, sName, uiReleaseYear, sFilePath, lstArtists), mObjCollection(objCollection), muiBookId(uiBookId), msComments(sComments)
 { }
 
 Book::Book(const Book &refCopy)
-    : Media(refCopy), muiBookId(refCopy.getBookId()), msCollection(refCopy.getCollection()), msComments(refCopy.getComments())
+    : Media(refCopy), mObjCollection(refCopy.getCollection()), muiBookId(refCopy.getBookId()), msComments(refCopy.getComments())
 { }
 
 Book::~Book()
@@ -178,9 +178,9 @@ unsigned Book::getBookId() const
     return(muiBookId);
 }
 
-QString Book::getCollection() const
+Collection Book::getCollection() const
 {
-    return(msCollection);
+    return(mObjCollection);
 }
 
 QString Book::getComments() const
@@ -195,9 +195,9 @@ void Book::setBookId(const unsigned uiBookId)
     setChanged(true);
     notifyObservers();
 }
-void Book::setCollection(const QString &sCollection)
+void Book::setCollection(const Collection &objCollection)
 {
-    msCollection = sCollection;
+    mObjCollection = objCollection;
 
     setChanged(true);
     notifyObservers();

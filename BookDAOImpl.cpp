@@ -6,6 +6,12 @@ using namespace net::draconia::mediadb::dao;
 Book BookDAOImpl::createObjectFromResults(const QSqlRecord &refRecord)
 {
     Media objMedia = getMediaDAO().getById(refRecord.field("MediaId").value().toUInt());
+    Collection objCollection;
+
+    if(refRecord.isNull("CollectionId"))
+        objCollection = Collection();
+    else
+        objCollection = getCollectionDAO().getById(refRecord.field("Collectionid").value().toUInt());
 
     return(Book (   objMedia.getMediaId()
                 ,   refRecord.field("BookId").value().toUInt()
@@ -14,7 +20,12 @@ Book BookDAOImpl::createObjectFromResults(const QSqlRecord &refRecord)
                 ,   objMedia.getFilePath()
                 ,   objMedia.getArtists()
                 ,   refRecord.field("Comments").value().toString()
-                ,   refRecord.field("Collection").value().toString()));
+                ,   objCollection));
+}
+
+CollectionDAO &BookDAOImpl::getCollectionDAO() const
+{
+    return(mRefCollectionDAO);
 }
 
 MediaDAO &BookDAOImpl::getMediaDAO() const
@@ -30,9 +41,16 @@ Book &BookDAOImpl::insert(const Book &refToSave) const
 
     getMediaDAO().save(refToSave);
 
+    if(!refToSave.getCollection().getName().isEmpty())
+        getCollectionDAO().save(refToSave.getCollection());
+
     objQuery.bindValue(1, refToSave.getMediaId());
     objQuery.bindValue(2, refToSave.getComments());
-    objQuery.bindValue(3, refToSave.getCollection());
+
+    if(refToSave.getCollection().getCollectionId() > 0)
+        objQuery.bindValue(3, refToSave.getCollection().getCollectionId());
+    else
+        objQuery.bindValue(3, QVariant(QVariant::UInt));
 
     if(objQuery.exec())
         const_cast<Book &>(refToSave).setBookId(objQuery.lastInsertId().toUInt());
@@ -58,9 +76,17 @@ Book &BookDAOImpl::update(const Book &refToSave) const
 
    getMediaDAO().save(refToSave);
 
+   if(!refToSave.getCollection().getName().isEmpty())
+       getCollectionDAO().save(refToSave.getCollection());
+
    objQuery.bindValue(1, refToSave.getMediaId());
    objQuery.bindValue(2, refToSave.getComments());
-   objQuery.bindValue(3, refToSave.getCollection());
+
+   if(refToSave.getCollection().getCollectionId() > 0)
+       objQuery.bindValue(3, refToSave.getCollection().getCollectionId());
+   else
+       objQuery.bindValue(3, QVariant(QVariant::UInt));
+
    objQuery.bindValue(4, refToSave.getBookId());
 
    return(const_cast<Book &>(refToSave));
@@ -68,7 +94,8 @@ Book &BookDAOImpl::update(const Book &refToSave) const
 
 BookDAOImpl::BookDAOImpl(const QSqlDatabase &refDatabase)
     : AbstractDAO<Book>(refDatabase)
-    , mRefMediaDAO(BeanFactory::getInstance().getMediaDAO())
+    , mRefCollectionDAO(BeanFactory::getInstance().getCollectionDAO())
+    , mRefMediaDAO(BeanFactory::getInstance().getMediaDAO())\
 { }
 
 BookDAOImpl::~BookDAOImpl()
@@ -80,7 +107,7 @@ bool BookDAOImpl::createTable() const
         {
         QSqlQuery objQuery(getDatabase());
 
-        objQuery.prepare("create table Books (BookId int not null auto_increment primary key, MediaId int not null, Comments varchar(32000) not null default ' ', Collection varchar(255) not null default ' ', foreign key(MediaId) references Media(MediaId), index(Collection));");
+        objQuery.prepare("create table Books (BookId int not null auto_increment primary key, MediaId int not null, Comments varchar(32000) not null default ' ', Collection int null, foreign key(MediaId) references Media(MediaId), foreign key(Collection) references Collections(CollectionId));");
 
         return(objQuery.exec());
         }
@@ -120,7 +147,7 @@ QList<Book> BookDAOImpl::list() const
         return(QList<Book>());
 }
 
-QList<Book> BookDAOImpl::listByCollection(const QString &sCollection) const
+QList<Book> BookDAOImpl::listByCollection(const Collection &objCollection) const
 {
    if(!isTableExists())
        createTable();
@@ -129,12 +156,27 @@ QList<Book> BookDAOImpl::listByCollection(const QString &sCollection) const
 
    objQuery.prepare("select BookId, MediaId, Comments, Collection from Books where Collection = ?;");
 
-   objQuery.bindValue(1, sCollection);
+   objQuery.bindValue(1, objCollection.getCollectionId());
 
    if(objQuery.exec())
        return(const_cast<BookDAOImpl &>(*this).createObjectListFromResults(objQuery));
    else
        return(QList<Book>());
+}
+
+QList<Book> BookDAOImpl::listByNoCollection() const
+{
+    if(!isTableExists())
+        createTable();
+
+    QSqlQuery objQuery(getDatabase());
+
+    objQuery.prepare("select BookId, MediaId, Comments, Collection from Books where Collection is null;");
+
+    if(objQuery.exec())
+        return(const_cast<BookDAOImpl &>(*this).createObjectListFromResults(objQuery));
+    else
+        return(QList<Book>());
 }
 
 QList<Book> BookDAOImpl::listByWordInComments(const QString &sWord) const

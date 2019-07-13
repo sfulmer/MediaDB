@@ -2,6 +2,7 @@
 
 #include "AlbumDAO.h"
 #include "ArtistDAO.h"
+#include "CollectionDAO.h"
 #include "LabelBuilder.h"
 #include "MediaDAO.h"
 #include "MovieDAO.h"
@@ -22,6 +23,7 @@ using net::draconia::mediadb::util::LabelBuilder;
 
 using net::draconia::mediadb::dao::AlbumDAO;
 using net::draconia::mediadb::dao::ArtistDAO;
+using net::draconia::mediadb::dao::CollectionDAO;
 using net::draconia::mediadb::dao::MediaDAO;
 using net::draconia::mediadb::dao::MovieDAO;
 using net::draconia::mediadb::dao::MovieViewingDAO;
@@ -48,6 +50,7 @@ namespace net
                 QFont mFntApplication;
                 QSharedPointer<AlbumDAO> mPtrAlbumDAO;
                 QSharedPointer<ArtistDAO> mPtrArtistDAO;
+                QSharedPointer<CollectionDAO> mPtrCollectionDAO;
                 QSqlDatabase mDbDatabase;
                 QSharedPointer<MediaDAO> mPtrMediaDAO;
                 QSharedPointer<MovieDAO> mPtrMovieDAO;
@@ -70,6 +73,7 @@ namespace net
                 AlbumDAO &getAlbumDAO();
                 QFont &getApplicationFont() const;
                 ArtistDAO &getArtistDAO();
+                CollectionDAO &getCollectionDAO();
                 QSqlDatabase &getDatabase();
                 LabelBuilder &getLabelBuilder();
                 MediaDAO &getMediaDAO();

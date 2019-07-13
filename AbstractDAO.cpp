@@ -2,6 +2,7 @@
 #include "Album.h"
 #include "Artist.h"
 #include "Book.h"
+#include "Collection.h"
 #include "Media.h"
 #include "Movie.h"
 #include "MovieViewing.h"
@@ -20,6 +21,7 @@ using namespace net::draconia::mediadb::dao;
 using net::draconia::mediadb::dbo::Album;
 using net::draconia::mediadb::dbo::Artist;
 using net::draconia::mediadb::dbo::Book;
+using net::draconia::mediadb::dbo::Collection;
 using net::draconia::mediadb::dbo::Media;
 using net::draconia::mediadb::dbo::Movie;
 using net::draconia::mediadb::dbo::MovieViewing;
@@ -84,6 +86,7 @@ AbstractDAO<T>::~AbstractDAO()
 template class net::draconia::mediadb::dao::AbstractDAO<Album>;
 template class net::draconia::mediadb::dao::AbstractDAO<Artist>;
 template class net::draconia::mediadb::dao::AbstractDAO<Book>;
+template class net::draconia::mediadb::dao::AbstractDAO<Collection>;
 template class net::draconia::mediadb::dao::AbstractDAO<Media>;
 template class net::draconia::mediadb::dao::AbstractDAO<Movie>;
 template class net::draconia::mediadb::dao::AbstractDAO<MovieViewing>;
