@@ -301,24 +301,24 @@ void TVSpecial::setComments(const QString &sComments)
 {
     msComments = sComments;
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Comments");
 }
 
 void TVSpecial::setSeries(const TVSeries &refSeries)
 {
     mPtrTVSeries.reset(const_cast<TVSeries *>(&refSeries));
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Series");
 }
 
 void TVSpecial::setTVSpecialId(const unsigned uiTVSpecialId)
 {
     muiTVSpecialId = uiTVSpecialId;
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("TVSpecialId");
 }
 
 TVSpecial &TVSpecial::operator=(const TVSpecial &refCopy)

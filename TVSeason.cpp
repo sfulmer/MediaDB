@@ -13,8 +13,8 @@ void TVSeason::setEpisodes(const QList<TVEpisode> &lstEpisodes)
     getEpisodesInternal().clear();
     getEpisodesInternal().append(lstEpisodes);
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Episodes");
 }
 
 TVSeason::TVSeason()
@@ -78,8 +78,8 @@ void TVSeason::addEpisode(const TVEpisode &refEpisode)
 {
     getEpisodesInternal().append(refEpisode);
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Episodes");
 }
 
 QString TVSeason::getComments() const
@@ -114,8 +114,8 @@ bool TVSeason::removeEpisode(const TVEpisode &refEpisode)
 {
     bool bRetVal = getEpisodesInternal().removeOne(refEpisode);
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Episodes");
 
     return(bRetVal);
 }
@@ -124,32 +124,32 @@ void TVSeason::removeEpisode(const unsigned uiIndex)
 {
     getEpisodesInternal().removeAt(static_cast<int>(uiIndex));
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Episodes");
 }
 
 void TVSeason::setComments(const QString &sComments)
 {
     msComments = sComments;
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Comments");
 }
 
 void TVSeason::setNumber(const unsigned uiNUmber)
 {
     muiNumber = uiNUmber;
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Number");
 }
 
 void TVSeason::setSeasonId(const unsigned uiSeasonId)
 {
     muiSeasonId = uiSeasonId;
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("SeasonId");
 }
 
 void TVSeason::setSeries(const TVSeries &refSeries)

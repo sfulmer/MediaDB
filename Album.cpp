@@ -12,8 +12,8 @@ void Album::setSongs(const QList<Song> &lstSongs)
     getSongsInternal().clear();
     getSongsInternal().append(lstSongs);
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Songs");
 }
 
 Album::Album()
@@ -146,8 +146,8 @@ void Album::addSong(const Song &refSong)
 {
     getSongsInternal().append(refSong);
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Songs");
 }
 
 unsigned Album::getAlbumId() const
@@ -179,8 +179,8 @@ bool Album::removeSong(const Song &refSong)
 {
     bool bRetVal = getSongsInternal().removeOne(refSong);
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Songs");
 
     return(bRetVal);
 }
@@ -189,40 +189,40 @@ void Album::removeSong(const unsigned uiIndex)
 {
     getSongsInternal().removeAt(static_cast<int>(uiIndex));
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Songs");
 }
 
 void Album::setAlbumId(const unsigned uiAlbumId)
 {
     muiAlbumId = uiAlbumId;
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("AlbumId");
 }
 
 void Album::setComments(const QString &sComments)
 {
     msComments = sComments;
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Comments");
 }
 
 void Album::setName(const QString &sName)
 {
     msName = sName;
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Name");
 }
 
 void Album::setReleaseDate(const QDate &dtRelease)
 {
     mDtRelease = dtRelease;
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("ReleaseDate");
 }
 
 Album &Album::operator=(const Album &refCopy)

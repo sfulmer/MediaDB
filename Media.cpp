@@ -138,8 +138,8 @@ void Media::addArtist(const Artist &refArtist)
 {
     getArtistsInternal().append(refArtist);
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Artists");
 }
 
 const QList<Artist> Media::getArtists() const
@@ -166,40 +166,40 @@ void Media::removeArtist(const Artist &refArtist)
 {
     getArtistsInternal().removeOne(refArtist);
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Artists");
 }
 
 void Media::setMediaId(const unsigned uiMediaId)
 {
     muiMediaId = uiMediaId;
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("MediaId");
 }
 
 void Media::setName(const QString &sName)
 {
     msName = sName;
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Name");
 }
 
 void Media::setReleaseDate(const QDate &dtRelease)
 {
     mDtRelease = dtRelease;
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("ReleaseDate");
 }
 
 void Media::setReleaseDate(const unsigned uiReleaseYear)
 {
     mDtRelease = QDate(static_cast<int>(uiReleaseYear), 1, 1);
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("ReleaseDate");
 }
 
 Media &Media::operator=(const Media &refCopy)

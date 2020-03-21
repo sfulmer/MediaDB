@@ -141,16 +141,16 @@ void Single::setComments(const QString &sComments)
 {
     msComments = sComments;
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Comments");
 }
 
 void Single::setSingleId(const unsigned uiSingleId)
 {
     muiSingleId = uiSingleId;
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("SingleId");
 }
 
 Single &Single::operator=(const Single &refCopy)

@@ -29,10 +29,10 @@ bool Observable::isChanged() const
     return(mbChanged);
 }
 
-void Observable::notifyObservers(const void *ptrArgument)
+void Observable::notifyObservers(const QString &sProperty)
 {
     for(Observer *ptrObserver : getObserversInternal())
-        (*ptrObserver).update(*this, ptrArgument);
+        (*ptrObserver).update(*this, sProperty);
 
     setChanged(false);
 }

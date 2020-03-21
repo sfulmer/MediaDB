@@ -29,11 +29,14 @@ SOURCES += \
         CollectionDAO.cpp \
         CollectionDAOImpl.cpp \
         FilePathFieldPanel.cpp \
+        GeneralModel.cpp \
         LabelBuilder.cpp \
         ListButtonPanel.cpp \
         ListPanel.cpp \
         MainPanel.cpp \
         MediaDAO.cpp \
+        MediaDBApp.cpp \
+        MediaDBController.cpp \
         MediaDetailsArtistButtonPanel.cpp \
         MediaDetailsArtistPanel.cpp \
         MediaDetailsBookPanel.cpp \
@@ -52,6 +55,12 @@ SOURCES += \
         MediaDetailsTVSpecialPanel.cpp \
         MediaFile.cpp \
         MovieDAO.cpp \
+        Properties.cpp \
+        Property.cpp \
+        PropertyFileIO.cpp \
+        SettingsDialog.cpp \
+        SettingsModel.cpp \
+        StyleModel.cpp \
         VideoPlayerPanel.cpp \
         main.cpp \
         BeanFactory.cpp \
@@ -113,12 +122,15 @@ HEADERS += \
         CollectionDAO.h \
         CollectionDAOImpl.h \
         FilePathFieldPanel.h \
+        GeneralModel.h \
         LabelBuilder.h \
         ListButtonPanel.h \
         ListPanel.h \
         MainPanel.h \
         MediaDAO.h \
         MediaDAOImpl.h \
+        MediaDBApp.h \
+        MediaDBController.h \
         MediaDetailsArtistButtonPanel.h \
         MediaDetailsArtistPanel.h \
         MediaDetailsBookPanel.h \
@@ -140,14 +152,20 @@ HEADERS += \
         MovieDAOImpl.h \
         MovieViewingDAO.h \
         MovieViewingDAOImpl.h \
+        Properties.h \
+        Property.h \
+        PropertyFileIO.h \
         RoleDAO.h \
         RoleDAOImpl.h \
         RoleTypeDAO.h \
         RoleTypeDAOImpl.h \
+        SettingsDialog.h \
+        SettingsModel.h \
         SingleDAO.h \
         SingleDAOImpl.h \
         SongDAO.h \
         SongDAOImpl.h \
+        StyleModel.h \
         TVEpisodeDAO.h \
         TVEpisodeDAOImpl.h \
         TVSeasonDAO.h \

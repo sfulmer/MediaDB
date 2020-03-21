@@ -12,8 +12,8 @@ void Movie::setViewings(const QList<MovieViewing> &lstViewings)
     getViewingsInternal().clear();
     getViewingsInternal().append(lstViewings);
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Viewings");
 }
 
 Movie::Movie()
@@ -247,8 +247,8 @@ void Movie::addViewing(const MovieViewing &dtViewing)
 {
     getViewingsInternal().append(dtViewing);
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Viewings");
 }
 
 unsigned Movie::getMovieId() const
@@ -270,8 +270,8 @@ bool Movie::removeViewing(const MovieViewing &dtViewing)
 {
     bool bRetVal = getViewingsInternal().removeOne(dtViewing);
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Viewings");
 
     return(bRetVal);
 }
@@ -280,24 +280,24 @@ void Movie::removeViewing(const unsigned uiIndex)
 {
     getViewingsInternal().removeAt(static_cast<int>(uiIndex));
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Viewings");
 }
 
 void Movie::setComments(const QString &sComments)
 {
     msComments = sComments;
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Comments");
 }
 
 void Movie::setMovieId(const unsigned uiMovieId)
 {
     muiMovieId = uiMovieId;
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("MovieId");
 }
 
 Movie &Movie::operator=(const Movie &refCopy)

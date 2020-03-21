@@ -50,8 +50,8 @@ void Artist::addRole(const Role &refRole)
 {
     getRolesInternal().append(refRole);
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Roles");
 }
 
 unsigned Artist::getArtistId() const
@@ -73,8 +73,8 @@ bool Artist::removeRole(const Role &refRole)
 {
     bool bRetVal = getRolesInternal().removeOne(refRole);
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Roles");
 
     return(bRetVal);
 }
@@ -89,16 +89,16 @@ void Artist::setArtistId(const unsigned uiArtistId)
 {
     muiArtistId = uiArtistId;
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("ArtistId");
 }
 
 void Artist::setName(const QString &sName)
 {
     msName = sName;
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Name");
 }
 
 Artist &Artist::operator=(const Artist &refOther)

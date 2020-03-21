@@ -222,40 +222,40 @@ void Role::setArtist(const Artist &refArtist)
 {
     mPtrArtist.reset(const_cast<Artist *>(&refArtist));
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Artist");
 }
 
 void Role::setMedia(const Media &refMedia)
 {
     mPtrMedia.reset(const_cast<Media *>(&refMedia));
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Media");
 }
 
 void Role::setName(const QString &sName)
 {
     msName = sName;
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Name");
 }
 
 void Role::setRoleId(const unsigned uiRoleId)
 {
     muiRoleId = uiRoleId;
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("RoleId");
 }
 
 void Role::setRoleType(const RoleType &refRoleType)
 {
     mPtrRoleType.reset(const_cast<RoleType *>(&refRoleType));
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("RoleType");
 }
 
 Role &Role::operator=(const Role &refCopy)

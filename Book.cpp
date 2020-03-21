@@ -192,23 +192,23 @@ void Book::setBookId(const unsigned uiBookId)
 {
     muiBookId = uiBookId;
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("BookId");
 }
 void Book::setCollection(const Collection &objCollection)
 {
     mObjCollection = objCollection;
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Collection");
 }
 
 void Book::setComments(const QString &sComments)
 {
     msComments = sComments;
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Comments");
 }
 
 Book &Book::operator=(const Book &refCopy)

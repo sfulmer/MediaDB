@@ -34,16 +34,16 @@ using net::draconia::mediadb::dao::TVSpecialDAOImpl;
 BeanFactory BeanFactory::msObjBeanFactory;
 
 BeanFactory::BeanFactory()
-    : mFntApplication("Times", 8, QFont::Normal, false)
-    , mPtrAlbumDAO(nullptr)
-    , mPtrArtistDAO(nullptr)
-    , mPtrCollectionDAO(nullptr)
-    , mPtrMediaDAO(nullptr), mPtrMovieDAO(nullptr)
-    , mPtrMovieViewingDAO(nullptr)
-    , mPtrRoleDAO(nullptr), mPtrRoleTypeDAO(nullptr)
-    , mPtrSingleDAO(nullptr), mPtrSongDAO(nullptr)
-    , mPtrTVEpisodeDAO(nullptr), mPtrTVSeasonDAO(nullptr)
-    , mPtrTVSeriesDAO(nullptr), mPtrTVSpecialDAO(nullptr)
+    :   mFntApplication("Times", 8, QFont::Normal, false)
+    ,   mPtrAlbumDAO(nullptr)
+    ,   mPtrArtistDAO(nullptr)
+    ,   mPtrCollectionDAO(nullptr)
+    ,   mPtrMediaDAO(nullptr), mPtrMovieDAO(nullptr)
+    ,   mPtrMovieViewingDAO(nullptr)
+    ,   mPtrRoleDAO(nullptr), mPtrRoleTypeDAO(nullptr)
+    ,   mPtrSingleDAO(nullptr), mPtrSongDAO(nullptr)
+    ,   mPtrTVEpisodeDAO(nullptr), mPtrTVSeasonDAO(nullptr)
+    ,   mPtrTVSeriesDAO(nullptr), mPtrTVSpecialDAO(nullptr)
 {
     mDbDatabase = QSqlDatabase::addDatabase("QMYSQL");
 }

@@ -28,8 +28,8 @@ void MediaFile::setFilePath(const QString &sFilePath)
 {
     msFilePath = sFilePath;
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("FilePath");
 }
 
 MediaFile &MediaFile::operator=(const MediaFile &refCopy)

@@ -1,6 +1,7 @@
 #pragma once
 
-#include<QList>
+#include <QList>
+#include <QString>
 
 namespace net
 {
@@ -13,8 +14,8 @@ namespace net
             class Observer
             {
             public:
-                virtual ~Observer() = 0;
-                virtual void update(const Observable &refObservable, const void *ptrArgument) = 0;
+                //virtual ~Observer() = 0;
+                virtual void update(const Observable &refObservable, const QString &sProperty) = 0;
             };
 
             class Observable
@@ -30,7 +31,7 @@ namespace net
                 void addObserver(const Observer &refObserver);
                 const QList<Observer *> &getObservers();
                 bool isChanged() const;
-                void notifyObservers(const void *ptrArgument = nullptr);
+                void notifyObservers(const QString &sProperty);
                 void setChanged(const bool bChanged = true);
 
                 bool operator==(const Observable &objOther) const;

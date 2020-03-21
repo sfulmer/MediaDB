@@ -56,24 +56,24 @@ void MovieViewing::setMovie(const Movie &refMovie)
 {
     mPtrMovie.reset(const_cast<Movie *>(&refMovie));
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Movie");
 }
 
 void MovieViewing::setMovieViewingId(const unsigned uiMovieViewingId)
 {
     muiMovieViewingId = uiMovieViewingId;
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("MovieViewingId");
 }
 
 void MovieViewing::setViewing(const QDateTime &dtViewing)
 {
     mDtViewing = dtViewing;
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Viewing");
 }
 
 MovieViewing &MovieViewing::operator=(const MovieViewing &refCopy)

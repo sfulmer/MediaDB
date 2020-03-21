@@ -14,6 +14,7 @@
 #include "RoleTypeDAO.h"
 #include "SingleDAO.h"
 #include "SongDAO.h"
+#include "StyleModel.h"
 #include "TVEpisodeDAO.h"
 #include "TVSeasonDAO.h"
 #include "TVSeriesDAO.h"

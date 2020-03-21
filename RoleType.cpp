@@ -39,16 +39,16 @@ void RoleType::setRoleTypeId(const unsigned uiRoleTypeId)
 {
     muiRoleTypeId = uiRoleTypeId;
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("RoleTypeId");
 }
 
 void RoleType::setRoleType(const QString &sRoleType)
 {
     msRoleType = sRoleType;
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("RoleType");
 }
 
 RoleType &RoleType::operator=(const RoleType &refOther)

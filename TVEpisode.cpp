@@ -385,24 +385,24 @@ void TVEpisode::setComments(const QString &sComments)
 {
     msComments = sComments;
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Comments");
 }
 
 void TVEpisode::setNumber(const unsigned uiNumber)
 {
     muiNumber = uiNumber;
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("Number");
 }
 
 void TVEpisode::setTVEpisodeId(const unsigned uiTVEpisodeId)
 {
     muiTVEpisodeId = uiTVEpisodeId;
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("TVEpisodeId");
 }
 
 TVEpisode &TVEpisode::operator=(const TVEpisode &refCopy)

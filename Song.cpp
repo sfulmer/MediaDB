@@ -205,16 +205,16 @@ void Song::setAlbum(const Album &refAlbum)
 {
     mPtrAlbum.reset(const_cast<Album *>(&refAlbum));
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("ALbum");
 }
 
 void Song::setSongId(const unsigned uiSongId)
 {
     muiSongId = uiSongId;
 
-    setChanged(true);
-    notifyObservers();
+    setChanged();
+    notifyObservers("SongId");
 }
 
 Song &Song::operator=(const Song &refOther)
